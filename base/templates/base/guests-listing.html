@@ -1,0 +1,39 @@
+{% extends 'main.html' %}
+{% block content %}
+{% load static %}
+<head>
+    <link rel="stylesheet" href="{% static 'css/users-listing-styles.css'%}">
+    <title>All Guests Available</title>
+</head>
+<h1>All Guests</h1>
+<div class="container">
+    <div class="user-listing-container">
+        {% for guest in guests %}
+        <div class="user-listing-card">
+            <div class="user-data">
+                <div class="sect-1">
+                    <h4>@{{guest}} {% if guest.verified %}<i class="bi-patch-check-fill verified-badge"></i>{%endif%}</h4>
+                    <img src="{% static guest.profilePhoto.url %}" alt="profile Photo">
+                </div>
+                <div class="sect-2">
+                    <span>{{guest.location}}</span>
+                    <p class="cutoff-text">{{guest.bio}}</p>
+                    <!-- {{pairs}} -->
+                </div>
+            </div>
+            <div class="interaction-btns">
+                <a href="{% url 'profiles' guest.id %}" class="intr-btn bi-person-fill"> Profile</a>
+                <a href="/chats?u={{guest.id}}" class="intr-btn bi-chat-fill"> </a>
+                {% if request.user.is_authenticated and request.user.category != 'Guest' and request.user.category != 'Owner' %}
+                {% if guest.id in pairs %}
+                <a href="{% url 'pair-with' guest.id %}" class="intr-btn requested-pair"><i class="fas fa-house-user">&check;</i> Pending Pair</a>
+                {%else%}
+                <a href="{% url 'pair-with' guest.id %}" class="intr-btn"><i class="fas fa-house-user">&plus;</i> Request Pair</a>
+                {% endif %}
+                {% endif %}
+            </div>
+        </div>
+        {% endfor %}
+    </div>    
+</div>
+{% endblock content %}

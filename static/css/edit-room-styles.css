@@ -1,0 +1,375 @@
+
+/* styles for edit-profile page  */
+.edit-profile-container{
+    position: relative;
+}
+.edit-profile-container .profile-header{
+    position: relative;
+    width: 100%;
+    margin: 0 auto;
+    /* padding: 0.5em; */
+    gap: 0.5em;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    background-color: var(--bgWhite2);
+    overflow: hidden;
+}
+.edit-profile-container .profile-header .slide-controls{
+    position: absolute;
+    width: fit-content;
+    right: 4%;
+    margin: 0 auto;
+    z-index: 3;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+}
+.edit-profile-container .profile-header .slide-controls:nth-child(2){
+    right: unset;
+    left: 4%;
+}
+.edit-profile-container .profile-header .slide-controls button{
+    border: none;
+    outline: none;
+    height: 40px;
+    width: 40px;
+    padding: 0.5em;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: var(--fontWhite);
+    color: var(--darkBlueBg);
+    box-shadow: 0 0 5px 2px var(--darkShadow);
+    border-radius: 0.5pc;
+    transition: 0.3s;
+}
+.edit-profile-container .profile-header .slide-controls button:hover{
+    background-color: var(--bgGreenDes);
+    color: var(--fontWhite);
+}
+.edit-profile-container .profile-header .slide-wrapper .slide .photo-counter{
+    position: absolute;
+    top: 0.5%;
+    right: 2%;
+    z-index: 3;
+    width: fit-content;
+    padding: 0.5em 1em;
+    background-color: var(--bgWhite2);
+    color: var(--fontBlue);
+    font-size: 14px;
+    font-weight: 600;
+}
+
+
+.edit-profile-container .profile-header img{
+    position: relative;
+    width: 100%;
+    height: auto;
+    object-fit: cover;
+}
+.edit-profile-container .profile-header a{
+    position: absolute;
+    bottom: 1em;
+    right: 1em;
+    background-color: var(--bgWhite3);
+    color: var(--fontBlack);
+    padding: 0.5em 1em;
+    text-decoration: none;
+    font-weight: 600;
+    border: 2px solid var(--bgBlue);
+    border-radius: 3px;
+    z-index: 3;
+}
+.edit-profile-container .profile-header a:hover{
+    background-color: var(--bgBlue2);
+    color: var(--fontWhite);
+}
+.edit-profile-container .room-details-wrapper{
+    position: relative;
+    width: 80%;
+    max-width: 768px;
+    display: flex;
+    flex-direction: column;
+    gap: 0.3em;
+    padding: 0.5em;
+    box-shadow: 0 0 7px 2px var(--grayShadow);
+    background-color: var(--pureWhite);
+    margin: 0.8em auto;
+    border-radius: 0.5pc;
+    /* font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; */
+}
+.edit-profile-container .room-details-wrapper .title-bar{
+    position: relative;
+    width: 100%;
+    padding: 0.5em 1em;
+    border-radius: 1pc 1pc 0 0;
+    text-align: center;
+    /* font-size: 20px; */
+    background-color: var(--bgWhite);
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+}
+.edit-profile-container .room-details-wrapper .title-bar h3{
+    position: relative;
+    margin: 0;
+    color: var(--fontGreen);
+}
+.edit-profile-container .room-details-wrapper .title-bar .header-btns{
+    position: relative;
+    font-size: 18px;
+    display: flex;
+    flex-direction: row;
+    gap: 1em;
+}
+.edit-profile-container .room-details-wrapper .title-bar .header-btns .room-actions-btn{
+    position: relative;
+    cursor: pointer;
+    height: 30px;
+    width: 30px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    transition: 0.3s;
+    color: var(--fontBlack2);
+    text-decoration: none;
+}
+.edit-profile-container .room-details-wrapper .title-bar .header-btns .room-actions-btn:hover{
+    background-color: var(--grayShadow);
+}
+.edit-profile-container .room-details-wrapper .outer-fields-wrapper{
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5em;
+    padding: 1em;
+    background-color: var(--bgWhite2);
+}
+.edit-profile-container .room-details-wrapper .outer-fields-wrapper .data-field-cont{
+    position: relative;
+    background-color: var(--bgWhite3);
+    padding: 1em;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.edit-profile-container .room-details-wrapper .outer-fields-wrapper .data-field-cont:first-child{
+    align-items: flex-start;
+    justify-content: flex-start;
+}
+.edit-profile-container .room-details-wrapper .outer-fields-wrapper .data-field-cont .data-field{
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    gap: 0.2em;
+    padding: 0.5em;
+    width: 50%;
+    background-color: var(--bgWhite2);
+}
+.edit-profile-container .room-details-wrapper .outer-fields-wrapper .data-field-cont .data-field span{
+    position: relative;
+    width: 100%;
+    padding: 0.5em 1em;
+    border: 1px solid var(--lightBorder);
+    font-size: 14px;
+    background-color: var(--bgWhite3);
+}
+.edit-profile-container .room-details-wrapper .form-container{
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: var(--trDarkBlue);
+    display: none;
+    align-items: center;
+    justify-content: center;
+    z-index: 5;
+}
+.edit-profile-container .room-details-wrapper .form-container .edit-room-form{
+    position: relative;
+    width: 90%;
+    max-width: 700px;
+    max-height: 90%;
+    display: flex;
+    flex-direction: column;
+    background-color: var(--bgWhite2);
+    padding: 1em;
+    gap: 0.5em;
+    border-radius: 5px;
+    animation-name: zoom;
+    animation-duration: 0.4s;
+}
+.edit-profile-container .room-details-wrapper .form-container .edit-room-form .form-title{
+    position: relative;
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    /* background-color: var(--bgWhite); */
+}
+.edit-profile-container .room-details-wrapper .form-container .edit-room-form .form-title h3{
+    position: relative;
+    margin: 0;
+    color: var(--bgBlue);
+    font-weight: 600;
+}
+.edit-profile-container .room-details-wrapper .form-container .edit-room-form .form-title .field{
+    position: relative;
+}
+.edit-profile-container .room-details-wrapper .form-container .edit-room-form .form-title .field input{
+    position: relative;
+    border: 1px solid var(--lightBorder);
+    outline: none;
+    padding: 0.5em 1em;
+    font-size: 12px;
+    font-weight: 600;
+    border-radius: 3px;
+}
+.edit-profile-container .room-details-wrapper .form-container .edit-room-form .form-title .hide-form{
+    position: relative;
+    width: 35px;
+    height: 35px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 24px;
+    cursor: pointer;
+    transition: 0.3s;
+}
+.edit-profile-container .room-details-wrapper .form-container .edit-room-form .form-title .hide-form:hover{
+    background-color: var(--darkShadow);
+}
+.edit-profile-container .room-details-wrapper .form-container .edit-room-form .form-sect{
+    position: relative;
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    padding: 0.5em;
+    align-items: center;
+    border-radius: 4px;    
+}
+.edit-profile-container .room-details-wrapper .form-container .edit-room-form .form-sect:not(:last-child){
+    background-color: var(--pureWhite);
+}
+.edit-profile-container .room-details-wrapper .form-container .edit-room-form .form-sect .form-mini-sect{
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    gap: 0.5em;
+    padding: 0.5em;
+}
+.edit-profile-container .room-details-wrapper .form-container .edit-room-form .form-sect .field{
+    position: relative;
+    width: 100%;
+    max-width: 500px;
+    margin: 0 auto;
+    /* padding: 0.5em; */
+    display: flex;
+    flex-direction: column;
+    /* gap: 0.5em; */
+    justify-content: center;
+    /* align-items: center; */
+}
+.edit-profile-container .room-details-wrapper .form-container .edit-room-form .form-sect .field .field-input{
+    width: 100%;
+    position: relative;
+    padding: 0.5em;
+    /* margin: 0 auto; */
+    font-size: 16px;
+    border: none;
+    background-color: var(--bgWhite2);
+    border-radius: 5px;
+    outline: none;
+}
+.edit-profile-container .room-details-wrapper .form-container .edit-room-form .form-sect .check-field{
+    position: relative;
+    flex-direction: row;
+    justify-content: flex-start;
+    align-items: center;
+    gap: 1em;
+}
+.edit-profile-container .room-details-wrapper .form-container .edit-room-form .form-sect .check-field label{
+    position: relative;
+    margin-bottom: 0;
+}
+.edit-profile-container .room-details-wrapper .form-container .edit-room-form .form-sect .check-field input{
+    position: relative;
+    margin-top: 0;
+}
+.edit-profile-container .room-details-wrapper .form-container .edit-room-form .form-sect .submit-field{
+    position: relative;
+    width: 100%;
+    max-width: 500px;
+    margin: 0 auto;
+    padding: 0.5em;
+    display: flex;
+    justify-content: flex-end;
+}
+.edit-profile-container .room-details-wrapper .form-container .edit-room-form .form-sect .submit-field input{
+    position: relative;
+    border: 2px solid var(--bgBlue2);
+    outline: none;
+    padding: 0.5em 1.2em;
+    background-color: transparent;
+    border-radius: 4px;
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--fontBlack2);
+    transition: 0.3s;
+}
+.edit-profile-container .room-details-wrapper .form-container .edit-room-form .form-sect .submit-field input:hover{
+    background-color: var(--bgBlue2);
+    color: var(--fontWhite2);
+}
+.edit-profile-container .sec-data-btns{
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0.4em;
+    gap: 0.5em;
+    flex-wrap: wrap;
+}
+.edit-profile-container .sec-data-btns a{
+    position: relative;
+    background-color: var(--fontBlue);
+    color: var(--fontWhite);
+    padding: 0.6em 1em;
+    border-radius: 0.3pc;
+    text-transform: capitalize;
+    text-decoration: none;
+}
+
+@media (max-width:768px) {   
+    .edit-profile-container .profile-header .bio-tag{
+        width: 100%;
+    }
+    .edit-profile-container .room-details-wrapper{
+        width: 100%;
+    }
+    .edit-profile-container .room-details-wrapper .form-container .edit-room-form .field{
+        width: 90%;
+    }
+}
+@media (max-width:600px) {
+    .edit-profile-container .room-details-wrapper .form-container .edit-room-form .form-sect .form-mini-sect{
+        width: 100%;
+    }
+    .edit-profile-container .room-details-wrapper .outer-fields-wrapper .data-field-cont .data-field{
+        width: 100%;
+        margin: 0 auto;
+    }
+    .edit-profile-container .room-details-wrapper .outer-fields-wrapper .data-field-cont{
+        flex-wrap: wrap;
+    }
+}

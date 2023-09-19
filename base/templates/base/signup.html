@@ -1,0 +1,177 @@
+{% extends 'main.html' %}
+{% block content %}
+{% load static %}
+<head>
+    <title>Signup To KejaPair for a personalized interaction with your future roommate.</title>
+</head>
+<div class="container">
+    <div class="signup-blockquote">
+        <h2>Set up your account to get started.</h2>
+        <p>Creating an account helps us to customize your experience to ensure your goals are easily met in time.</p>
+    </div>
+    <form action="" method="POST" enctype="multipart/form-data" data-multi-step class="signup-form">
+        <div class="step-row">
+            <!-- <div id="progress" step-indicator style="width:25%"></div> -->
+            <div class="step-col active-step" id="step-col-1"><span>Sign Up</span></div>
+            <div class="step-col" id="step-col-2"><span>Customize Account</span></div>
+            <div class="step-col" id="step-col-3"><span>Verify</span></div>
+        </div>
+        <div class="form-sects-wrapper showSect" data-step>
+            <div class="form-sect">
+                {% csrf_token %}
+                <!-- {{form.as_p}} -->
+                <div class="form-group">
+                    <label for="id_first_name">First Name: <code>*</code></label>
+                    <input type="text" name="first_name" id="id_first_name" class="form-control aptinput" required placeholder="First Name" maxlength="200">
+                </div>
+                <div class="form-group">
+                    <label for="id_last_name">Last Name: <code>*</code></label>
+                    <input type="text" name="last_name" id="id_last_name" class="form-control aptinput" required placeholder="Last Name" maxlength="200" required>
+                </div>
+                <div class="form-group">
+                    <label for="id_username">Username: <code>*</code></label>
+                    <input type="text" name="username" id="id_username" class="form-control aptinput" required placeholder="Username" maxlength="200">
+                </div>
+                <div class="form-group">
+                    <label for="id_email">Your Email: <code>*</code></label>
+                    <input type="email" name="email" id="id_email" class="form-control aptinput" required placeholder="Your Email" maxlength="254">
+                </div>
+                <div class="form-group">
+                    <label for="id_category">Account Type: <code>*</code></label>
+                    <select name="category" id="id_category" class="form-control aptinput" required>
+                        <option value="">--select--</option>
+                        <option value="Guest">I'm looking for a place to stay.</option>
+                        <option value="Host">I have a home and I'm looking for a roommate.</option>
+                        <option value="Owner">I'm a home owner looking for tenants.</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="id_password">password:</label>
+                    <input type="password" name="password1" id="id_password" placeholder="********" class="form-control aptinput" required>
+                </div>
+                <div class="form-group">
+                    <label for="id_password">Confirm Password:</label>
+                    <input type="password" name="password2" id="id_password2" placeholder="********" class="form-control aptinput" required>
+                </div>
+                <div class="form-group">
+                    <input type="checkbox" id="termsCheck" required>
+                    <label for="termsCheck">By submitting this data, you confirm that you have read and understood our terms and conditions.</label>
+                </div>
+                <button type="button" class="elongated-btn centered-el" data-next>Next</button>
+            </div>
+            <div class="form-sect" id="icon-sect-1">
+                
+            </div>
+        </div>
+
+        <div class="form-sects-wrapper" data-step>
+            <div class="form-sect">
+                <div class="form-group">
+                    <label for="id_location">Your Location: <code>*</code></label>
+                    <input type="text" name="location" id="id_location" class="form-control aptinput" required placeholder="eg. Nairobi" maxlength="200">
+                </div>
+                <div class="form-group">
+                    <label for="id_phone">Phone Number: <code>*</code></label>
+                    <input type="tel" name="phone" id="id_phone" class="form-control aptinput" required placeholder="Phone Number" maxlength="15">
+                </div>
+                <div class="form-group">
+                    <label for="id_gender">Gender: <code>*</code></label>
+                    <select name="gender" id="id_gender" class="form-control aptinput" required>
+                        <option value="">--select--</option>
+                        <option value="Male">Male</option>
+                        <option value="Female">Female</option>
+                        <option value="Other">Other</option>
+                        <option value="Unspecified">Rather Not Say</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="id_age">Age: <code>*</code></label>
+                    <input type="number" name="age" id="id_age" class="form-control aptinput" required placeholder="age" min="18" value="18">
+                </div>
+                <div class="form-group">
+                    <label for="id_bio">About You:</label>
+                    <textarea name="bio" id="id_bio" cols="30" rows="4" class="form-control aptinput" placeholder="Describe yourself and what you're looking for..."></textarea>
+                </div>
+                <!-- <div class="form-group">
+                    <label for="id_profilePhoto">profile Photo:</label>
+                    <input type="file" name="profilePhoto" id="id_profilePhoto" accept="image/*" class="form-control aptinput">
+                </div> -->
+            </div>
+            <div class="form-sect" id="icon-sect-2">
+                
+            </div>
+            <button type="button" data-previous>Previous</button>
+            <div class="form-group">
+                <input type="submit" id="submitNewUser" value="Confirm" class="btn btn-primary aptinput submit-form">
+            </div>
+        </div>
+
+        
+        <div class="form-sects-wrapper" data-step>
+            <p>Verify</p>
+        </div>
+        <p class="centered-p full-width padded-mini">Already have an account? <a href="{% url 'signin' %}">Signin</a></p>
+    </form>
+</div>
+<script>    
+        //data steps code
+        const multiStepForm = document.querySelector("[data-multi-step]")
+        const formSteps = [...multiStepForm.querySelectorAll("[data-step]")]
+        const stepIndicator = document.querySelectorAll(".step-col");
+        let currentStep = formSteps.findIndex(step => {
+        return step.classList.contains("showSect")
+        })
+
+        if (currentStep < 0) {
+        currentStep = 0
+        showCurrentStep()
+        }
+
+        multiStepForm.addEventListener("click", e => {
+        let incrementor
+        if (e.target.matches("[data-next]")) {
+            incrementor = 1
+        } else if (e.target.matches("[data-previous]")) {
+            incrementor = -1
+        }
+
+        if (incrementor == null) return
+
+        const inputs = [...formSteps[currentStep].querySelectorAll("input, select")]
+        const allValid = inputs.every(input => input.reportValidity())
+        if (allValid) {
+            currentStep += incrementor
+            showCurrentStep()
+        }
+        })
+
+        formSteps.forEach(step => {
+        step.addEventListener("animationend", e => {
+            formSteps[currentStep].classList.remove("hidden")
+            e.target.classList.toggle("hidden", !e.target.classList.contains("showSect"))
+        })
+        })
+
+        function showCurrentStep() {
+        formSteps.forEach((step, index) => {
+            step.classList.toggle("showSect", index === currentStep)
+
+            if(formSteps.length==3){
+                if(currentStep==0){
+                    stepIndicator[0].classList.add('active-step');
+                }
+                if(currentStep==1){
+                    stepIndicator[0].classList.add("cleared-step");
+                    stepIndicator[1].classList.add('active-step');
+                }
+                if(currentStep==2){
+                    stepIndicator[0].classList.add("cleared-step");
+                    stepIndicator[1].classList.add("cleared-step");
+                    stepIndicator[2].classList.add('active-step');
+                }
+            }
+            
+        })
+        }
+</script>
+{% endblock content %}

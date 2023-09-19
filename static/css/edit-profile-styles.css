@@ -1,0 +1,312 @@
+.edit-window{
+    position: relative;
+    width: 90%;
+    margin: 1em auto;
+    background-color: var(--bgWhite2);
+    display: flex;
+    gap: 1em;
+    padding: 1em;
+    flex-wrap: wrap;
+    border-radius: 5px;
+}
+.edit-window h2{
+    position: relative;
+    width: 100%;
+    margin: 0;
+}
+.edit-window .main-edit-form{
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    gap: 1em;
+    width: 100%;
+    max-width: 700px;
+}
+.edit-window .main-edit-form .actions-card{
+    position: relative;
+    width: 96%;
+    margin: 0 auto;
+    background-color: var(--pureWhite);
+    border-radius: 0.5pc;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.5em;
+    padding: 0.5em;
+    box-shadow: 0 5px 9px 2px var(--grayShadow);
+}
+.edit-window .main-edit-form .actions-card .userpic-cont{
+    position: relative;
+    width: fit-content;
+    height: fit-content;
+}
+.edit-window .main-edit-form .actions-card .userpic-cont .user-pic{
+    position: relative;
+    width: 150px;
+    height: 150px;
+    min-width: 150px;
+    min-height: 150px;
+    border-radius: 50%;
+    border: 1px solid var(--bgGreenDes);
+    object-fit: cover;
+    background-color: var(--bgWhite3);
+}
+.edit-window .main-edit-form .actions-card .userpic-cont .field{
+    position: relative;
+}
+.edit-window .main-edit-form .actions-card .userpic-cont .field label{
+    position: absolute;
+    right: 1em;
+    top: -2.5em;
+    padding: 0.5em;
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: var(--bgGreenDes);
+    border: 1px solid var(--pureWhite);
+    color: var(--pureWhite);
+    cursor: pointer;
+    z-index: 3;
+}
+.edit-window .main-edit-form .actions-card .actions-txt-btns{
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5em;
+    padding: 1em;
+    width: 70%;
+}
+.edit-window .main-edit-form .actions-card .actions-txt-btns .user-bio-data{
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+}
+.edit-window .main-edit-form .actions-card .actions-txt-btns .user-bio-data p{
+    margin: 0;
+}
+.edit-window .main-edit-form .actions-card .actions-txt-btns .profile-actions{
+    position: relative;
+    display: flex;
+    flex-wrap: wrap;
+    width: 100%;
+    gap: 0.5em;
+    align-items: center;
+}
+.edit-window .main-edit-form .actions-card .actions-txt-btns .profile-actions a{
+    position: relative;
+    background-color: var(--bgBlue2);
+    color: var(--fontWhite);
+    text-decoration: none;
+    cursor: pointer;
+    padding: 0.5em 1em;
+}
+.edit-window .main-edit-form .personal-info-wrapper{
+    position: relative;
+    width: 96%;
+    background-color: var(--pureWhite);
+    margin: 0 auto;
+    padding: 1em;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5em;
+    box-shadow: 0 5px 9px 2px var(--grayShadow);
+    border-radius: 0.5pc;
+}
+.edit-window .main-edit-form .personal-info-wrapper .inp-fields-cont{
+    position: relative;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5em;
+}
+.edit-window .main-edit-form .personal-info-wrapper .inp-fields-cont .semi-fields-wrapper{
+    position: relative;
+    width: 100%;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1em;
+    margin: 0 auto;
+}
+.edit-window .main-edit-form .personal-info-wrapper .inp-fields-cont .semi-fields-wrapper .semi-field{
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5em;
+    margin: 0 auto;
+    width: 100%;
+    max-width: 300px;
+}
+.edit-window .main-edit-form .personal-info-wrapper .inp-fields-cont .field{
+    position: relative;
+    width: 100%;
+    /* padding: 0.5em; */
+    margin: 0 auto;
+}
+.edit-window .main-edit-form .personal-info-wrapper .inp-fields-cont .input{
+    position: relative;
+    border: 1px solid var(--grayBorder);
+    outline: none;
+    width: 100%;
+    background-color: var(--shadeBg);
+    padding: 0.7em 1.2em;
+    border-radius: 4px;
+    font-size: 14px;
+    transition: 0.3s;
+}
+.edit-window .main-edit-form .personal-info-wrapper .inp-fields-cont .input:hover{    
+    border: 1px solid var(--bgBlue2Tr);
+}
+.edit-window .main-edit-form .personal-info-wrapper .inp-fields-cont .input:focus{    
+    border: 1px solid var(--bgGreenDes);
+}
+.edit-window .main-edit-form .personal-info-wrapper .inp-fields-cont .full-len-field-wrapper{
+    position: relative;
+    width: 100%;
+    margin: 0 auto;
+}
+.edit-window .main-edit-form .personal-info-wrapper .submit-field-wrapper{
+    position: relative;
+    width: 100%;
+    padding: 0.5em;
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+}
+.edit-window .main-edit-form .personal-info-wrapper .submit-field-wrapper .upadate-btn{
+    position: relative;
+    padding: 0.6em 1.1em;
+    border: 3px solid var(--bgBlue2);
+    outline: none;
+    font-size: 16px;
+    font-weight: 600;
+    color: var(--fontBlack);
+    border-radius: 0.5pc;
+}
+.edit-window .sec-forms-cont{
+    position: relative;
+    width: 90%;
+    height: fit-content;
+    background-color: var(--pureWhite);
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    gap: 1em;
+    padding: 1em;
+    border-radius: 4px;
+    max-width: 600px;
+    box-shadow: 0 5px 9px 2px var(--grayShadow);
+}
+.edit-window .sec-forms-cont h3,.edit-window .sec-forms-cont h4{
+    margin: 0;
+}
+.edit-window .sec-forms-cont .hobbies-cont{
+    position: relative;
+    width: 100%;
+    background-color: var(--bgWhite3);
+    padding: 0.5em;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5em;
+}
+.edit-window .sec-forms-cont .hobbies-cont .hobbies-list{
+    position: relative;
+    display: flex;
+    margin: 0 auto;
+    width: 100%;
+    padding: 0.5em;
+    flex-wrap: wrap;
+    gap: 1em;
+}
+.edit-window .sec-forms-cont .hobbies-cont .hobbies-list .hobby-item{
+    position: relative;
+    padding: 0.5em 1em;
+    border-radius: 1pc;
+    border: 1px solid var(--bgBlue);
+    background-color: var(--bgWhite2);
+}
+.edit-window .sec-forms-cont .sec-btn-wrapper{
+    position: relative;
+    width: 100%;
+    padding: 0.3em;
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+}
+.edit-window .sec-forms-cont .sec-btn-wrapper .sec-btn{
+    background-color: var(--bgGreenDes);
+    color: var(--fontWhite);
+    padding: 0.7em 1.5em;
+    border-radius: 0.5em;
+    font-size: 14px;
+    outline: none;
+    border: none;
+    text-decoration: none;
+    transition: 0.3s;
+}
+.edit-window .sec-forms-cont .sec-btn-wrapper .sec-btn:hover{
+    box-shadow: 0 0 5px 2px var(--greenShadow);
+}
+.edit-window .sec-forms-cont .acc-settings-wrapper{
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    gap: 0.3em;
+    padding: 1em 0.5em;
+    background-color: var(--bgWhite3);
+}
+.edit-window .sec-forms-cont .acc-settings-wrapper .settings-fields-wrapper{
+    position: relative;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 0.7em;
+}
+.edit-window .sec-forms-cont .acc-settings-wrapper .settings-fields-wrapper .field{
+    position: relative;
+    width: 90%;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: row;
+    gap: 0;
+    border-radius: 4px;
+}
+.edit-window .sec-forms-cont .acc-settings-wrapper .settings-fields-wrapper .field label{
+    position: absolute;
+    z-index: 3;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    padding: 0.3em;
+    min-width: 100px;
+    background-color: var(--bgWhite2);
+}
+.edit-window .sec-forms-cont .acc-settings-wrapper .settings-fields-wrapper .field input{
+    width: 100%;
+    position: relative;
+    border: 1px solid var(--bgWhite2);
+    outline: none;
+    padding: 1em 1.2em;
+    padding-left: 105px;
+    box-shadow: 0 0 7px var(--grayShadow);
+    border-radius: 5px;
+}
+.edit-window .sec-forms-cont .acc-settings-wrapper .settings-fields-wrapper .field input:focus{
+    box-shadow: 0 0 7px var(--bgBlue2Tr);
+}
+
+@media (max-width:600px) {
+    .edit-window .main-edit-form .actions-card .actions-txt-btns{
+        width: 100%;
+    }
+    .edit-window .main-edit-form .actions-card .userpic-cont{
+        margin: 0 auto;
+    }
+    .edit-window .main-edit-form .actions-card .actions-txt-btns .user-bio-data{
+        align-items: center;
+    }
+}

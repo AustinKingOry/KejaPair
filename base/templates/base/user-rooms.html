@@ -1,0 +1,54 @@
+{% extends 'main.html' %}
+{% block content %}
+{% load static %}
+<head>
+    <link rel="stylesheet" href="{% static 'css/rooms-styles.css' %}" type="text/css">
+    <title>Available Rooms From {{host}}</title>
+</head>
+<div class="container">
+    <h1>Available Rooms From {{host}}</h1>
+    <div class="rooms-counter">    
+        <span>{{room_count}} rooms available</span>
+    </div>
+    <div class="rooms-container">
+        {% if rooms.count == 0 %}
+        <h3>Empty</h3>
+        {% else %}
+        {% for room in rooms %}
+        <a href="{% url 'room' room.id %}" class="room-card">
+            <div class="card-top">
+                <div class="profile-link">
+                    <img src="{% static room.host.profilePhoto.url %}" alt="avatar" class="w-h-50 cir-bor-rad obj-fit-cover">
+                    <span>@{{room.host}} {% if room.host.verified %}<i class="bi-patch-check-fill verified-badge"></i>{%endif%}</span>
+                </div>
+                <div class="room-location">
+                    <span class="bi-geo-alt-fill"> {{room.location}}</span>
+                </div>
+            </div>
+            <div class="room-cover-photo">
+                <img src="{% static room.coverPhoto.url %}" alt="cover photo" class="room-photo">
+            </div>
+            <div class="room-details-wrapper">
+                <div class="room-tags-wrapper">
+                    <span>{{room.host.age}} years</span>
+                    <span>{{room.host.gender}}</span>
+                    <span>Kshs.{{room.rent}}</span>
+                </div>
+                <div class="room-data-wrapper">
+                    <span class="room-title">{{room.name}}</span>
+                    <p class="room-description cutoff-text-shift">{{room.description}}</p>
+                </div>
+                <div class="room-footer">
+                    <span>{{room.created|timesince}} ago</span>
+                </div>
+            </div>
+            {% if room.host == request.user %}
+            <!-- <a href="{% url 'delete-room' room.id %}">delete room</a> -->
+            {% endif %}
+        </a>
+    
+        {% endfor %}
+        {% endif %}
+    </div>
+</div>
+{% endblock content %}

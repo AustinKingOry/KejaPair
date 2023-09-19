@@ -1,0 +1,152 @@
+{% extends 'main.html' %}
+{% block content%}
+{% load static %}
+<head>
+    <link rel="stylesheet" href="{% static 'css/edit-room-styles.css' %}">
+    <title>Edit Room</title>
+</head>
+
+<div class="container edit-profile-container">
+    <div class="darken2 room-details-wrapper">
+        <div class="title-bar">
+            <h3>Room Details:</h3>
+            <div class="header-btns">
+                <span class="bi-pencil-fill room-actions-btn" id="show-room-form" title="Edit Room"></span>
+                <a href="{% url 'delete-room' room.id %}" class="bi-trash-fill room-actions-btn" title="Delete Room"></a>
+                <span class="bi-bookmark-check room-actions-btn" title="Clear Room From Listing"></span>
+                <span class="bi-share-fill room-actions-btn" title="Share Room"></span>
+            </div>
+        </div>
+        <div class="profile-header mySwiper">
+            <div class="swiper-wrapper slide-wrapper">
+                <div class="slide swiper-slide">
+                    <p class="photo-counter">1/{{photos.count|add:'1'}}</p>
+                    <img src="{% static room.coverPhoto.url %}" alt="cover photo" id="imgPreview" class="">
+                </div>
+                {% for photo in photos %}
+                <div class="slide swiper-slide">
+                    <p class="photo-counter">{{forloop.counter|add:'1'}}/{{photos.count|add:'1'}}</p>
+                    <img src="{% static photo.image.url %}" alt="room image">
+                </div>
+                {% endfor %}
+            </div>
+            <div class="slide-controls">
+                <button class="bi-chevron-left prev-slide"></button>
+                <!-- <div class="swiper-button-prev"></div> -->
+            </div>
+            <div class="slide-controls">
+                <button class="bi-chevron-right next-slide"></button>
+                <!-- <div class="swiper-button-next1"></div> -->
+            </div>
+            <div class="swiper-pagination"></div>
+            <a href="{% url 'add-room-photos' room.id %}" class="bi-camera2"> Edit Photos</a>
+        </div>
+        <div class="outer-fields-wrapper">
+            <div class="data-field-cont">
+                <p>{{room.description}}</p>
+            </div>
+            <div class="data-field-cont">
+                <div class="data-field">
+                    <span class="bi-info"> {{room.name}}</span>
+                    <span class="bi-geo-alt"> {{room.location}}</span>
+                    <span class="bi-people"> Capacity: {{room.capacity}}</span>
+                    <span class="bi-person"> {{room.occupants}} Occupants</span>
+                </div>
+                <div class="data-field">
+                    <span class="bi-currency-dollar"> Rent: {{room.rent}}</span>
+                    <span class="bi-currency-dollar"> Deposit: {{room.security_deposit}}</span>
+                    <span class="bi-currency-pound"> Bills: {{room.bills_included}}</span>
+                    <span class="bi-gender-ambiguous"> Preferred Gender: {{room.preferredGender}}</span>
+                </div>
+            </div>
+        </div>
+        <div class="form-container bgPopUpWrapper" id="room-data-form">
+            <form action="" method="POST" enctype="multipart/form-data" class="edit-room-form y-scrollable">
+                {% csrf_token %}
+                <div class="form-title">
+                    <h3>Edit Room</h3>
+                    <div class="field">
+                        <input type="text" name="name" value="{{room.name}}" maxlength="200" id="id_name" required placeholder="Room Title" class="field-input">
+                    </div>
+                    <span class="hide-form cancelBgPopUpWrapper">&times;</span>
+                </div>
+                <div class="form-sect">
+                    <div class="form-mini-sect">
+                        <!-- <div class="field">
+                            <label for="id_coverPhoto">Cover Photo:</label>
+                            <input type="file" name="coverPhoto" id="id_coverPhoto" accept="image/*" class="field-input" onchange="previewFile('imgPreview','id_coverPhoto');">
+                        </div> -->
+                        <!-- <div class="field">
+                            <label for="id_name">Title: <code>*</code></label>
+                            <input type="text" name="name" value="{{room.name}}" maxlength="200" id="id_name" required placeholder="Room Title" class="field-input">
+                        </div> -->
+                        <div class="field">
+                            <label for="id_location">Location: <code>*</code></label>
+                            <input type="text" name="location" value="{{room.location}}" maxlength="200" required id="id_location" placeholder="Your Location" class="field-input">
+                        </div>
+                        <div class="field">
+                            <label for="id_capacity">Capacity: <code>*</code></label>
+                            <input type="number" name="capacity" value="{{room.capacity}}" placeholder="Capacity" required id="id_capacity" class="field-input">
+                        </div>
+                        <div class="field">
+                            <label for="id_occupants">Occupants: <code>*</code></label>
+                            <input type="number" name="occupants" value="{{room.occupants}}" placeholder="Current Occupants" required id="id_occupants" class="field-input">
+                        </div>
+                        <div class="field">
+                            <label for="id_maps_link">Google Maps Link: <code>*</code></label>
+                            <input type="url" name="maps_link" value="{{room.maps_link}}" maxlength="200" id="id_maps_link" required placeholder="share a location link for verification" class="field-input">
+                        </div>
+                    </div>
+                    <div class="form-mini-sect">
+                        <div class="field">
+                            <label for="id_rent">Rent: <code>*</code></label>
+                            <input type="number" name="rent" value="{{room.rent}}" required id="id_rent" placeholder="amount" class="field-input">
+                        </div>
+                        <div class="field">
+                            <label for="id_security_deposit">Security Deposit: <code>*</code></label>
+                            <input type="number" name="security_deposit" value="{{room.security_deposit}}" required id="id_security_deposit" placeholder="amount" class="field-input">
+                        </div>
+                        <div class="field">
+                            <label for="id_bills_included">Bills Included:</label>
+                            <select name="bills_included" id="id_bills_included" class="field-input" required>
+                                {% if room.bills_included %}
+                                <option value="True">Yes, Rent covers bills.</option>
+                                <option value="False">No, bills are exclusive.</option>
+                                {% else %}
+                                <option value="False">No, bills are exclusive.</option>
+                                <option value="True">Yes, Rent covers bills.</option>
+                                {%endif%}
+                            </select>
+                        </div>
+                        <div class="field">
+                            <label for="id_preferredGender">Preferred Gender: <code>*</code></label>
+                            <input type="text" name="preferredGender" value="{{room.preferredGender}}" maxlength="50" id="id_preferredGender" required placeholder="preferred Gender" class="field-input" list="gender-list">
+                            <datalist id="gender-list">
+                                <select id="preferred-gender">
+                                    <option value="">--select--</option>
+                                    <option value="Not Necessary">Not Necessary</option>
+                                    <option value="Male">Male</option>
+                                    <option value="Female">Female</option>
+                                    <option value="Other">Other</option>
+                                </select>
+                            </datalist>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-sect">
+                    <div class="field">
+                        <label for="id_description">Description:</label>
+                        <textarea name="description" cols="30" rows="4" id="id_description" placeholder=" describe your room..." class="field-input y-scrollable">{{room.description}}</textarea>
+                    </div>
+                </div>
+                <div class="form-sect">
+                    <div class="submit-field">
+                        <input type="submit" value="Update">
+                    </div>
+                </div>
+            </form>
+        </div>        
+    </div>
+</div>
+<script src="{% static 'js/edit-room-scripts.js' %}"></script>
+{% endblock content %}

@@ -1,0 +1,92 @@
+.user-listing-container{
+    position: relative;
+    width: 100%;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-around;
+    gap: 1em;
+}
+.user-listing-card{
+    position: relative;
+    padding: 1em;
+    background-color: var(--bgWhite);
+    box-shadow: 0 0 7px var(--darkShadow);
+    border-radius: 1pc;
+    width: fit-content;
+    min-width: 320px;
+    max-width: 350px;
+    height: fit-content;
+    min-height: 150px;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    gap: 0.5em;
+}
+.user-listing-card .user-data{
+    position: relative;
+    width: 100%;
+    max-width: 350px;
+    display: flex;
+    flex-direction: row;
+    gap: 1em;
+    align-items: center;
+}
+.user-listing-card .user-data .sect-1{
+    position: relative;
+    width: fit-content;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5em;
+}
+.user-listing-card .user-data .sect-1 img{
+    position: relative;
+    background-color: var(--bgWhite2);
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    box-shadow: 0 0 7px var(--darkShadow);
+    object-fit: cover;
+    object-position: center;
+}
+.user-listing-card .user-data .sect-1 h4{
+    color: var(--fontBlack);
+    font-size: 14px;
+    display: flex;
+    flex-direction: row;
+    gap: 0.2em;
+}
+.user-listing-card .user-data .sect-2{
+    position: relative;
+    width: fit-content;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5em;
+}
+.user-listing-card .user-data .sect-2 span{
+    background-color: var(--bgGreenDes);
+    color: var(--fontWhite);
+    padding: 0.3em 1em;
+    border-radius: 1pc;
+    width: fit-content;
+    height: fit-content;
+    font-size: 12px;
+}
+.user-listing-card .interaction-btns{
+    position: relative;
+    width: 100%;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    gap: 1em;
+    align-items: center;
+}
+.user-listing-card .interaction-btns .intr-btn{
+    position: relative;
+    background-color: var(--bgBlue2);
+    padding: 0.5em 1em;
+    color: var(--fontWhite);
+    font-size: 14px;
+    text-decoration: none;
+    border-radius: 0.5pc;
+}

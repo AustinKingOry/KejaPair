@@ -1,0 +1,32 @@
+{% extends 'main.html' %}
+{% block content%}
+{% load static %}
+<head>
+    <link rel="stylesheet" href="{% static 'css/add-profile-photos-styles.css' %}" type="text/css">
+    <title>New Timeline Photo</title>
+</head>
+<div class="container">
+    <div class="headings">
+        <h1>New Activity</h1>
+        <p>Share memories, capture your lifestyle with people with mutual interests.</p>
+    </div>
+    <form method="POST" action="" enctype="multipart/form-data" class="post-form">
+        {% csrf_token %}
+        <div class="field">
+            <label for="id_image" class="bi-camera"> New Photo</label>
+            <input type="file" class="hidden" name="image" id="id_image" accept="image/*" onchange="previewFile('uploadPreview','id_image')" required>
+        </div>
+        <div class="new-photos-wrapper">
+            <div class="image-container">
+                <img src="" alt="" id="uploadPreview">
+            </div>
+        </div>
+        <div class="field">
+            <textarea name="description" id="id_description" cols="30" rows="4" placeholder="Caption..."></textarea>
+        </div>
+        <div class="submit-field">
+            <button class="sendPhoto">Post</button>
+        </div>
+    </form>
+</div>
+{% endblock content %}

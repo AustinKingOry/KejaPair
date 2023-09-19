@@ -1,0 +1,174 @@
+{% extends 'main.html' %}
+{% block content %}
+{% load static %}
+<!-- <h1>Profile</h1> -->
+<head>
+    <link rel="stylesheet" href="{% static 'css/profile-styles.css'%}">
+    <title>Profile-{{profile}}</title>
+</head>
+<div class="container view-room">
+    
+    <div class="host-data-wrapper">
+        <div class="basic-data">
+            <img src="{% static profile.profilePhoto.url %}" alt="profile photo">
+        </div>
+        <div class="host-names">
+            <h4>{{profile.get_full_name}} {% if profile.verified %}<i class="bi-patch-check-fill verified-badge"></i>{%endif%}</h4>
+            <span>@{{profile}}</span>
+        </div>
+        <div class="host-data-bio">
+            <!-- <h4>Bio:</h4> -->
+            <p>{{profile.bio}}</p>
+        </div>
+        <div class="host-sect-links">
+            {% if pairable == True %}
+            {% if not pair_exists %}
+            <a href="{% url 'pair-with' profile.id %}"><i class="fas fa-house-user">&plus;</i> Pair</a>
+            {% else %}
+            <a href="{% url 'pair-with' profile.id %}" class="requested"><i class="fas fa-house-user">&check;</i> Pending Pair</a>
+            {% endif %}
+            {% endif %}
+            {% if request.user.id == profile.id %}
+            <a href="/edit-profile">Edit Profile</a>
+            {% endif %}
+            {% if request.user.id != profile.id %}
+            <a href="/chats?u={{profile.id}}">Send Message</a>
+            {% endif %}
+            <a href="#activity-feed">View Photos</a>
+            {% if profile.category != 'Guest' %}
+            <a href="{% url 'host-rooms' profile.id %}">Rooms</a>
+            {%endif%}
+        </div>
+        <div class="host-data-card">
+            <div class="data-field">
+                <h3 class="green-el">About {{profile}}:</h3>
+            </div>            
+            <div class="data-field">
+                <span>Gender: {{profile.gender}}</span>
+            </div>
+            <div class="data-field">
+                <span>Age: {{profile.age}}</span>
+            </div>
+            <div class="data-field">
+                <span>Residence: {{profile.location}}</span>
+            </div>
+            <div class="data-field">
+                <span>Account: {{profile.category}}</span>
+            </div>
+        </div>
+        <h3 class="blue-el">Hobbies & Interests:</h3>
+        <div class="hobbies-container">
+            {% if hobbies.count == 0 %}
+            <span>empty</span>
+            {% else %}
+            {% for hobby in hobbies %}
+            <span class="hobby-tag">{{hobby}}</span>
+            {% endfor %}
+            {% endif %}
+        </div>
+    </div>
+
+    <div class="activity-component" id="activity-feed">
+        <h3>Activity Feed</h3>
+        <div class="feed-category-header-wrapper">
+            <div class="feed-category-header active_feed_header" id="rooms_feed_header">
+                <span>Rooms</span>
+            </div>
+            <div class="feed-category-header" id="profile_feed_header">
+                <span>Profile</span>
+            </div>              
+        </div>
+        <div class="activity-wrapper">
+            {% if rooms.count > 0 and rooms_photos.count > 0 %}
+            {% for photo in rooms_photos %}
+            <div class="activity-card rooms-feed-item">
+                <div class="activity-card-header">
+                    <div class="user-info">
+                        <img src="{% static profile.profilePhoto.url %}" alt="">
+                        <p>{{profile.get_full_name}} {% if profile.verified %}<i class="bi-patch-check-fill verified-badge"></i>{%endif%}<br><small>@{{profile}}</small></p>
+                    </div>                    
+                    <span><small>{{photo.created|timesince}} ago</small></span>
+                </div>
+                <div class="activity-card-caption">
+                    <p class="cutoff-text-shift">{{photo.description|default:"added a new photo of their room album."}} <a href="{% url 'room' photo.room.id %}"> Checkout this room.</a></p>
+                </div>
+                <div class="activity-card-image">
+                    <img src="{% static photo.image.url %}" alt="{{photo.category}}">
+                </div>
+            </div>
+            {% endfor %}
+            {% endif %}
+            {% if rooms.count == 0 and likes_rec.count == 0 %}
+            <div class="empty-container rooms-feed-item">
+                <span>No activity yet.</span>
+            </div>
+            {% else %}
+            {% for room in rooms %}
+            <div class="activity-card rooms-feed-item">
+                <div class="activity-card-header">
+                    <div class="user-info">
+                        <img src="{% static room.host.profilePhoto.url %}" alt="">
+                        <p>{{room.host.get_full_name}} {% if room.host.verified %}<i class="bi-patch-check-fill verified-badge"></i>{%endif%}<br><small>@{{room.host}}</small></p>
+                    </div>                    
+                    <span><small>{{room.created|timesince}} ago</small></span>
+                </div>
+                <div class="activity-card-caption">
+                    <p class="cutoff-text-shift">{{room.description}}</p><a href="{% url 'room' room.id %}"> Checkout this room.</a>
+                </div>
+                <div class="activity-card-image">
+                    <img src="{% static room.coverPhoto.url %}" alt="room photo">
+                </div>
+            </div>
+            {% endfor %}
+            {% endif %}
+            {% if feed_photos.count == 0 %}
+            <div class="empty-container profile-feed-item" style="display: none;">
+                <span>No activity yet.</span>
+            </div>
+            {% else %}
+            {% for photo in feed_photos %}
+            <div class="activity-card profile-feed-item" style="display: none;">
+                <div class="activity-card-header">
+                    <div class="user-info">
+                        <img src="{% static profile.profilePhoto.url %}" alt="">
+                        <p>{{profile.get_full_name}} {% if profile.verified %}<i class="bi-patch-check-fill verified-badge"></i>{%endif%}<br><small>@{{profile}}</small></p>
+                    </div>                    
+                    <span><small>{{photo.created|timesince}} ago</small></span>
+                </div>
+                <div class="activity-card-caption">
+                    <p>{{photo.description}}</p>
+                </div>
+                <div class="activity-card-image">
+                    <img src="{% static photo.image.url %}" alt="{{photo.category}}">
+                </div>
+            </div>
+            {% endfor %}
+            {% endif %}
+            <!-- <div class="empty-container rooms-feed-item">
+                 <span>No activity yet.</span>
+            </div> -->
+            {% if likes_rec.count > 0 %}
+            {% for like in likes_rec %}
+            <div class="activity-card rooms-feed-item">
+                <div class="activity-card-header">
+                    <div class="user-info">
+                        <img src="{% static like.home.host.profilePhoto.url %}" alt="">
+                        <p>{{like.home.host.get_full_name}} {% if like.home.host.verified %}<i class="bi-patch-check-fill verified-badge"></i>{%endif%}<br><small>@{{like.home.host}}</small></p>
+                    </div>                    
+                    <span><small>{{like.created|timesince}} ago</small></span>
+                </div>
+                <div class="activity-card-caption">
+                    <p class="cutoff-text-shift">{{like.home.host.get_full_name}} liked the room "{{like.home.description|truncatewords:"10"}}"</p><a href="{% url 'room' like.home.id %}"> Checkout this room.</a>
+                </div>
+                <div class="activity-card-image">
+                    <img src="{% static like.home.coverPhoto.url %}" alt="room photo">
+                </div>
+            </div>
+            {% endfor %}
+            {%endif%}
+        </div>        
+    </div>
+</div>
+<script src="{% static 'js/profile-scripts.js' %}"></script>
+{% endblock content %}
+Lorem ipsum dolor sit amet consectetur adipisicing elit. Nemo molestiae fugit blanditiis iure itaque placeat dignissimos dicta sunt maiores maxime!

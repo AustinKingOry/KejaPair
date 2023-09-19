@@ -1,0 +1,225 @@
+{% extends 'main.html' %}
+{% block content %}
+{% load static %}
+<head>
+    <link rel="stylesheet" href="{% static 'css/user-pairs-styles.css' %}" type="text/css">
+    <title>My Pair Requests</title>
+</head>
+<div class="container pair-groups-wrapper">
+    <h2>Received Requests</h2>
+    <div class="pair-group x-scrollable">
+        {% if received_pairs_count == 0 %}
+        <div class="empty-container">
+            <span>No Received Requests.</span>
+        </div>
+        {%endif%}
+        {% for pair in pairs %}
+        {% if request.user == pair.guest and request.user != pair.trigger %}
+        <div class="pair-request-card">
+            <a class="user-info-wrapper" href="{% url 'profiles' pair.host.id %}">
+                <div class="top">
+                    <span class="bi-person-circle pair-type" title="This is a user."></span> 
+                    <img src="{% static pair.host.profilePhoto.url %}" alt="host_{{pair.host.id}}">
+                </div>
+                <div class="mid">
+                    <h5>{{pair.host.get_full_name}} {% if pair.host.verified %}<i class="bi-patch-check-fill verified-badge"></i>{%endif%}</h5>
+                    <!-- <div class="mid-tags"> -->
+                        <p>{{pair.host.age}},{{pair.host.gender}},{{pair.host.location}}</p>
+                    <!-- </div> -->
+                </div>
+                <div class="bottom">
+                    <p class="cutoff-text-shift"> {{pair.host.bio}}</p>
+                </div>
+            </a>
+            <div class="pairing-actions">
+                <a href="{% url 'match-with' pair.host.id %}" class="pair-action">&check; Accept</a>
+                <a href="{% url 'pair-with' pair.host.id %}" class="pair-action">&times; Decline</a>
+            </div>
+        </div>
+        {% elif request.user == pair.host and request.user != pair.trigger %}
+        <div class="pair-request-card">
+            <a href="{% url 'profiles' pair.guest.id %}" class="user-info-wrapper">
+                <div class="top">
+                    <span class="bi-person-circle pair-type" title="This is a user."></span> 
+                    <img src="{% static pair.guest.profilePhoto.url %}" alt="guest_{{pair.guest.id}}">
+                </div>
+                <div class="mid">
+                    <h5>{{pair.guest.get_full_name}} {% if pair.guest.verified %}<i class="bi-patch-check-fill verified-badge"></i>{%endif%}</h5>
+                    <!-- <div class="mid-tags"> -->
+                        <p>{{pair.guest.age}},{{pair.guest.gender}},{{pair.guest.location}}</p>
+                    <!-- </div> -->
+                </div>
+                <div class="bottom">
+                    <p class="cutoff-text-shift"> {{pair.guest.bio|default:'No bio.'}}</p>
+                </div>
+            </a>
+            <div class="pairing-actions">
+                <a href="{% url 'match-with' pair.guest.id %}" class="pair-action">&check; Accept</a>
+                <a href="{% url 'pair-with' pair.guest.id %}" class="pair-action">&times; Decline</a>
+            </div>
+        </div>
+        {% endif %}
+        {% endfor %}
+    </div>
+    <h2>Sent Requests</h2>
+    <div class="pair-group x-scrollable">
+        {% if sent_pairs_count == 0 and booked_rooms|length == 0 %}
+        <div class="empty-container">
+            <span>No Sent Requests.</span>
+        </div>
+        {%endif%}
+        {% for pair in pairs %}
+        {% if request.user == pair.guest and request.user == pair.trigger %}
+        <div class="pair-request-card">
+            <a href="{% url 'profiles' pair.host.id %}" class="user-info-wrapper">
+                <div class="top">
+                    <span class="bi-person-circle pair-type" title="This is a user."></span> 
+                    <img src="{% static pair.host.profilePhoto.url %}" alt="host_{{pair.host.id}}">
+                </div>
+                <div class="mid">
+                    <h5>{{pair.host.get_full_name}} {% if pair.host.verified %}<i class="bi-patch-check-fill verified-badge"></i>{%endif%}</h5>
+                    <!-- <div class="mid-tags"> -->
+                        <p>{{pair.host.age}},{{pair.host.gender}},{{pair.host.location}}</p>
+                    <!-- </div> -->
+                </div>
+                <div class="bottom">
+                    <p class="cutoff-text-shift"> {{pair.host.bio}}</p>
+                </div>
+            </a>
+            <div class="pairing-actions">
+                <a href="/chats?u={{pair.host.id}}" class="pair-action bi-chat"> Chat</a>
+                <a href="{% url 'pair-with' pair.host.id %}" class="pair-action">Cancel</a>
+            </div>
+        </div>
+        {% elif request.user == pair.host and request.user == pair.trigger %}
+        <div class="pair-request-card">
+            <a href="{% url 'profiles' pair.guest.id %}" class="user-info-wrapper">
+                <div class="top">
+                    <span class="bi-person-circle pair-type" title="This is a user."></span> 
+                    <img src="{% static pair.guest.profilePhoto.url %}" alt="guest_{{pair.guest.id}}">
+                </div>
+                <div class="mid">
+                    <h5>{{pair.guest.get_full_name}} {% if pair.guest.verified %}<i class="bi-patch-check-fill verified-badge"></i>{%endif%}</h5>
+                    <!-- <div class="mid-tags"> -->
+                        <p>{{pair.guest.age}},{{pair.guest.gender}},{{pair.guest.location}}</p>
+                    <!-- </div> -->
+                </div>
+                <div class="bottom">
+                    <p class="cutoff-text-shift"> {{pair.guest.bio|default:'No bio.'}}</p>
+                </div>
+            </a>
+            <div class="pairing-actions">
+                <a href="/chats?u={{pair.guest.id}}" class="pair-action bi-chat"> Chat</a>
+                <a href="{% url 'pair-with' pair.guest.id %}" class="pair-action">Cancel</a>
+            </div>
+        </div>
+        {% endif %}
+        {% endfor %}
+        {% if booked_rooms|length > 0 %}
+        {% for booked_room in booked_rooms %}
+        <div class="pair-request-card suggested-room">
+            <a href="{% url 'room' booked_room.id %}" class="user-info-wrapper">
+                <div class="top">
+                    <span class="bi-house-fill pair-type green-el" title="This is a room."></span> 
+                    <img src="{% static booked_room.coverPhoto.url %}" alt="room_{{booked_room.id}}">
+                </div>
+                <div class="mid">
+                    <h5>{{booked_room.name|truncatewords:"4"}} {% if booked_room.host.verified %}<i class="bi-patch-check-fill verified-badge"></i>{%endif%}</h5>
+                    <!-- <div class="mid-tags"> -->
+                        <p>{{booked_room.rent}},{%if booked_room.bills_included%}Bills Included{%endif%},{{booked_room.location}}</p>
+                    <!-- </div> -->
+                </div>
+                <div class="bottom">
+                    <p class="cutoff-text-shift"> {{booked_room.description}}</p>
+                </div>
+            </a>
+            <div class="pairing-actions">
+                <a href="/chats?u={{booked_room.host.id}}" class="pair-action bi-chat"> Chat</a>
+                <a href="{% url 'request-room' booked_room.id %}" class="pair-action">Cancel Booking</a>
+            </div>
+        </div>
+        {% endfor %}
+        {%endif%}
+    </div>
+    <h2>Reccommended For You</h2>
+    <div class="pair-group x-scrollable">
+        {% if reccommended_pairs_count == 0 %}
+        <div class="empty-container">
+            <span>No Reccommendations For Now.</span>
+        </div>
+        {%endif%}
+        {% for pair in suggested_pairs %}
+        {% if request.user.category != 'Guest' %}
+        <div class="pair-request-card">
+            <a href="{% url 'profiles' pair.id %}" class="user-info-wrapper">
+                <div class="top">
+                    <span class="bi-person-circle pair-type" title="This is a user."></span> 
+                    <img src="{% static pair.profilePhoto.url %}" alt="user_{{pair.id}}">
+                </div>
+                <div class="mid">
+                    <h5>{{pair.get_full_name}} {% if pair.verified %}<i class="bi-patch-check-fill verified-badge"></i>{%endif%}</h5>
+                    <!-- <div class="mid-tags"> -->
+                        <p>{{pair.age}},{{pair.gender}},{{pair.location}}</p>
+                    <!-- </div> -->
+                </div>
+                <div class="bottom">
+                    <p class="cutoff-text-shift"> {{pair.bio}}</p>
+                </div>
+            </a>
+            <div class="pairing-actions">
+                <a href="/chats?u={{pair.id}}" class="pair-action bi-chat"> Chat</a>
+                <a href="{% url 'pair-with' pair.id %}" class="pair-action">Pair</a>
+            </div>
+        </div>
+        {% else %}
+        {% if pair.host.category == 'Host' %}
+        <div class="pair-request-card">
+            <a href="{% url 'profiles' pair.host.id %}" class="user-info-wrapper">
+                <div class="top">
+                    <span class="bi-person-circle pair-type" title="This is a user."></span> 
+                    <img src="{% static pair.host.profilePhoto.url %}" alt="host_{{pair.host.id}}">
+                </div>
+                <div class="mid">
+                    <h5>{{pair.host.get_full_name}} {% if pair.host.verified %}<i class="bi-patch-check-fill verified-badge"></i>{%endif%}</h5>
+                    <!-- <div class="mid-tags"> -->
+                        <p>{{pair.host.age}},{{pair.host.gender}},{{pair.host.location}}</p>
+                    <!-- </div> -->
+                </div>
+                <div class="bottom">
+                    <p class="cutoff-text-shift"> {{pair.host.bio}}</p>
+                </div>
+            </a>
+            <div class="pairing-actions">
+                <a href="/chats?u={{pair.host.id}}" class="pair-action bi-chat"> Chat</a>
+                <a href="{% url 'pair-with' pair.host.id %}" class="pair-action">Pair</a>
+            </div>
+        </div>
+        {% else %}
+        <div class="pair-request-card suggested-room">
+            <a href="{% url 'room' pair.id %}" class="user-info-wrapper">
+                <div class="top">
+                    <span class="bi-house-fill pair-type green-el" title="This is a room."></span> 
+                    <img src="{% static pair.coverPhoto.url %}" alt="room_{{pair.id}}">
+                </div>
+                <div class="mid">
+                    <h5>{{pair.name|truncatewords:"4"}} {% if pair.host.verified %}<i class="bi-patch-check-fill verified-badge"></i>{%endif%}</h5>
+                    <!-- <div class="mid-tags"> -->
+                        <p>{{pair.rent}},{%if pair.bills_included%}Bills Included{%endif%},{{pair.location}}</p>
+                    <!-- </div> -->
+                </div>
+                <div class="bottom">
+                    <p class="cutoff-text-shift"> {{pair.description}}</p>
+                </div>
+            </a>
+            <div class="pairing-actions">
+                <a href="/chats?u={{pair.host.id}}" class="pair-action bi-chat"> Chat</a>
+                <a href="{% url 'request-room' pair.id %}" class="pair-action">Request Room</a>
+            </div>
+        </div>
+        {%endif%}
+        {%endif%}
+        {% endfor %}
+    </div>
+</div>
+
+{% endblock content %}

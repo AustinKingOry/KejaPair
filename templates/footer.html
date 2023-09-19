@@ -1,0 +1,35 @@
+{% load static %}
+<footer>
+    <div class="toast-wrapper" id="toast-wrapper">
+        <div class="message-wrapper">
+            <i class="bi-info-circle info-type"></i>
+            <p id="toast-message"></p>
+        </div>        
+        <span id="time-out-progress"></span>
+    </div>
+    <section class="footer-links">
+        <div class="social-links">
+            <a href="">Facebook</a>
+            <a href="">Instagram</a>
+            <a href="">Twitter</a>
+            <a href="">Mail Us</a>
+            <a href="">Whatsapp</a>
+            <a href="">Customer Service</a>
+        </div>
+        <div class="doc-links">
+            <a href="/signup">Register</a>
+            <a href="/signin">Login</a>
+            <a href="">About Us</a>
+            <a href="">FAQ</a>
+            <a href="{% url 'add-room' %}">Rent Your Room</a>
+            <a href="{%url 'all-room'%}">Find A Room</a>
+            <a href="">Safety And Security</a>
+            <a href="">Terms And Conditions</a>
+            <a href="">Privacy Policies</a>
+        </div>
+    </section>    
+    <section>
+        <p>Copyright &copy; KejaPair <span id="cpyyear"></span>. All Rights Reserved To<a href="">Crust Technologies LLP.</a></p>
+    </section>
+</footer>
+<script src="{% static 'js/footer-scripts.js' %}"></script>

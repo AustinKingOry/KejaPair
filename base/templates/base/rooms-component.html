@@ -1,0 +1,94 @@
+{% load static %}
+<head>
+    <link rel="stylesheet" href="{% static 'css/rooms-styles.css' %}" type="text/css">
+</head>
+<h1>All Rooms</h1>
+<div class="rooms-filter-container">
+    <div class="field">
+        <select id="locationFilter" class="filter-field">
+            <option value="*">Location</option>
+            {% for room in rooms %}
+            <option value="{{room.location}}">{{room.location}}</option>
+            {% endfor %}
+        </select>
+    </div>
+    <div class="field">
+        <select id="rentFilter" class="filter-field">
+            <option value="*">Rent</option>
+            <option value="2000">2000 and below</option>
+            <option value="5000">5000 and below</option>
+            <option value="8000">8000 and below</option>
+            <option value="10000">10000 and below</option>
+            <option value="15000">15000 and below</option>
+            <option value="20000">20000 and below</option>
+            <option value="30000">30000 and below</option>
+            <option value="40000">40000 and below</option>
+            <option value="50000">50000 and below</option>
+            <option value="50001">Above 50000</option>
+        </select>
+    </div>
+    <div class="field">
+        <select id="genderFilter" class="filter-field">
+            <option value="*">Gender</option>
+            <option value="*">Not Neccesary</option>
+            <option value="Male">Male</option>
+            <option value="Female">Female</option>
+            <option value="Other">Other</option>
+        </select>
+    </div>
+    <div class="field">
+        <select id="capacityFilter" class="filter-field">
+            <option value="*">Capacity</option>
+            <option value="1">1 bedroom</option>
+            <option value="2">2 bedrooms</option>
+            <option value="3">3 bedrooms</option>
+            <option value="4">4 bedrooms</option>
+        </select>
+    </div>
+    <div class="field">
+        <button class="filter-field bi-arrow-counterclockwise" value="*" id="reset_filters" onclick="filter_rooms('reset_filters');"> Reset</button>
+    </div>
+</div>
+<div class="rooms-counter">    
+    <span>{{room_count}} rooms available</span>
+</div>
+<div class="rooms-container" id="rooms-container-main">
+    {% if rooms.count == 0 %}
+    <h3>Empty</h3>
+    {% else %}
+    {% for room in rooms %}
+    <a href="{% url 'room' room.id %}" class="room-card" capacity="{{room.capacity}}" rent="{{room.rent}}" loc="{{room.location}}">
+        <div class="card-top">
+            <div class="profile-link">
+                <img src="{% static room.host.profilePhoto.url %}" alt="avatar" class="w-h-50 cir-bor-rad obj-fit-cover">
+                <span>@{{room.host}} {% if room.host.verified %}<i class="bi-patch-check-fill verified-badge"></i>{%endif%}</span>
+            </div>
+            <div class="room-location">
+                <span class="bi-geo-alt-fill room-loc"> {{room.location}}</span>
+            </div>
+        </div>
+        <div class="room-cover-photo">
+            <img src="{% static room.coverPhoto.url %}" alt="cover photo" class="room-photo">
+        </div>
+        <div class="room-details-wrapper">
+            <div class="room-tags-wrapper">
+                <span>{{room.host.age}} years</span>
+                <span class="host-gender">{{room.host.gender}}</span>
+                <span>Kshs.{{room.rent}}</span>
+            </div>
+            <div class="room-data-wrapper">
+                <span class="room-title">{{room.name}}</span>
+                <p class="room-description cutoff-text-shift">{{room.description}}</p>
+            </div>
+            <div class="room-footer">
+                <span>{{room.created|timesince}} ago</span>
+            </div>
+        </div>
+        {% if room.host == request.user %}
+        <!-- <a href="{% url 'delete-room' room.id %}">delete room</a> -->
+        {% endif %}
+    </a>
+
+    {% endfor %}
+    {% endif %}
+</div>

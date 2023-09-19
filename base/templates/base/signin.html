@@ -1,0 +1,34 @@
+{% extends 'main.html' %}
+{% block content %}
+{% load static %}
+<head>
+    <link rel="stylesheet" href="{% static 'css/rooms-styles.css' %}" type="text/css">
+    <title>Login to your account</title>
+</head>
+<div class="container signin-wrapper">
+    <div class="form-container">
+        <div class="signup-blockquote">
+            <h2>Set up your account to get started.</h2>
+            <p>Creating an account helps us to customize your experience to ensure your goals are easily met in time.</p>
+        </div>
+        <form action="" method="post" class="signin-form">
+            {% csrf_token %}
+            <div class="field form-group">
+                <label for="id_username">Username:</label>
+                <input type="text" name="username" id="id_username" placeholder="Username or email or phone" required  class="form-control">
+            </div>
+            <div class="field form-group">
+                <label for="id_password">Password:</label>
+                <input type="password" name="password" id="id_password" placeholder="********" required class="form-control">
+            </div>
+            <!-- <div class="field">
+                <input type="submit" value="Sign In">
+            </div>                     -->
+            <div class="field form-group">
+                <input type="submit" id="submitLogin" value="Sign In" class="elongated-btn centered-el submit-form">
+            </div>
+            <p class="centered-p full-width padded-mini">Don't have an account? <a href="{% url 'signup' %}">Sign Up</a></p>
+        </form>
+    </div>
+</div>
+{% endblock content %}

@@ -1,0 +1,75 @@
+{% load static %}
+<nav>
+    <div class="logo-sect">
+        {% if request.user.is_authenticated %}
+        <span class="bi-list side-nav-toggle" id="side-nav-toggle"></span>
+        {%endif%}
+        <a href="/">Keja<span>Pair</span> </a>
+    </div>
+    <!-- <a href="/users">Users</a> -->
+    <div class="nav-links">
+        <!-- <a href="/rooms">Rooms</a> -->
+        {% if request.user.is_authenticated %}
+        {% if user.profilePhoto is None %}
+        <div class="acc-link pointed" id="nav-toggle">
+            <img src="{% static 'img/avatar.png' %}" alt="avatar" class="w-h-40 cir-bor-rad obj-fit-cover drop-btn">
+            <span class="bold drop-btn l-u-name" user-id="{{user.id}}">{{user}} {% if user.verified %}<i class="bi-patch-check-fill verified-badge"></i>{%endif%}</span>
+            <span class="bi-chevron-down bold drop-btn"></span>
+        </div>
+        {% else %}
+
+        <div class="acc-link pointed" id="nav-toggle">
+            <img src="{% static user.profilePhoto.url %}" alt="avatar" class="w-h-40 cir-bor-rad obj-fit-cover drop-btn">
+            <span class="bold drop-btn l-u-name" user-id="{{user.id}}">{{user}} {% if user.verified %}<i class="bi-patch-check-fill verified-badge"></i>{%endif%}</span>
+            <span class="bi-chevron-down bold drop-btn"></span>
+        </div>
+        {% endif %}
+        <aside class="user-nav-links drop-list" id="nav-links-dropdown">
+            <a href="{% url 'notifications' %}" class="bi-bell-fill"> Notifications</a>
+            <a href="/chats" class="bi-chat"> Chats</a>
+            <a href="{% url 'edit-profile' %}" class="bi-pencil-square"> Edit Profile</a>
+            <a href="{% url 'logout' %}" class="bi-box-arrow-right"> Logout</a>
+        </aside>
+
+        {% else %}
+        <a href="/signin">Sign In</a>
+        {% endif %}
+    </div>
+</nav>
+{% if request.user.is_authenticated %}
+<aside class="side-nav" id="global-side-nav">
+    <div class="side-nav-components-wrapper">
+        <div class="icons-container"></div>
+        <div class="side-nav-links-wrapper">
+            <a href="{% url 'profiles' user.id %}" title="Profile" {% if active_page == 'profile'%}class="active-page"{%endif%}><i class="bi-person-circle"></i><span class="side-nav-link"> Profile</span></a>
+            <a href="/chats" title="Chats" {% if active_page == 'chats'%}class="active-page"{%endif%}><i class="bi-chat-fill"></i><span class="side-nav-link"> Chats </span><span class="badge alert-badge chats-alert"></span></a>
+            <a href="{% url 'notifications' %}" title="Notifications" {% if active_page == 'notif'%}class="active-page"{%endif%}><i class="bi-bell-fill"></i><span class="side-nav-link"> Notifications </span><span class="badge alert-badge notif-alert"></span></a>
+            <a href="{% url 'edit-profile' %}" title="Settings" {% if active_page == 'settings'%}class="active-page"{%endif%}><i class="bi-gear"></i><span class="side-nav-link"> Settings</span></a>
+            {% if user.category != 'Owner' %}
+            <a href="{% url 'user-pairs' %}" title="My Pairs" {% if active_page == 'pairs'%}class="active-page"{%endif%}><i class="bi-people-fill"></i><span class="side-nav-link"> My Pairs </span><span class="badge alert-badge pairs-alert"></span></a>
+            <a href="{% url 'my-matches' %}" title="My Matches" {% if active_page == 'matches'%}class="active-page"{%endif%}><i class="bi-people-fill bold"><small>&check;</small></i><span class="side-nav-link"> My Matches </span><span class="badge alert-badge matches-alert"></span></a>
+            {%endif%}
+            {% if user.category == 'Owner' %}
+            <a href="{% url 'owner-chamber' %}" title="Owner's Chamber" {% if active_page == 'owner-chamber'%}class="active-page"{%endif%}><i class="bi-house-heart-fill"></i><span class="side-nav-link"> Owner's Chamber</span></a>
+            {%endif%}
+            {% if user.category == 'Guest' %}
+            <a href="{% url 'guest-settings' %}" title="Guest Settings" {% if active_page == 'guest-settings'%}class="active-page"{%endif%}><i class="bi-gear"></i><span class="side-nav-link"> Guest Settings</span></a>
+            {% else %}
+            <a href="{% url 'add-room' %}" title="Add Room" {% if active_page == 'add-room'%}class="active-page"{%endif%}><i class="bi-house"><small>&plus;</small></i><span class="side-nav-link"> Add Room</span></a>
+            <a href="{% url 'my-rooms' %}" title="My Listing" {% if active_page == 'listing'%}class="active-page"{%endif%}><i class="fas fa-house-user"></i><span class="side-nav-link"> My Listing</span></a>
+            {%endif%}
+            <a href="{% url 'profiles' user.id %}#activity-feed" title="Activity Feed" {% if active_page == 'activity-feed'%}class="active-page"{%endif%}><i class="bi-clock-history"></i><span class="side-nav-link"> Activity Feed</span></a>
+        </div>
+    </div>
+</aside>
+{%endif%}
+{% if messages %}
+        {% for message in messages %}
+    <div class="messages {{ message.tags }} messages-alert alert alert-primary" role="alert">
+        <p>{{ message }}</p>
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+        {% endfor %}
+{% endif %}

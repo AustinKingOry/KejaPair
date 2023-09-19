@@ -1,0 +1,49 @@
+{% extends 'main.html' %}
+{% block content%}
+{% load static %}
+<head>
+    <link rel="stylesheet" href="{% static 'css/user-hobbies-styles.css' %}" type="text/css">
+    <title>My Hobbies & Interests</title>
+</head>
+<div class="container">
+    <div class="hobbies-wrapper">
+        <h4>Your Hobbies & Interests</h4>
+        <div class="hobbies-list" id="hobbies-list">
+            {% if hobbies.count > 0 %}
+            {% for hobby in hobbies %}
+            <div class="hobby-item">
+                <p>{{hobby}}</p>
+                <span class="bi-x remove-hobby"></span>
+            </div>
+            {% endfor %}
+            {% else %}
+            <div class="empty-container">
+                <span>You have not added any.</span>
+            </div>
+            {% endif %} 
+        </div>
+        <div class="new-hobbies-wrapper">
+            <div class="hobby-search-field">
+                <input type="hidden" name="USER_ID" id="USER_ID" value="{{request.user.id}}">
+                <input type="search" name="hobby-search-input" id="id-hobby-search-input" placeholder="Search Or Add Here..." class="hobby-search" onkeyup="search_hobbies();" autofocus>
+                <button class="new_from_search" id="new_from_search" >Add New</button>
+            </div>
+            <div class="hobby-options y-scrollable" id="hobby-options">
+                {% for hobby in all_hobbies %}
+                <div class="hobby-option">
+                    <span>{{hobby}}</span>
+                    <i class="bi-plus bold add-hobby"></i>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+        <div class="send-hobby-items">
+            <div class="field">
+                <button class="sendHobbies" id="sendHobbies">Update</button>
+            </div>
+        </div>        
+    </div>
+</div>
+
+<script src="{% static 'js/user-hobbies-scripts.js' %}"></script>
+{% endblock content %}

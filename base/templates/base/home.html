@@ -1,0 +1,51 @@
+{% extends 'main.html' %}
+{% block content %}
+{% load static %}
+<head>
+    <link rel="stylesheet" href="{% static 'css/rooms-styles.css' %}" type="text/css">
+    <title>Find Your Perfect Preferred Roommate</title>
+</head>
+<div class="showcase">
+    <div class="showcase-headers">
+        <h1>Kenya's leading roommate finder</h1>
+        <p class="blockquote">
+            Lorem ipsum dolor sit amet consectetur adipisicing elit. Sed ipsam nam reprehenderit explicabo, officiis delectus.
+        </p>
+    </div>
+    <div class="showcase-search">
+        <form action="/rooms" method="get">
+            <div class="field">
+                <input type="search" name="q" id="id_search" placeholder="search KejaPair" required>
+                <button type="submit" class="bi-search" autocomplete="on"></button>
+            </div>
+        </form>
+    </div>
+    <div class="showcase-btns">
+        {% if request.user.is_authenticated %}
+        {% if user.category != 'Guest' %}
+        <a href="{%url 'add-room'%}"> List Your Room</a>
+        {% else %}
+        <a href="{%url 'hosts'%}"> Explore Hosts</a>
+        {% endif %}
+        {% else %}
+        <a href="{%url 'add-room'%}"> List Your Room</a>
+        {% endif %}
+        {% if user.category == 'Host' or user.category == 'Owner' %}
+        <a href="{%url 'guests-listing'%}"> Explore Guests</a>
+        {% else %}
+        <a href="{%url 'all-room'%}"> Find A Room</a>
+        {% endif %}
+    </div>
+</div>
+<main>
+    <div class="container">
+        <!-- rooms page starts here  -->
+
+        {% include 'base/rooms-component.html' %}
+
+        <!-- rooms page ends here  -->
+    </div>
+</main>
+
+
+{% endblock content %}

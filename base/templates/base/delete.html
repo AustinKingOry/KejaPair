@@ -1,0 +1,84 @@
+{% extends 'main.html' %}
+{% block content %}
+<head>
+    <title>Delete Item</title>
+    <style>
+        .layout__body{
+            background-color: var(--bgWhite2);
+            padding: 0.2em 1em;
+            box-shadow: 0 0 5px var(--darkShadow);
+            border-radius: 0.5em;
+            max-width: 90%;
+            margin: 1em auto;
+            gap: 0.5em;
+            /* min-height: 250px; */
+        }
+        .layout__body h3{
+            width: 100%;
+            margin: 0;
+            padding: 0.3em;
+            border-bottom: 2px solid var(--lightBorder);
+        }
+        form{
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            gap: 1em;
+            align-items: center;
+            justify-content: center;
+        }
+        .form__statement{
+            position: relative;
+            background-color: var(--bgWhite3);
+            width: 100%;
+            padding: 1em;
+            border-radius: 0.5pc;
+        }
+        .form-actions-wrapper{
+            position: relative;
+            padding: 1em;
+            width: 90%;
+            display: flex;
+            /* flex-direction: row; */
+            flex-wrap: wrap;
+            align-items: flex-end;
+            justify-content: flex-end;
+            gap: 1em;
+        }
+        .form-action{
+            position: relative;
+            border: 2px solid var(--bgBlue);
+            padding: 0.5em 1em;
+            font-size: 16px;
+            border-radius: 1pc;
+            font-weight: 600;
+            background-color: var(--bgWhite3);
+        }
+        .form-action:last-child{
+            color: var(--color-error);
+            border-color: var(--color-error);
+            text-decoration: none;
+        }
+        .form-action:hover{
+            box-shadow: 0 0 7px 2px var(--darkShadow);
+        }
+    </style>
+</head>
+<div class="container">
+    <div class="layout__body">
+        <form class="form" method="POST" action="">
+            <h3>DELETE</h3>
+            {% csrf_token %}
+            <div class="form__statement">
+                <p>Are you sure you want to delete "{{obj}}"? This action cannot be undone.</p>
+            </div>
+            <div class="form-actions-wrapper">
+                <input class="btn btn--main form-action" type="submit" value="Confirm" />
+                <a href="{{request.META.HTTP_REFERER}}" class="form-action">Cancel</a>
+            </div>
+        </form>
+    </div>
+</div>
+
+
+{% endblock content %}

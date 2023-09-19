@@ -1,0 +1,19 @@
+{% extends 'main.html' %}
+{% block content %}
+{% load static %}
+<head>
+    <title>Hosts and guests</title>
+</head>
+<h1>Users</h1>
+
+<div class="container">
+    {% for user in users %}
+
+    <a href="{% url 'profiles' user.id %}">
+        {{user.username}}
+        <img src="{% static user.profilePhoto.url %}" alt="profile photo" class="w-h-50 cir-bor-rad"> {% if user.verified %}<i class="bi-patch-check-fill verified-badge"></i>{%endif%}
+    </a><br>
+
+    {% endfor %}
+</div>
+{% endblock content %}

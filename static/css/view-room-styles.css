@@ -1,0 +1,484 @@
+
+.view-room{
+    position: relative;
+}
+.view-room .photo-slider-container{
+    position: relative;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
+    gap: 1em;
+    margin-top: 2em;
+}
+.view-room .photo-slider-container .slide-controls{
+    position: absolute;
+    width: fit-content;
+    right: 8%;
+    margin: 0 auto;
+    z-index: 3;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+}
+.view-room .photo-slider-container .slide-controls:nth-child(2){
+    right: unset;
+    left: 7%;
+}
+.view-room .photo-slider-container .slide-controls button{
+    border: none;
+    outline: none;
+    height: 40px;
+    width: 40px;
+    padding: 0.5em;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: var(--darkBlueBg);
+    color: var(--fontWhite);
+    border-radius: 50%;
+    transition: 0.3s;
+}
+.view-room .photo-slider-container .slide-controls button:hover{
+    background-color: var(--bgBlue2);
+}
+.view-room .photo-slider-container .slide-wrapper{
+    position: relative;
+    width: 100%;
+}
+.view-room .photo-slider-container .slide-wrapper .slide{
+    width: 90%;
+    position: relative;
+    margin: 0 auto;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+}
+
+.view-room .photo-slider-container .slide-wrapper .slide .photo-counter{
+    position: absolute;
+    top: 0.5%;
+    right: 6.5%;
+    z-index: 3;
+    width: fit-content;
+    padding: 0.5em 1em;
+    background-color: var(--bgWhite2);
+    color: var(--fontBlue);
+    font-size: 14px;
+    font-weight: 600;
+}
+.view-room .photo-slider-container .slide-wrapper .slide img{
+    position: relative;
+    width: 100%;
+    max-width: 992px;
+    height: auto;
+    max-height: 500px;
+    object-fit: fill;
+    margin: 0 auto;
+}
+.view-room .contact-actions-wrapper{
+    display: flex;
+    flex-direction: row;
+    align-items: flex-start;
+    justify-content: flex-start;
+    gap: 0.5em;
+    /* width: 80%; */
+    width: fit-content;
+    margin: 0.5em auto;
+    padding: 0.7em 1em;
+    background-color: var(--bgWhite3);
+    box-shadow: 0 0 5px var(--darkShadow);
+    /* background: chocolate; */
+    border-radius: 2pc;
+}
+.view-room .contact-actions-wrapper .contact-action{
+    position: relative;
+    display: flex;
+    flex-direction: row;
+    gap: 0.3em;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    padding: 0 0.5em;
+}
+.view-room .contact-actions-wrapper .contact-action:not(:last-child){
+    border-right: 1px solid var(--lightBorder);
+}
+.view-room .contact-actions-wrapper .contact-action span,.view-room .contact-actions-wrapper .contact-action a{
+    font-size: 28px;
+    display: flex;
+    text-decoration: none;
+}
+.view-room .contact-actions-wrapper .contact-action p{
+    font-size: 14px;
+    margin: 0;
+}
+
+.view-room .room-data-wrapper{
+    position: relative;
+    width: 90%;
+    margin: 0 auto;
+}
+.view-room .room-data-wrapper .room-data-card{
+    position: relative;
+    width: 90%;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5em;
+    justify-content: space-between;
+    box-shadow: 0 0 7px 2px var(--grayShadow);
+    border-radius: 0.5pc;
+    transition: 0.3s;
+}
+.view-room .room-data-wrapper .room-data-card .card-title{
+    position: relative;
+    width: 100%;
+    padding: 0.5em 1em;
+    background-color: var(--bgBlue);
+    color: var(--fontWhite);
+    text-align: center;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    box-sizing: border-box;
+    border-radius: 0.5pc 0.5pc 0 0;
+}
+.view-room .room-data-wrapper .room-data-card .card-title h3{
+    position: relative;
+    width: 80%;
+    text-align: left;
+    margin: 0;
+    padding: 0.5em 0;
+    font-weight: 600;
+}
+.view-room .room-data-wrapper .room-data-card .card-title .dropable-controller{
+    font-size: 18px;
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    cursor: pointer;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    transition: 0.3s;
+}
+.view-room .room-data-wrapper .room-data-card .card-title .dropable-controller:hover{
+    background-color: var(--bgWhiteTr2);
+}
+.view-room .room-data-wrapper .room-data-card .room-card-body{
+    position: relative;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+}
+.view-room .room-data-wrapper .room-data-card .room-card-body .data-field{
+    position: relative;
+    width: 100%;
+    background-color: var(--pureWhite);
+    padding: 0.3em 0.5em;
+    font-size: 16px;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+}
+.view-room .room-data-wrapper .room-data-card .room-card-body .data-field:nth-child(odd){
+    background-color: var(--patterrnOdd);
+}
+.view-room .room-data-wrapper .room-data-card .room-card-body .data-field span{
+    width: 40%;
+}
+.view-room .room-data-wrapper .room-data-card .room-card-body .data-field .maps-iframe{
+    position: relative;
+    max-height: 450px;
+    width: 100%;
+}
+.view-room .host-data-wrapper{
+    position: relative;
+    width: 90%;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.5em;
+    margin-top: 2em;
+}
+.view-room .host-data-wrapper .basic-data{
+    position: relative;
+    width: 70%;
+    display: flex;
+    /* flex-direction: row; */
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5em;
+}
+.view-room .host-data-wrapper .basic-data img{
+    position: relative;
+    width: 150px;
+    height: 150px;
+    border-radius: 50%;
+    object-fit: cover;
+    background-color: var(--bgWhite2);
+}
+.view-room .host-data-wrapper .basic-data .host-names{
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    gap: 1em;
+    align-items: flex-start;
+    padding: 1em;
+}
+.view-room .host-data-wrapper .host-sect-links{
+    position: relative;
+    display: flex;
+    width: 90%;
+    align-items: center;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 0.5em;
+}
+.view-room .host-data-wrapper .host-sect-links .actions{
+    position: relative;
+    background-color: var(--bgBlue2);
+    color: var(--fontWhite);
+    padding: 0.5em 1em;
+    border-radius: 0.2pc;
+    text-decoration: none;
+    cursor: pointer;
+}
+.view-room .host-data-wrapper .host-data-card{
+    position: relative;
+    width: 90%;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+}
+.view-room .host-data-wrapper .host-data-card .data-field{
+    width: 90%;
+    margin: 0 auto;
+    font-size: 16px;
+    color: var(--fontBlack2);
+    padding: 0.3em 0.5em;
+    background-color: var(--pureWhite);
+}
+.view-room .host-data-wrapper .host-data-card .data-field:nth-child(odd){
+    background-color: var(--patterrnOdd);
+}
+.view-room .host-data-wrapper .hobbies-container{
+    position: relative;
+    padding: 0.5em;
+    display: flex;
+    justify-content: flex-start;
+    gap: 0.5em;
+    align-items: center;
+    flex-wrap: wrap;
+}
+.view-room .host-data-wrapper .hobbies-container span{
+    position: relative;
+    padding: 0.4em 1em;
+    color: var(--fontWhite2);
+    background-color: var(--bgGreenDes);
+    text-align: center;
+    border-radius: 1pc;
+}
+
+.review-form-container{
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: var(--trDarkBlue);
+    display: none;
+    align-items: center;
+    justify-content: center;
+    z-index: 3;
+}
+.review-form-container .review-form{
+    position: relative;
+    width: 90%;
+    max-width: 450px;
+    height: fit-content;
+    min-height: 300px;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    background-color: var(--bgWhite2);
+    border-radius: 0.5pc;
+    animation-name: zoom;
+    animation-duration: 0.4s;
+}
+.review-form-container .review-form #rating-figures{
+    padding: 0.5em 1em;
+    color: var(--bgGreen2);
+}
+.review-form-container .review-form .star-field{
+    width: 100%;
+    padding: 0.8em 0.5em;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.review-form-container .review-form .star-field .formStarsDiv{
+    position: relative;
+    display: flex;
+    flex-direction: row;
+    gap: 1em;
+    padding: 0.5em;
+}
+.review-form-container .review-form .star-field .formStarsDiv i{
+    font-size: 30px;
+    color: var(--bgGreenDes);
+    cursor: pointer;
+}
+.review-form-container .review-form .input-fields{
+    position: relative;
+    padding: 0.5em;
+    border-radius: 1pc;
+    display: flex;
+    flex-direction: column;
+    background-color: var(--bgWhite3);
+    width: 90%;
+    margin: 0 auto;
+    box-shadow: 0 0 7px var(--grayShadow);
+}
+.review-form-container .review-form .input-fields .field{
+    position: relative;
+    width: 98%;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    gap: 0.3em;
+    padding: 1em;
+}
+.review-form-container .review-form .input-fields .field textarea{
+    border: 1px solid var(--lightBorder);
+    outline: none;
+    border-radius: 4px;
+    padding: 0.5em 1em;
+    width: 100%;
+}
+.review-form-container .review-form .input-fields .field textarea:focus{
+    border-color: var(--bgGreen2);
+}
+.review-form-container .review-form .submit-field{
+    position: relative;
+    padding: 1em;
+    width: 90%;
+    margin: 0 auto;
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 1em;
+}
+.review-form-container .review-form .submit-field .hide-form{
+    position: relative;
+    background-color: red;
+    color: var(--fontWhite2);
+    border-radius: 5px;
+    border: 2px solid crimson;
+    outline: none;
+    font-size: 16px;
+    font-weight: 600;
+    padding: 0.6em 1em;
+    transition: 0.3s;
+    cursor: pointer;
+    display: flex;
+    flex-direction: row;
+}
+.review-form-container .review-form .submit-field input{
+    position: relative;
+    background-color: transparent;
+    color: var(--fontBlack);
+    border-radius: 5px;
+    border: 2px solid var(--bgBlue2);
+    outline: none;
+    font-size: 16px;
+    font-weight: 600;
+    padding: 0.6em 1em;
+    transition: 0.3s;
+}
+.review-form-container .review-form .submit-field input:hover{
+    background-color: var(--bgBlue2);
+    color: var(--fontWhite);
+}
+
+.view-room .room-reviews{
+    position: relative;
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    overflow-x: hidden;
+    padding: 1em;
+    gap: 1em;
+}
+.view-room .room-reviews .review-card{
+    position: relative;
+    max-width: 350px;
+    min-width: 300px;
+    padding: 0.8em 0.5em;
+    box-shadow: 0 0 5px 2px var(--grayShadow);
+    border-radius: 0.3pc;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5em;
+    align-items: flex-start;
+}
+.view-room .room-reviews .review-card .reviewer-info{
+    position: relative;
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    align-items: center;
+    gap: 1em;
+}
+.view-room .room-reviews .review-card .reviewer-info img{
+    position: relative;
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    background-color: var(--bgWhite2);
+}
+.view-room .room-reviews .review-card .reviewer-info .pt2{
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    gap: 0.6em;
+}
+.view-room .room-reviews .review-card .reviewer-info .pt2 .stars-wrapper{
+    position: relative;
+    width: 150px;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-evenly;
+    font-size: 16px;
+}
+.view-room .room-reviews .review-card .reviewer-info .pt2 .stars-wrapper i{
+    font-size: 20px;
+    color: var(--starColor);
+}
+.view-room .room-reviews .review-card .comment-time{
+    position: relative;
+    width: 100%;
+    text-align: right;
+    padding: 0.3em;
+}
+.view-room .room-reviews .review-card .comment-time span{
+    background-color: var(--bgGreenDes);
+    color: var(--fontWhite);
+    padding: 0.3em 0.6em;
+}
+
+@media screen and (max-width:768px){    
+    .view-room .room-data-wrapper .room-data-card{
+        width: 100%;
+    }
+    /* .view-room .contact-actions-wrapper{
+        margin: unset;
+    } */
+}

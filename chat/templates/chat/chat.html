@@ -1,0 +1,273 @@
+{% extends 'main.html' %}
+{% block content %}
+{% load custom_tags %}
+{% load static %}
+<head>    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/emojionearea/3.4.2/emojionearea.css">
+    <link rel="stylesheet" href="{% static 'plugins/emojionearea.css' %}">
+    <link rel="stylesheet" href="{% static 'css/chat-styles.css' %}">
+    <title>My Chats</title>
+</head>
+<main class="chats-page">
+    <aside class="chat-list-wrapper  {% if receiver == '' %}dorminant-tab{%else%}hidden-tab{% endif %}" id="chat-list-wrapper">
+        <div class="chat-list-nav">
+            <!-- <h2>CHATS<span class="badge badge-light">6</span></h2> -->
+            <h2>CHATS</h2>
+            <div class="field">
+                <input type="hidden" id="logged-in-user" value="{{ user.id }}">
+                <input type="search" name="chat-search" id="id_chat_search" placeholder="search chats here..." onkeyup="search_chat_list()">
+            </div>
+        </div>
+        <div class="chat-list y-scrollable contacts" id="chat-list">
+            {% if thread_count == 0 %}
+            <div class="empty-container">
+                <h4>Create New Chat</h4>
+            </div>            
+            {% else %}
+            {% for thread in Threads %}
+            <div class="chat-item {% if thread.first_person == receiver %}{{ 'is_active' }}{% elif thread.second_person == receiver%}{{ 'is_active' }}{% endif %}" id="chat_{{ thread.id }}" receiver="{% if thread.first_person == user %}{{ thread.second_person.id }}{% elif thread.second_person == user %}{{ thread.first_person.id }}{% endif %}">
+                {% if thread.first_person == request.user %}
+                <img src="{% static thread.second_person.profilePhoto.url%}" alt="user">
+                <div class="text-preview">
+                    <span class="thread_user_name">{{ thread.second_person.username }} {% if thread.second_person.verified %}<i class="bi-patch-check-fill verified-badge"></i>{%endif%}</span>
+                    {% for chat in thread.chat_thread.all %}
+                    {% if forloop.last %}
+                    <p class="latest-text cutoff-text-1">{% if chat.user == request.user %}{{'You:'}} {% endif %}{{ chat.body|decrypt_message }}</p>
+                    {% endif %}
+                    {% endfor %}
+                </div> 
+                    {% for chat in thread.chat_thread.all %}
+                    {% if forloop.last %}
+                    {% if chat.unread == True and chat.user != request.user %}<i class="unread-icon bi-record-fill green-el"></i>{% endif %}
+                    {% endif %}
+                    {% endfor %}
+                {% else %}
+                <img src="{% static thread.first_person.profilePhoto.url%}" alt="user">
+                <div class="text-preview">
+                    <span class="thread_user_name">{{ thread.first_person.username }} {% if thread.first_person.verified %}<i class="bi-patch-check-fill verified-badge"></i>{%endif%}</span>
+                    {% for chat in thread.chat_thread.all %}
+                    {% if forloop.last %}
+                    <p class="latest-text cutoff-text-1">{% if chat.user == request.user %}{{'You:'}}  {% endif %}{{ chat.body|decrypt_message }}</p>
+                    {% endif %}
+                    {% endfor %}
+                </div>
+                    {% for chat in thread.chat_thread.all %}
+                    {% if forloop.last %}
+                    {% if chat.unread == True and chat.user != request.user %}<i class="unread-icon bi-record-fill green-el"></i>{% endif %}
+                    {% endif %}
+                    {% endfor %}
+                {% endif %}
+            </div>
+            {% endfor %}
+            {% endif %}
+        </div>
+        <div class="create-chat-btn">
+            <span class="bi-plus"></span>
+        </div>
+    </aside>
+    <div class="conversation-wrapper {% if receiver != '' %}dorminant-tab{%else%}hidden-tab{% endif %}" id="conversation-wrapper">
+    {% if receiver != '' %}
+        <div id="conv-divs-wrapper" class="conv-divs-wrapper show-flex">
+            {% if thread_exists == False %}
+            <div class="msg_card_body active_chat" id="chat_body_{{receiver.id}}">
+                <div class="conversation-header">
+                    <div class="header-left">
+                        <span class="bi-arrow-left hide_chat_arrow"></span>
+                        <a class="receiver-data" href="{% url 'profiles' receiver.id %}">
+                            <img src="{% static receiver.profilePhoto.url%}" alt="user">
+                            <span class="receiver_name">{{receiver}} {% if receiver.verified %}<i class="bi-patch-check-fill verified-badge"></i>{%endif%}</span>
+                            <input type="hidden" name="receiverId" value="{{receiver.id}}" id="receiverId" readonly>
+                        </a>
+                    </div>
+                    <span class="actions-btn bi-three-dots-vertical"></span>
+                    <div class="actions-sect chat-actions-wrapper">
+                        <span class="pointed chat-action close-chat">Close Chat</span>
+                    </div> 
+                </div>
+                <div class="conversation-body y-scrollable" id="conversation-body">
+                    
+                </div>
+            </div>
+            {% for thread in Threads %}
+            <div class="msg_card_body" id="chat_body_{% if thread.first_person == user %}{{ thread.second_person.id }}{% elif thread.second_person == user %}{{ thread.first_person.id }}{% endif %}">
+                <div class="conversation-header">
+                    <div class="header-left">
+                        <span class="bi-arrow-left hide_chat_arrow"></span>
+                            {% if thread.first_person == request.user %}
+                        <a class="receiver-data" href="{% url 'profiles' thread.second_person.id %}">
+                            <img src="{% static thread.second_person.profilePhoto.url%}" alt="user">
+                            <span class="receiver_name">{{ thread.second_person.username }} {% if thread.second_person.verified %}<i class="bi-patch-check-fill verified-badge"></i>{%endif%}</span>
+                        </a>
+                            {% else %}
+                        <a class="receiver-data" href="{% url 'profiles' thread.first_person.id %}">
+                            <img src="{% static thread.first_person.profilePhoto.url%}" alt="user">
+                            <span class="receiver_name">{{ thread.first_person.username }} {% if thread.first_person.verified %}<i class="bi-patch-check-fill verified-badge"></i>{%endif%}</span>
+                        </a>
+                            {% endif %}
+                    </div>
+                    <!-- <p>{{ thread.chat_thread.all.count }} messages</p> -->
+                    <span class="actions-btn bi-three-dots-vertical"></span>
+                    <div class="actions-sect chat-actions-wrapper">
+                        <span class="pointed chat-action close-chat">Close Chat</span>
+                    </div> 
+                </div>
+                <div class="conversation-body y-scrollable" id="conversation-body">
+                    {% for chat in thread.chat_thread.all %}
+                    {% if chat.user == user %}
+                    <div class="message-holder sent-msg">
+                        <div class="message-body">
+                            <p class="message-text">{{ chat.body|decrypt_message }}</p>
+                        </div>                
+                        <span class="message-time">{{ chat.created|date:"d D" }}, {{ chat.created|time:"H:i" }}</span>
+                    </div>
+                    {% else %}
+                    <div class="message-holder received-msg">
+                        <div class="message-body">
+                            <p class="message-text">{{ chat.body|decrypt_message }}</p>
+                        </div>                
+                        <span class="message-time">{{ chat.created|date:"d D" }}, {{ chat.created|time:"H:i" }}</span>
+                    </div>
+                    {% endif %}
+                    {% endfor %}
+                </div>
+            </div>
+            {% endfor %}
+            {% else %}
+            {% for thread in Threads %}
+            <div class="msg_card_body {% if thread.first_person == receiver %}{{ 'active_chat' }}{% elif thread.second_person == receiver %}{{ 'active_chat' }}{% endif %}" id="chat_body_{% if thread.first_person == user %}{{ thread.second_person.id }}{% elif thread.second_person == user %}{{ thread.first_person.id }}{% endif %}">
+                <div class="conversation-header">
+                    <div class="header-left">
+                        <span class="bi-arrow-left hide_chat_arrow"></span>
+                            {% if thread.first_person == request.user %}
+                        <a class="receiver-data" href="{% url 'profiles' thread.second_person.id %}">
+                            <img src="{% static thread.second_person.profilePhoto.url%}" alt="user">
+                            <span class="receiver_name">{{ thread.second_person.username }} {% if thread.second_person.verified %}<i class="bi-patch-check-fill verified-badge"></i>{%endif%}</span>
+                        </a>
+                            {% else %}
+                        <a class="receiver-data" href="{% url 'profiles' thread.first_person.id %}">
+                            <img src="{% static thread.first_person.profilePhoto.url%}" alt="user">
+                            <span class="receiver_name">{{ thread.first_person.username }} {% if thread.first_person.verified %}<i class="bi-patch-check-fill verified-badge"></i>{%endif%}</span>
+                        </a>
+                            {% endif %}
+                    </div>
+                    <!-- <p>{{ thread.chat_thread.all.count }} messages</p> -->
+                    <span class="actions-btn bi-three-dots-vertical"></span>
+                    <div class="actions-sect chat-actions-wrapper">
+                        <span class="pointed chat-action close-chat">Close Chat</span>
+                    </div> 
+                </div>
+                <div class="conversation-body y-scrollable" id="conversation-body">
+                    {% for chat in thread.chat_thread.all %}
+                    {% if chat.user == user %}
+                    <div class="message-holder sent-msg">
+                        <div class="message-body">
+                            <p class="message-text">{{ chat.body|decrypt_message }}</p>
+                        </div>                
+                        <span class="message-time">{{ chat.created|date:"d D" }}, {{ chat.created|time:"H:i" }}</span>
+                    </div>
+                    {% else %}
+                    <div class="message-holder received-msg">
+                        <div class="message-body">
+                            <p class="message-text">{{ chat.body|decrypt_message }}</p>
+                        </div>                
+                        <span class="message-time">{{ chat.created|date:"d D" }}, {{ chat.created|time:"H:i" }}</span>
+                    </div>
+                    {% endif %}
+                    {% endfor %}
+                </div>
+            </div>
+            {% endfor %}
+            {% endif %}
+            
+            <form class="msg-input-wrapper" id="msgForm">
+                <aside class="emojis-wrapper" id="emojisWrapper">
+                    <section class="emojis-wrapper-controls">
+                        <input type="search" name="emojiSearch" id="emojiSearch" placeholder="search for emoji">
+                        <i class="bi-x emojis-wrapperHide" onclick="showEmojis()"></i>
+                    </section>
+                    <section class="emojis" id="emojis"><div id="emojisList"></div></section>
+                </aside>
+                <button class="bi-emoji-smile emoji-btn" type="button" id="emoji-btn"></button>
+                <!-- <textarea name="msg-input" id="msg-input" rows="1" placeholder="Type Message..." required autofocus oninput="heightFitter('msg-input')"></textarea> -->
+                <input type="text" name="msg-input" id="msg-input" placeholder="Type Message..." required autofocus>
+                <button class="bi-send send-msg-btn" type="submit"></button>
+            </form>
+        </div>
+        <div class="empty-container hidden" id="no-active-chat">
+            <img src="{% static 'svgs/undraw_quick_chat_re_bit5.svg' %}" alt="Chat" draggable="false">
+            <span>Chat With Roomies Here...</span>
+        </div>
+    {% else %}
+        <div id="conv-divs-wrapper" class="conv-divs-wrapper">
+            {% for thread in Threads %}
+            <div class="msg_card_body" id="chat_body_{% if thread.first_person == user %}{{ thread.second_person.id }}{% elif thread.second_person == user %}{{ thread.first_person.id }}{% endif %}">
+                <div class="conversation-header">
+                    <div class="header-left">
+                        <span class="bi-arrow-left hide-chat-arrow"></span>
+                        {% if thread.first_person == request.user %}
+                        <a class="receiver-data" href="{% url 'profiles' thread.second_person.id %}">
+                            <img src="{% static thread.second_person.profilePhoto.url%}" alt="user">
+                            <span class="receiver_name">{{ thread.second_person.username }} {% if thread.second_person.verified %}<i class="bi-patch-check-fill verified-badge"></i>{%endif%}</span>
+                        </a>                    
+                            {% else %}
+                        <a class="receiver-data" href="{% url 'profiles' thread.first_person.id %}">
+                            <img src="{% static thread.first_person.profilePhoto.url%}" alt="user">
+                            <span class="receiver_name">{{ thread.first_person.username }} {% if thread.first_person.verified %}<i class="bi-patch-check-fill verified-badge"></i>{%endif%}</span>
+                        </a>
+                            {% endif %}
+                    </div>
+                    
+                    <!-- <p>{{ thread.chat_thread.all.count }} messages</p> -->
+                    <span class="actions-btn bi-three-dots-vertical"></span>
+                    <div class="actions-sect chat-actions-wrapper">
+                        <span class="pointed chat-action close-chat">Close Chat</span>
+                    </div> 
+                </div>
+                <div class="conversation-body y-scrollable" id="conversation-body">
+                    {% for chat in thread.chat_thread.all %}
+                    {% if chat.user == user %}
+                    <div class="message-holder sent-msg">
+                        <div class="message-body">
+                            <p class="message-text">{{ chat.body|decrypt_message }}</p>
+                        </div>                
+                        <span class="message-time">{{ chat.created|date:"d D" }}, {{ chat.created|time:"H:i" }}</span>
+                    </div>
+                    {% else %}
+                    <div class="message-holder received-msg">
+                        <div class="message-body">
+                            <p class="message-text">{{ chat.body|decrypt_message }}</p>
+                        </div>                
+                        <span class="message-time">{{ chat.created|date:"d D" }}, {{ chat.created|time:"H:i" }}</span>
+                    </div>
+                    {% endif %}
+                    {% endfor %}
+                </div>
+            </div>
+            {% endfor %}
+            <form class="msg-input-wrapper" id="msgForm">
+                <aside class="emojis-wrapper" id="emojisWrapper">
+                    <section class="emojis-wrapper-controls">
+                        <input type="search" name="emojiSearch" id="emojiSearch" placeholder="search for emoji">
+                        <i class="bi-x emojis-wrapperHide" onclick="showEmojis()"></i>
+                    </section>
+                    <section class="emojis" id="emojis"><div id="emojisList"></div></section>
+                </aside>
+                <button class="bi-emoji-smile emoji-btn" type="button" id="emoji-btn"></button>
+                <!-- <textarea name="msg-input" id="msg-input" rows="1" placeholder="Type Message..." required autofocus oninput="heightFitter('msg-input')"></textarea> -->
+                <input type="text" name="msg-input" id="msg-input" placeholder="Type Message..." required autofocus>
+                <!-- <div class="msg-input" contenteditable="true" id="msg-input" placeholder="Type Message..." tabindex="0" autocapitalize="off" autocomplete="off" autocorrect="off" dir="ltr"></div> -->
+                <button class="bi-send send-msg-btn" type="submit"></button>
+            </form>
+        </div>
+        <div class="empty-container" id="no-active-chat">
+            <img src="{% static 'svgs/undraw_quick_chat_re_bit5.svg' %}" alt="Chat">
+            <span>Chat With Roomies Here...</span>
+        </div>
+        {% endif %}
+    </div>
+</main>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.3/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/emojionearea/3.4.2/emojionearea.js"></script>
+<script src="{% static 'plugins/emojionearea.js' %}"></script>
+<script src="{% static 'js/chats-scripts.js' %}"></script>
+{% endblock content %}

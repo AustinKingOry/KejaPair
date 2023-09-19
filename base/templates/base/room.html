@@ -1,0 +1,224 @@
+{% extends 'main.html' %}
+{% block content %}
+{% load static %}
+<head>
+    <link rel="stylesheet" href="{% static 'css/view-room-styles.css' %}" type="text/css">
+    <title>{{room.name|truncatewords:"15"}}</title>
+</head>
+<div class="container view-room">
+    <input type="hidden" name="USER_ID" id="USER_ID" value="{{request.user.id}}">
+    <div class="photo-slider-container mySwiper">
+        <div class="swiper-wrapper slide-wrapper">
+            <div class="slide swiper-slide">
+                <p class="photo-counter">1/{{photos.count|add:'1'}}</p>
+                <img src="{% static room.coverPhoto.url %}" alt="cover photo">
+            </div>
+            {% for photo in photos %}
+            <div class="slide swiper-slide">
+                <p class="photo-counter">{{forloop.counter|add:'1'}}/{{photos.count|add:'1'}}</p>
+                <img src="{% static photo.image.url %}" alt="room image">
+            </div>
+            {% endfor %}
+        </div>
+        <div class="slide-controls">
+            <button class="bi-chevron-left prev-slide"></button>
+            <!-- <div class="swiper-button-prev"></div> -->
+        </div>
+        <div class="slide-controls">
+            <button class="bi-chevron-right next-slide"></button>
+            <!-- <div class="swiper-button-next1"></div> -->
+        </div>
+        <div class="swiper-pagination"></div>
+    </div>
+    <div class="contact-actions-wrapper">
+        <div class="contact-action">
+            <a href="/chats?u={{room.host.id}}" class="bi-chat"></a>
+        </div>
+        <div class="contact-action" {% if request.user.is_authenticated %} id="like-btn" {% endif %} room-id="{{room.id}}">
+            {% if user_likes %}
+            <span class="bi-heart-fill green-el" title="You Like This"></span>
+            {% else %}
+            <span class="bi-heart" title="Like"></span>
+            {% endif %}
+            <p>{{room.likesCount}}</p>
+        </div>
+        {% if request.user.is_authenticated %}
+        {% if request.user == room.host %}
+        <div class="contact-action">
+            <a href="{% url 'update-room' room.id %}" class="bi-pencil-fill" title="Edit"></a>
+        </div>
+        {% endif %}
+        {% endif %}
+    </div>
+    <div class="room-data-wrapper">
+        <div class="room-data-card dropable-container">
+            <div class="card-title">
+                <h3>Room Details</h3>
+                <span class="bi-chevron-down dropable-controller" title="minimize"></span>
+            </div>
+            <div class="room-card-body dropable-sect">
+                <div class="data-field">
+                    <p>{{room.name}}</p>
+                </div>
+                <div class="data-field">
+                    <p>{{room.description}}</p>
+                </div>
+                <div class="data-field">
+                    <span class="data-label bi-geo-alt-fill"> Location:</span>
+                    <p>{{room.location}}</p>
+                </div>
+                <div class="data-field">
+                    <span class="data-label bi-currency-dollar"> Rent:</span>
+                    <p>{{room.rent}}</p>
+                </div>
+                <div class="data-field">
+                    <span class="data-label bi-currency-dollar"> Security Deposit:</span>
+                    <p>{{room.security_deposit}}</p>
+                </div>
+                <div class="data-field">
+                    <span class="data-label bi-envelope-check"> Bills Included:</span>
+                    <p>{{room.bills_included}}</p>
+                </div>
+                <div class="data-field">
+                    <span class="data-label bi-geo-alt-fill"></span>
+                    <p>{{room.maps_link}}</p>
+                </div>
+                <div class="data-field">
+                    <span class="data-label bi-people"> Capacity:</span>
+                    <p>{{room.capacity}}</p>
+                </div>
+                <div class="data-field">
+                    <span class="data-label bi-person-check"> Occupants:</span>
+                    <p>{{room.occupants}}</p>
+                </div>
+                <div class="data-field">
+                    <span class="data-label bi-gender-ambiguous"> Preferred Gender</span>
+                    <p>{{room.preferredGender}}</p>
+                </div>
+                <div class="data-field">
+                    <span class="data-label bi-check-circle-fill"> Availability:</span>
+                    <p>{{room.available}}</p>
+                </div>
+                <div class="data-field">
+                    <span class="data-label bi-check-circle-fill"> Verified:</span>
+                    <p>{{room.verified}}</p>
+                </div>
+                <div class="data-field">
+                    <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d15955.871499993425!2d36.91680770668756!3d-1.1830197331577958!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x182f3f09067bad99%3A0xf16d95cc142da70a!2sKenyatta%20University%2C%20Nairobi!5e0!3m2!1sen!2ske!4v1681384068998!5m2!1sen!2ske" width="600" height="450" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade" class="maps-iframe"></iframe>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="host-data-wrapper">
+        <div class="basic-data">
+            <img src="{% static room.host.profilePhoto.url %}" alt="profile photo">
+            <div class="host-names">
+                <h4>{{room.host.get_full_name}} {% if room.host.verified %}<i class="bi-patch-check-fill verified-badge"></i>{%endif%}</h4>
+                <span>@{{room.host}}</span>
+            </div>
+        </div>
+        <div class="host-sect-links">
+            {% if request.user.id != room.host.id %}
+            <a href="/chats?u={{room.host.id}}" class="actions">Send Message</a>
+            {% if pairable == True %}
+            {% if not pair_exists %}
+            <a href="{% url 'pair-with' room.host.id %}" class="actions"><i class="fas fa-house-user">&plus;</i> Pair</a>
+            {% else %}
+            <a href="{% url 'pair-with' room.host.id %}" class="requested-pair actions"><i class="fas fa-house-user">&check;</i> Pending Pair</a>
+            {% endif %}
+            {% endif %}
+            <span onclick="showReviewForm();" class="actions">Give Review</span>
+            {% endif %}
+            <a href="{% url 'profiles' room.host.id %}" class="actions"> Go To Profile</a>
+            <a href="{% url 'host-rooms' room.host.id %}" class="actions">More Rooms</a>
+            <!-- <a href="" class="actions">View Photos</a> -->
+        </div>
+        <div class="host-data-card">
+            <div class="data-field">
+                <h4>About Roommate | Host:</h4>
+                <p>{{room.host.bio}}</p>
+            </div>
+            <div class="data-field">
+                <span>Gender: {{room.host.gender}}</span>
+            </div>
+            <div class="data-field">
+                <span>Age: {{room.host.age}}</span>
+            </div>
+            <div class="data-field">
+                <span>Residence: {{room.host.location}}</span>
+            </div>
+        </div>
+        <h3 class="blue-el">Hobbies & Interests:</h3>
+        <div class="hobbies-container">
+            {% if hobbies_count == 0 %}
+            <span>empty</span>
+            {% else %}
+            {% for hobby in hobbies %}
+            <span class="hobby-tag">{{hobby}}</span>
+            {% endfor %}
+            {% endif %}
+        </div>
+    </div>
+    <h3 class="blue-el">Some Reviews About The Host:</h3>
+    <div class="review-form-container bgPopUpWrapper" id="review-form-container">
+        <form action="" method="post" class="review-form">
+            {% csrf_token %}
+            <div class="star-field">
+                <div class="formStarsDiv">
+                    <i id="starBtn1" class="bi-star-fill" title="ONE STAR" data-tool-tip="ONE STAR" onclick="starClick(1)"></i>
+                    <i id="starBtn2" class="bi-star" title="TWO STARS" data-tool-tip="TWO STARS" onclick="starClick(2)"></i>
+                    <i id="starBtn3" class="bi-star" title="THREE STARS" data-tool-tip="THREE STARS"  onclick="starClick(3)"></i>
+                    <i id="starBtn4" class="bi-star" title="FOUR STARS" data-tool-tip="FOUR STARS" onclick="starClick(4)"></i>
+                    <i id="starBtn5" class="bi-star" title="FIVE STARS" data-tool-tip="FIVE STARS" onclick="starClick(5)"></i>
+                </div>
+            </div>
+            
+            <div class="input-fields">
+                <div class="field">
+                    <label for="id_rating">Rating: <span id="rating-figures">1 star(s)</span></label>
+                    <input type="range" name="rating" id="id_rating" min="1" max="5" value="1" required>
+                </div>
+                <div class="field">
+                    <label for="id_body">Comment:</label>
+                    <textarea name="body" id="id_body" cols="30" rows="4" required placeholder="My thoughts about this user..."></textarea>
+                </div>
+            </div>
+            <div class="submit-field">
+                <span class="hide-form cancelBgPopUpWrapper">&times;</span>
+                <input type="submit" value="Send Review">
+            </div>
+        </form>
+    </div>    
+    <div class="room-reviews" id="reviews">
+        {% if reviews_count == 0 %}
+        <span>No reviews for now.</span>
+        {% else %}
+        {% for review in reviews %}
+        <div class="review-card">
+            <div class="reviewer-info">
+                <img src="{% static review.guest.profilePhoto.url %}" alt="">
+                <div class="pt2">
+                    <span class="commentor-name">{{review.guest.get_full_name}} {% if review.guest.verified %}<i class="bi-patch-check-fill verified-badge"></i>{%endif%}</span>
+                    <div class="stars-wrapper" title="{{review.rating}} stars">
+                        <i class="{% if review.rating > 0 %} bi-star-fill {% else %} bi-star {% endif %}"></i>
+                        <i class="{% if review.rating > 1 %} {% if review.rating <= 1.5 %} bi-star-half {% else %}bi-star-fill {% endif %} {% else %} bi-star {% endif %}"></i>
+                        <i class="{% if review.rating > 2 %} {% if review.rating <= 2.5 %} bi-star-half {% else %}bi-star-fill {% endif %} {% else %} bi-star {% endif %}"></i>
+                        <i class="{% if review.rating > 3 %} {% if review.rating <= 3.5 %} bi-star-half {% else %}bi-star-fill {% endif %} {% else %} bi-star {% endif %}"></i>
+                        <i class="{% if review.rating > 4 %} {% if review.rating <= 4.5 %} bi-star-half {% else %}bi-star-fill {% endif %} {% else %} bi-star {% endif %}"></i>
+                    </div>
+                </div>
+            </div>
+            <div class="comment-body">
+                <p class="cutoff-text">{{review}}</p>
+            </div>
+            <div class="comment-time">
+                <span>{{review.created|timesince}} ago</span>
+            </div>
+        </div>
+        {% endfor %}
+        {% endif %}
+    </div>
+    
+</div>
+<script src="{% static 'js/view-room-scripts.js' %}"></script>
+{% endblock content %}

@@ -1,0 +1,74 @@
+{% extends 'main.html' %}
+{% block content %}
+{% load static %}
+<head>
+    <link rel="stylesheet" href="{% static 'css/notifications-styles.css'%}">
+    <title>Notifications</title>
+</head>
+<div class="container">
+    <div class="notif-body-container height-500">
+        <div class="notif-top-header">
+            <div class="title-sect">
+                <h2>Notifications</h2>
+                <select name="" id="notif-categories">
+                    <option value="*">All</option>
+                    {% for cat in categories %}
+                    <option value="{{cat}}">{{cat}}s</option>
+                    {% endfor %}
+                </select>
+            </div>
+            {% if unread_count > 0 %}
+            <span id="clear_all_btn" onclick="clear_notification('clear_all_btn');"><i class="far fa-envelope-open"></i> Mark All As Read</span>
+            {% endif %}
+        </div> 
+        <div class="notif-groups-wrapper y-scrollable">
+            <input type="hidden" name="USER_ID" value="{{request.user.id}}" id="USER_ID">
+            {% if notifications.count == 0 %}
+            <div class="empty-container">
+                <img src="/static/svgs/empty-custom.svg" alt="...">
+                <span>No notifications.</span>
+            </div>
+            {% endif %}
+            {% if unread_count > 0 %}
+            <h4 class="group-label">Unread <span class="badge unread-counter">{{unread_count}}</span></h4>
+            <div class="notif-group unread-group">
+                {% csrf_token %}
+                {% for notif in notifications %}
+                {% if notif.seen == False %}
+                <div href="{{notif.link}}" class="notif-card unread-item" id="notif{{notif.id}}" notif-id="{{notif.id}}" cat="{{notif.notifType}}">
+                    <div class="notif-card-body">
+                        <img src="{%static notif.trigger_user.profilePhoto.url%}" alt="photo{{notif.id}}">
+                        <p class="cutoff-text-2">{{notif.body}}</p>
+                    </div>
+                    <div class="notif-card-footer">
+                        <p class="notif-title"><small>{{notif.title}}</small></p>
+                        <span class="time-since">{{notif.created|timesince}}</span>
+                    </div>
+                </div>
+                {% endif %}
+                {% endfor %}
+            </div>
+            {% if read_count > 0 %}<h4 class="group-label">Earlier</h4> {% endif %}
+            {% endif %}
+            <div class="notif-group read-group">
+                {% for notif in notifications %}
+                {% if notif.seen == True %}
+                <a href="{{notif.link}}" class="notif-card" id="notif{{notif.id}}" notif-id="{{notif.id}}" cat="{{notif.notifType}}">
+                    <div class="notif-card-body">
+                        <img src="{%static notif.trigger_user.profilePhoto.url%}" alt="photo{{notif.id}}">
+                        <p class="cutoff-text-2">{{notif.body}}</p>
+                    </div>
+                    <div class="notif-card-footer">
+                        <p class="notif-title"><small>{{notif.title}}</small></p>
+                        <span class="time-since">{{notif.created|timesince}}</span>
+                    </div>
+                </a>
+                {% endif %}
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+</div>
+<script src="{% static 'js/notifications-scripts.js' %}"></script>
+
+{% endblock content %}

@@ -1,0 +1,122 @@
+{% extends 'main.html' %}
+{% block content%}
+{% load static %}
+<head>
+    <link rel="stylesheet" href="{% static 'css/edit-profile-styles.css' %}" type="text/css">
+    <title>Edit My Profile | {{user}}</title>
+</head>
+
+<div class="edit-window">
+    <h2>Edit Profile:</h2>
+    <form action="" method="POST" enctype="multipart/form-data" class="main-edit-form">
+        {% csrf_token %}
+        <div class="actions-card">
+            <div class="userpic-cont">
+                <img src="{% static user.profilePhoto.url %}" alt="user_photo" class="user-pic" id="imgPreview">
+                <div class="field">
+                    <label for="id_profilePhoto" class="bi-pencil-fill"></label>
+                </div>
+                <input type="file" name="profilePhoto" id="id_profilePhoto" accept="image/*" onchange="previewFile('imgPreview','id_profilePhoto');" class="field-input hidden">
+            </div>
+            <div class="actions-txt-btns">
+                <div class="user-bio-data">
+                    <p>{{user.get_full_name}} {% if user.verified %}<i class="bi-patch-check-fill verified-badge"></i>{%endif%}</p>
+                    <span><small>@{{user}}</small></span>
+                </div>
+                <div class="profile-actions">
+                    <a href="{% url 'add-activity' %}" class="bi-camera2"> Photos</a>
+                    <a href="{% url 'profiles' user.id %}" class="bi-clock-history"> Activity</a>
+                    <a href="" class="bi-lock"> Change Password</a>
+                    <a href="{% url 'delete-user' user.id %}" class="bi-trash-fill room-actions-btn" title="Delete Account"></a>
+                </div>
+            </div>
+        </div>
+        <div class="personal-info-wrapper">
+            <h3>Personal Information:</h3>
+            <div class="inp-fields-cont">
+                <div class="semi-fields-wrapper">
+                    <div class="semi-field">
+                        <div class="field">
+                            <input type="text" name="" id="" value="{{user.get_full_name}}" placeholder="Display Name" class="input">
+                        </div>
+                        <div class="field">
+                            <input type="text" name="first_name" value="{{user.first_name}}" maxlength="150" id="id_first_name" required placeholder="Your First Name" class="input">
+                        </div>
+                        <div class="field">
+                            <input type="text" name="last_name" value="{{user.last_name}}" maxlength="150" id="id_last_name" required placeholder="Your Last Name" class="input">
+                        </div>
+                        <div class="field">
+                            <input type="text" name="gender" value="{{user.gender}}" maxlength="50" required id="id_gender" placeholder="Your Gender" readonly class="input">
+                        </div>
+                    </div>
+                    <div class="semi-field">
+                        <div class="field">
+                            <input type="number" name="age" value="{{user.age}}" required id="id_age" placeholder="Age" class="input">
+                        </div>
+                        <div class="field">
+                            <input type="text" name="location" value="{{user.location}}" maxlength="200" required id="id_location" placeholder="Your Location" class="input">
+                        </div>
+                        <div class="field">
+                            <input type="tel" name="phone" value="{{user.phone}}" maxlength="15" required id="id_phone" placeholder="Your Phone Number" class="input">
+                        </div>
+                        <div class="field">
+                            <input type="email" name="email" value="{{user.email}}" maxlength="254" id="id_email" required placeholder="Your Email" class="input">
+                        </div>
+                    </div>
+                </div>
+                <div class="full-len-field-wrapper">
+                    <div class="field">
+                        <textarea name="bio" cols="30" rows="4" id="id_bio" placeholder="Your Bio | describe yourself..." class="input y-scrollable">{{user.bio}}</textarea>
+                    </div>
+                </div>
+            </div>
+            <div class="submit-field-wrapper">
+                <div class="field">
+                    <input type="submit" class="upadate-btn" value="Save Changes">
+                </div>
+            </div>
+        </div>
+    </form>
+    <div class="sec-forms-cont">
+        <h3>Hobbies & Interests</h4>
+        <div class="hobbies-cont">
+            <div class="hobbies-list">
+                {% if hobbies_count > 0 %}
+                {% for hobby in hobbies %}
+                <span class="hobby-item">{{hobby}}</span>
+                {% endfor %}
+                {% else %}
+                <span>No hobbies Added.</span>
+                {%endif%}
+            </div>
+            <div class="sec-btn-wrapper">
+                <a href="{% url 'my-hobbies' %}" class="sec-btn bi-pencil-fill"> Edit List</a>
+            </div>
+        </div>
+        {% if request.user.category|lower == 'guest' %}
+        <h3>Account Settings:</h3>
+        <form action="{% url 'guest-settings' %}" method="POST" class="acc-settings-wrapper">
+            {% csrf_token %}
+            <div class="settings-fields-wrapper">
+                <div class="field">
+                    <label for="id_budget" class="bi-currency-dollar"> Budget:</label>
+                    <input type="number" name="budget" id="id_budget" required placeholder="Budget" value="{{guest_data.budget}}">
+                </div>
+                <div class="field">
+                    <label for="id_moving_date" class="bi-calendar2"> Moving:</label>
+                    <input type="date" name="moving_date" id="id_moving_date" value="{{guest_data.moving_date|date:'Y-m-d' }}" required>
+                </div>
+            </div>
+            <div class="sec-btn-wrapper">
+                <input type="submit" value="Save" id="submitAccData" class="sec-btn">
+            </div>
+        </form>
+        {%endif%}
+    </div>
+</div>
+
+
+
+
+
+{% endblock content %}
