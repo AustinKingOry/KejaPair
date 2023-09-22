@@ -15,7 +15,7 @@ def upload_path_handler_room(instance, filename):
     return "uploads/user_{id}/{file}".format(id=instance.host.id, file=filename)
 
 class Hobby(models.Model):
-    hbId = models.CharField(max_length=10)
+    hbId = models.CharField(max_length=10,unique=True)
     name = models.CharField(max_length=50)
     created = models.DateTimeField(auto_now_add=True)
     
@@ -28,7 +28,7 @@ class Hobby(models.Model):
         return self.hbId
     
 class UserPhoto(models.Model):
-    photoId = models.CharField(max_length=10)
+    photoId = models.CharField(max_length=10,unique=True)
     user = models.ForeignKey('User',on_delete=models.CASCADE,null=True,related_name='photo_user')
     image = models.ImageField(null=False,blank=False,upload_to=upload_path_handler_up)
     created = models.DateTimeField(auto_now_add=True)
@@ -45,7 +45,15 @@ class UserPhoto(models.Model):
 
 
 class User(AbstractUser):
-    UID = models.CharField(max_length=11)
+    gender_1 = 'Male'
+    gender_2 = 'Female'
+    gender_3 = 'Other'
+    gender_choices = [
+        (gender_1,'Male'),
+        (gender_2,'Female'),
+        (gender_3,'Other'),
+        ]
+    UID = models.CharField(max_length=11,unique=True)
     hobbies = models.ManyToManyField(Hobby, related_name='hobbies', blank=True)
     pairs = models.ManyToManyField('PairRequest', related_name='pairs', blank=True)
     matches = models.ManyToManyField('Match', related_name='matches', blank=True)
@@ -53,7 +61,7 @@ class User(AbstractUser):
     category = models.CharField(default='Host', max_length=50)
     bio = models.TextField(null=True,blank=True)
     age = models.IntegerField(default=18)
-    gender = models.CharField(max_length=50)
+    gender = models.CharField(max_length=50,choices=gender_choices,default=gender_1)
     location = models.CharField(max_length=200)
     profilePhoto = models.ImageField(upload_to=upload_path_handler,default='avatar.png')
     photosList = models.ManyToManyField(UserPhoto,related_name='timeline_photos',blank=True)
@@ -77,7 +85,7 @@ class User(AbstractUser):
     REQUIRED_FIELDS = []
 
 class Guest(models.Model):
-    guestId = models.CharField(max_length=10)
+    guestId = models.CharField(max_length=10,unique=True)
     userId = models.ForeignKey(User,on_delete=models.CASCADE)
     budget = models.IntegerField(null=True,default=0)
     cleared = models.BooleanField(default=False)
@@ -93,7 +101,7 @@ class Guest(models.Model):
         return self.guestId
       
 class RoomPhoto(models.Model):
-    photoId = models.CharField(max_length=10)
+    photoId = models.CharField(max_length=10,unique=True)
     host = models.ForeignKey(User,on_delete=models.CASCADE,null=True)
     room = models.ForeignKey('Home',on_delete=models.CASCADE,null=True)
     image = models.ImageField(null=False,blank=False,upload_to=upload_path_handler_room)
@@ -110,8 +118,7 @@ class RoomPhoto(models.Model):
         return self.photoId
 
 class Home(models.Model):
-    num = models.IntegerField(default=1,auto_created=True)
-    homeId = models.CharField(max_length=10)
+    homeId = models.CharField(max_length=10,unique=True)
     host = models.ForeignKey(User,on_delete=models.CASCADE,null=True,related_name='home_host')
     name = models.CharField(max_length=200)
     description = models.TextField(null=True,blank=True)
@@ -143,8 +150,7 @@ class Home(models.Model):
     
 
 class PairRequest(models.Model):
-    num = models.IntegerField(default=1,auto_created=True)
-    rqstId = models.CharField(max_length=10)
+    rqstId = models.CharField(max_length=10,unique=True)
     host = models.ForeignKey(User,null=False,on_delete=models.CASCADE,related_name='pr_hosting')
     guest = models.ForeignKey(User,null=False,on_delete=models.CASCADE,related_name='pr_searching')
     trigger = models.ForeignKey(User,null=False,on_delete=models.CASCADE,related_name='initiator')
@@ -159,8 +165,7 @@ class PairRequest(models.Model):
         return self.rqstId
     
 class Match(models.Model):
-    num = models.IntegerField(default=1,auto_created=True)
-    matchId = models.CharField(max_length=10)
+    matchId = models.CharField(max_length=10,unique=True)
     host = models.ForeignKey(User,null=False,on_delete=models.CASCADE,related_name='Match_hosting')
     guest = models.ForeignKey(User,null=False,on_delete=models.CASCADE,related_name='Match_searching')
     home = models.ForeignKey(Home,null=False,on_delete=models.CASCADE)
@@ -175,8 +180,7 @@ class Match(models.Model):
         return self.matchId
     
 class Like(models.Model):
-    num = models.IntegerField(default=1,auto_created=True)
-    likeId = models.CharField(max_length=10)
+    likeId = models.CharField(max_length=10,unique=True)
     host = models.ForeignKey(User,null=False,on_delete=models.CASCADE,related_name='receiver')
     guest = models.ForeignKey(User,null=False,on_delete=models.CASCADE,related_name='sender')
     home = models.ForeignKey(Home,null=False,on_delete=models.CASCADE)
@@ -191,8 +195,7 @@ class Like(models.Model):
     
     
 class Review(models.Model):
-    num = models.IntegerField(default=1,auto_created=True)
-    reviewId = models.CharField(max_length=10)
+    reviewId = models.CharField(max_length=10,unique=True)
     host = models.ForeignKey(User,on_delete=models.CASCADE,related_name='User')
     guest = models.ForeignKey(User,on_delete=models.CASCADE,related_name='participant')
     home = models.ForeignKey(Home,on_delete=models.CASCADE)
@@ -208,8 +211,7 @@ class Review(models.Model):
         return self.reviewId
     
 class SignInLog(models.Model):
-    num = models.IntegerField(default=1,auto_created=True)
-    loginId = models.CharField(max_length=10)
+    loginId = models.CharField(max_length=10,unique=True)
     user = models.ForeignKey(User,null=False,on_delete=models.CASCADE)
     username = models.CharField(max_length=200)
     device = models.TextField(null=False)
@@ -223,8 +225,7 @@ class SignInLog(models.Model):
         return self.loginId
     
 class Notification(models.Model):
-    num = models.IntegerField(default=1,auto_created=True)
-    notifId = models.CharField(max_length=10)
+    notifId = models.CharField(max_length=10,unique=True)
     user = models.ForeignKey(User,null=False,on_delete=models.CASCADE,related_name="Target_User")
     trigger_user = models.ForeignKey(User,null=True,on_delete=models.CASCADE,related_name='Trigger_User')
     notifType = models.CharField(null=False,max_length=20)
@@ -242,8 +243,7 @@ class Notification(models.Model):
         return self.notifId
     
 class Mail(models.Model):
-    num = models.IntegerField(default=1,auto_created=True)
-    mailId = models.CharField(max_length=10)
+    mailId = models.CharField(max_length=10,unique=True)
     user = models.ForeignKey(User,null=False,on_delete=models.CASCADE)
     userMail = models.EmailField(null=False)
     mailSubject = models.CharField(null=False,max_length=200)
@@ -257,8 +257,7 @@ class Mail(models.Model):
         return self.mailId
     
 class CompletedMatch(models.Model):
-    num = models.IntegerField(default=1,auto_created=True)
-    cmId = models.CharField(max_length=10)
+    cmId = models.CharField(max_length=10,unique=True)
     host = models.ForeignKey(User,null=False,on_delete=models.CASCADE,related_name='cm_hosting')
     guest = models.ForeignKey(User,null=False,on_delete=models.CASCADE,related_name='cm_searching')
     home = models.ForeignKey(Home,null=False,on_delete=models.CASCADE)
@@ -271,8 +270,7 @@ class CompletedMatch(models.Model):
         return self.cmId
     
 class PwdReset(models.Model):
-    num = models.IntegerField(default=1,auto_created=True)
-    resetId = models.CharField(max_length=10)
+    resetId = models.CharField(max_length=10,unique=True)
     user = models.ForeignKey(User,null=False,on_delete=models.CASCADE)
     pwdToken = models.TextField(null=False)
     pwdToken = models.TextField(null=False)
@@ -286,8 +284,7 @@ class PwdReset(models.Model):
         return self.resetId
     
 class ActivityLog(models.Model):
-    num = models.IntegerField(default=1,auto_created=True)
-    actId = models.CharField(max_length=10)
+    actId = models.CharField(max_length=10,unique=True)
     trigger = models.ForeignKey(User,null=False,on_delete=models.CASCADE)
     target_id = models.CharField(null=True,max_length=10)
     activity_type = models.CharField(max_length=20,null=False)

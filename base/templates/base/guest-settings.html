@@ -15,19 +15,17 @@
                 <div class="card-body">
                 <form action="" method="POST">
                     {% csrf_token %}
-                    <!-- {{form.as_p}} -->
                     <div class="form-group">
                         <label for="id_budget">Your Budget: <code>*</code></label>
-                        <input type="number" name="budget" id="id_budget" class="form-control aptinput" required placeholder="budget" value="{{guest.budget}}">
+                        <input type="number" name="budget" id="id_budget" class="form-control aptinput my-3" required placeholder="budget" value="{{guest.budget}}">
                     </div>
                     <div class="form-group">
                         <label for="id_moving_date">Moving Date: <code>*</code></label>
-                        <input type="date" name="moving_date" id="id_moving_date" class="form-control aptinput" value="{{guest.moving_date|date:'Y-m-d' }}" required>
+                        <input type="date" name="moving_date" id="id_moving_date" class="form-control aptinput my-3" value="{{guest.moving_date|date:'Y-m-d' }}" required>
                     </div>
                     <div class="form-group">
                         <input type="submit" id="submitNewUser" value="Confirm" class="btn btn-primary aptinput">
                     </div>
-                    <!-- <p class="centered-p full-width padded-mini">Already have an account? <a href="{% url 'signin' %}">Signin</a></p> -->
                 </form>
                 </div>
             </div>

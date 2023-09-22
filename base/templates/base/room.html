@@ -5,32 +5,117 @@
     <link rel="stylesheet" href="{% static 'css/view-room-styles.css' %}" type="text/css">
     <title>{{room.name|truncatewords:"15"}}</title>
 </head>
-<div class="container view-room">
+<div class="container-md view-room">
     <input type="hidden" name="USER_ID" id="USER_ID" value="{{request.user.id}}">
-    <div class="photo-slider-container mySwiper">
-        <div class="swiper-wrapper slide-wrapper">
-            <div class="slide swiper-slide">
-                <p class="photo-counter">1/{{photos.count|add:'1'}}</p>
-                <img src="{% static room.coverPhoto.url %}" alt="cover photo">
+    <div class="row mt-5">
+        <div class="col-md-8">
+            <div class="photo-slider-container mySwiper">
+                <div class="swiper-wrapper slide-wrapper">
+                    <div class="slide swiper-slide">
+                        <p class="photo-counter">1/{{photos.count|add:'1'}}</p>
+                        <img src="{% static room.coverPhoto.url %}" alt="cover photo" class="img-responsive">
+                    </div>
+                    {% for photo in photos %}
+                    <div class="slide swiper-slide">
+                        <p class="photo-counter">{{forloop.counter|add:'1'}}/{{photos.count|add:'1'}}</p>
+                        <img src="{% static photo.image.url %}" alt="room image" class="img-responsive">
+                    </div>
+                    {% endfor %}
+                </div>
+                <div class="slide-controls">
+                    <button class="bi-chevron-left prev-slide btn btn-tool"></button>
+                    <!-- <div class="swiper-button-prev"></div> -->
+                </div>
+                <div class="slide-controls">
+                    <button class="bi-chevron-right next-slide btn btn-tool"></button>
+                    <!-- <div class="swiper-button-next1"></div> -->
+                </div>
+                <div class="swiper-pagination"></div>
             </div>
-            {% for photo in photos %}
-            <div class="slide swiper-slide">
-                <p class="photo-counter">{{forloop.counter|add:'1'}}/{{photos.count|add:'1'}}</p>
-                <img src="{% static photo.image.url %}" alt="room image">
+            <div class="d-flex flex-row align-items-center border-left border-primary">
+                <div class="col-md-12 d-flex flex-row align-items-center p-0">
+                    <div class="border-righta d-flex flex-row btn btn-tool gap-2 align-items-center" {% if request.user.is_authenticated %} id="like-btn" {% endif %} room-id="{{room.id}}">
+                        {% if user_likes %}
+                        <span class="bi-heart-fill green-el fos-22" title="You Like This Room"></span>
+                        {% else %}
+                        <span class="bi-heart fos-22" title="Like"></span>
+                        {% endif %}
+                        <p class="m-0 fos-14">{{room.likesCount}}</p>
+                    </div>
+                    <div class="border-righta d-flex flex-row btn btn-tool gap-2 text-center">
+                        <a href="/chats?u={{room.host.id}}" class="fas fa-comments fos-22" title="Messages"></a>
+                    </div>
+                </div>
             </div>
-            {% endfor %}
         </div>
-        <div class="slide-controls">
-            <button class="bi-chevron-left prev-slide"></button>
-            <!-- <div class="swiper-button-prev"></div> -->
+        <div class="col-md-4">
+            <div class="card border-0">
+                <div class="card-header p-2 bg-white border-0 d-flex flex-row align-items-center">
+                    <div class="card-title col-md-10 m-0 p-2">
+                        <h5 class="text-capitalize m-0 text-primary bold col-md-12">{{room.name}}</h5>
+                    </div>
+                </div>
+                <div class="card-body p-2">
+                    <div class="d-flex flex-row align-items-center p-2">
+                        <span class="bi-geo-alt-fill p-1"> <strong>Location:</strong> {{room.location}}</span>
+                    </div>
+                    <div class="d-flex flex-row align-items-center p-2">
+                        <span class="bi-currency-dollar p-1"> <strong>Rent:</strong> {{room.rent}}</span>
+                    </div>
+                    <div class="d-flex flex-row align-items-center p-2">
+                        <span class="bi-currency-dollar p-1"> <strong>Security Deposit:</strong> {{room.security_deposit}}</span>
+                    </div>
+                    <div class="d-flex flex-row align-items-center p-2">
+                        <span class="bi-envelope-check p-1"> <strong>Bills Included:</strong> {{room.bills_included}}</span>
+                    </div>
+                    <div class="d-flex flex-row align-items-center p-2">
+                        <span class="bi-people p-1"> <strong>Capacity:</strong> {{room.capacity}}</span>
+                    </div>
+                    {% if room.available %}
+                    <div class="d-flex flex-row align-items-center p-2">
+                        <span class="bi-check-circle-fill p-1 text-success"> Available For Booking</span>
+                    </div>
+                    {% endif %}
+                    <div class="d-flex flex-row align-items-center p-3">
+                        {% if pairable == True %}
+                        {% if not pair_exists %}
+                        <a href="{% url 'pair-with' room.host.id %}" class="btn btn-success btn-block shadow">&plus; Book Now</a>
+                        {% else %}
+                        <a href="{% url 'pair-with' room.host.id %}" class="btn btn-outline-danger btn-block shadow">&minus; Remove Request</a>
+                        {% endif %}
+                        {% endif %}
+                        {% if request.user.is_authenticated %}
+                        {% if request.user == room.host %}
+                        <a href="{% url 'update-room' room.id %}" class="bi-pencil-fill btn btn-success btn-block shadow" title="Edit"> Edit</a>
+                        {% endif %}
+                        {% endif %}
+                    </div>
+                    <div class="d-flex flex-row align-items-center p-2">
+                        <div class="col-md-12 d-flex flex-row align-items-center p-0">
+                            <div class="d-flex flex-row gap-2 text-center">
+                                <p class="m-0"><i class="fas fa-share"></i> Share:</p>
+                            </div>
+                            <div class="d-flex flex-row btn btn-tool gap-2 text-center">
+                                <a href="#" class="fas fa-clipboard fos-22 text-primary"></a>
+                            </div>
+                            <div class="d-flex flex-row btn btn-tool gap-2 text-center">
+                                <a href="#" class="fab fa-facebook fos-22 text-primary"></a>
+                            </div>
+                            <div class="d-flex flex-row btn btn-tool gap-2 text-center">
+                                <a href="#" class="fab fa-twitter fos-22 text-primary"></a>
+                            </div>
+                            <div class="d-flex flex-row btn btn-tool gap-2 text-center">
+                                <a href="#" class="fab fa-instagram fos-22 text-primary"></a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
         </div>
-        <div class="slide-controls">
-            <button class="bi-chevron-right next-slide"></button>
-            <!-- <div class="swiper-button-next1"></div> -->
-        </div>
-        <div class="swiper-pagination"></div>
     </div>
-    <div class="contact-actions-wrapper">
+    
+    <!-- <div class="contact-actions-wrapper">
         <div class="contact-action">
             <a href="/chats?u={{room.host.id}}" class="bi-chat"></a>
         </div>
@@ -49,8 +134,8 @@
         </div>
         {% endif %}
         {% endif %}
-    </div>
-    <div class="room-data-wrapper">
+    </div> -->
+    <div class="room-data-wrapper mt-4">
         <div class="room-data-card dropable-container">
             <div class="card-title">
                 <h3>Room Details</h3>
@@ -120,13 +205,13 @@
         <div class="host-sect-links">
             {% if request.user.id != room.host.id %}
             <a href="/chats?u={{room.host.id}}" class="actions">Send Message</a>
-            {% if pairable == True %}
+            <!-- {% if pairable == True %}
             {% if not pair_exists %}
             <a href="{% url 'pair-with' room.host.id %}" class="actions"><i class="fas fa-house-user">&plus;</i> Pair</a>
             {% else %}
             <a href="{% url 'pair-with' room.host.id %}" class="requested-pair actions"><i class="fas fa-house-user">&check;</i> Pending Pair</a>
             {% endif %}
-            {% endif %}
+            {% endif %} -->
             <span onclick="showReviewForm();" class="actions">Give Review</span>
             {% endif %}
             <a href="{% url 'profiles' room.host.id %}" class="actions"> Go To Profile</a>
@@ -151,7 +236,7 @@
         <h3 class="blue-el">Hobbies & Interests:</h3>
         <div class="hobbies-container">
             {% if hobbies_count == 0 %}
-            <span>empty</span>
+            <p class="text-muted">No hobbies listed.</p>
             {% else %}
             {% for hobby in hobbies %}
             <span class="hobby-tag">{{hobby}}</span>

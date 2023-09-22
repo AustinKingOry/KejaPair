@@ -54,6 +54,7 @@
     --color-bg: #2d2d39;
     --color-success: #5dd693;
     --color-error: #fc4b0b;
+    --color-warning: #ffa500;
 }
 ::selection{
     color: #fff;
@@ -70,9 +71,94 @@ body{
     font-family: 'Poppins','Roboto','Lato','Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 a{
-    text-decoration: none;
+    text-decoration: none !important;
     transition: 0.4s;
 }
+/* buttons */
+.btn-primary{
+    background-color: var(--bgBlue);
+    color: var(--fontWhite);
+}
+.btn-secondary{
+    background-color: var(--fontGray);
+    color: var(--fontWhite);
+}
+.btn-success{
+    background-color: var(--bgGreen2);
+    color: var(--fontWhite);
+}
+.btn-warning{
+    background-color: var(--color-warning);
+    color: var(--fontWhite);
+}
+.btn-danger{
+    background-color: var(--color-error);
+    color: var(--fontWhite);
+}
+/* btn outline */
+.btn-outline-primary{
+    border-color: var(--bgBlue);
+    color: var(--bgBlue);
+}
+.btn-outline-secondary{
+    border-color: var(--fontGray);
+    color: var(--fontGray);
+}
+.btn-outline-success{
+    border-color: var(--bgGreen2);
+    color: var(--bgGreen2);
+}
+.btn-outline-warning{
+    border-color: var(--color-warning);
+    color: var(--color-warning);
+}
+.btn-outline-danger{
+    border-color: var(--color-error);
+    color: var(--color-error);
+}
+/* text colors */
+.text-primary{
+    color: var(--fontBlue) !important;
+}
+.text-secondary{
+    color: var(--fontGray) !important;
+}
+.text-success{
+    color: var(--fontGreen) !important;
+}
+.text-warning{
+    color: initial;
+}
+.text-danger{
+    color: var(--color-error) !important;
+}
+/* font sizes */
+.fos-14{
+    font-size: 14px;
+}
+.fos-16{
+    font-size: 16px;
+}
+.fos-18{
+    font-size: 18px;
+}
+.fos-20{
+    font-size: 20px;
+}
+.fos-22{
+    font-size: 22px;
+}
+.fos-24{
+    font-size: 24px;
+}
+.fos-28{
+    font-size: 28px;
+}
+/* border-colors */
+.border-success{
+    border-color: var(--bgGreen2);
+}
+/* nav bar */
 nav{
     position: relative;
     width: 100%;
@@ -129,7 +215,7 @@ nav .nav-links a{
 .user-nav-links{
     z-index: 11;
     position: absolute;
-    top: 4.5rem;
+    top: 3rem;
     right: 0.5em;
     background: var(--bgWhite2);
     border-radius: 5px;

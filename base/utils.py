@@ -4,6 +4,7 @@ from django.db.models import Q
 from Crypto.Cipher import AES
 from Crypto.Util.Padding import pad, unpad
 from base64 import b64encode, b64decode
+import re
 
 def encrypt_text(key, text):
     cipher = AES.new(key, AES.MODE_ECB)
@@ -19,23 +20,27 @@ def decrypt_text(key, encrypted_text):
     decrypted_text = unpad(decrypted_bytes, AES.block_size).decode('utf-8')
     return decrypted_text
 
-def RemovePreffix(index,preffix):
-    # res0 = str(index).replace([str(preffix)+"00",preffix,str(preffix)+"0"],'')
-    res0 = int(str(index).replace(preffix,''))
-    return res0
+def RemovePrefix(index,prefix):
+    s=str(index)
+    if s !='':
+        if prefix in str(s):
+            res = int(str(s).replace(prefix,''))
+        else:
+            res = int(re.search(r'\d+', s).group())
+    else:
+        res = 1
+    return res
 
-def addPreffix(preffix,index):
+def addPrefix(prefix,index):
     if (index<10):
-        res1 = str(preffix)+"00"+str(index)
-        return res1
+        res= str(prefix)+"00"+str(index)
+        return res
 
     elif(index>=10):
-        res1 = str(preffix)+"0"+str(index)
-        return res1
+        res = str(prefix)+"0"+str(index)
+        return res
 
-
-
-def createId(table,fieldname,preffix):
+def createId(table,fieldname,prefix)->str:
     '''
     Creates unique id values for objects in the database, by checking and incrementing the integer part of the field with the highest value.
 
@@ -53,23 +58,23 @@ def createId(table,fieldname,preffix):
     else:
         tableFields = None
 
-    idPreffix=preffix
+    idPrefix=prefix
     dm_adms = [0]
     for field in idsArray:
         newRow = field
-        index = RemovePreffix(newRow,idPreffix)
+        index = RemovePrefix(newRow,idPrefix)
         newRow = int(index)
         dm_adms.append(newRow)
-        print(newRow)
     
     cur_max = max(dm_adms)
     
-    if cur_max==1:
-        newId = str(idPreffix)+"002"
-    
+    if not cur_max==1:
+        newId =cur_max+1
+        index1 = addPrefix(idPrefix,newId)
+        newId = index1
     else:
         newId =cur_max+1
-        index1 = addPreffix(idPreffix,newId)
+        index1 = addPrefix(idPrefix,newId)
         newId = index1
 
     return newId
@@ -416,7 +421,7 @@ def createMatch(guest,host,room,trigger):
                 target = new_match
                 
             send_notification(
-                'It\'s a match! You have successfully matched with '+str(trigger.get_full_name)+'. Take things to the next level and start preparing your new home.',
+                'It\'s a match! You have successfully matched with '+str(trigger.get_full_name())+'. Take things to the next level and start preparing your new home.',
                 'New Match',
                 trigger,
                 target,
@@ -440,7 +445,7 @@ def book_room(guest,owner,room):
             room_obj.requestsList.add(guest_obj)
         
         send_notification(
-            str(user_obj.get_full_name)+' sent you a request for an apartment/room. Check out their profile to see more.',
+            str(user_obj.get_full_name())+' sent you a request for an apartment/room. Check out their profile to see more.',
             'Room Request',
             user_obj,
             owner_obj,
@@ -451,7 +456,7 @@ def book_room(guest,owner,room):
             user_obj,
             room_obj.id,
             'Home',
-            str(user_obj.get_full_name)+' requested for a room.'
+            str(user_obj.get_full_name())+' requested for a room.'
         )
         res = True
     return res
@@ -464,7 +469,7 @@ def guest_has_requested(guest,room):
 
 def booked_rooms(guest):
     res=[]
-    if Guest.objects.filter(id=guest.id).exists():
+    if guest is not None and Guest.objects.filter(id=guest.id).exists():
         guest_obj = Guest.objects.get(id=guest.id)
         booked_rooms = Room.objects.exclude(requestsList=None)
         for room in booked_rooms:

@@ -10,12 +10,12 @@
     align-items: center;
     overflow: hidden;
     gap: 1em;
-    margin-top: 2em;
+    /* margin-top: 2em; */
 }
 .view-room .photo-slider-container .slide-controls{
     position: absolute;
     width: fit-content;
-    right: 8%;
+    right: 2%;
     margin: 0 auto;
     z-index: 3;
     display: flex;
@@ -24,7 +24,7 @@
 }
 .view-room .photo-slider-container .slide-controls:nth-child(2){
     right: unset;
-    left: 7%;
+    left: 2%;
 }
 .view-room .photo-slider-container .slide-controls button{
     border: none;
@@ -35,7 +35,7 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    background-color: var(--darkBlueBg);
+    background-color: var(--bgGreen2);
     color: var(--fontWhite);
     border-radius: 50%;
     transition: 0.3s;
@@ -59,8 +59,8 @@
 
 .view-room .photo-slider-container .slide-wrapper .slide .photo-counter{
     position: absolute;
-    top: 0.5%;
-    right: 6.5%;
+    top: 0;
+    right: 0;
     z-index: 3;
     width: fit-content;
     padding: 0.5em 1em;

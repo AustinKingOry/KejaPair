@@ -3,7 +3,7 @@ from django.contrib.auth.decorators import login_required
 from .models import User,Home as Room,Review,Guest,Like,RoomPhoto,UserPhoto,Hobby,Notification,PairRequest,ActivityLog as Log,Match
 from chat.models import Chat,Thread
 from .forms import MyUserCreationForm,RoomForm,GuestForm,ReviewForm
-from .basicFunctions import createId,send_notification,pairable,create_pair,pair_exists,suggestPair,createLog,createMatch,book_room,booked_rooms
+from .utils import createId,send_notification,pairable,create_pair,pair_exists,suggestPair,createLog,createMatch,book_room,booked_rooms
 from django.core.mail import send_mail
 from django.contrib.auth.hashers import make_password
 from django.utils import timezone
@@ -95,7 +95,9 @@ def signUp(request):
                 return redirect('add-room')
             return redirect('home')
         else:
-            messages.error(request,form.errors)
+            for field, errors in form.errors.items():
+                for error in errors:
+                    messages.error(request, f"Error in {field}: {error}")
     context = {'form':form}
     return render(request,'base/signup.html',context)
 
@@ -125,7 +127,9 @@ def guest_settings(request):
                 messages.success(request,'Account settings updated successfully!')
                 return redirect('edit-profile')
             else:
-                messages.error(request,form.errors)
+                for field, errors in form.errors.items():
+                    for error in errors:
+                        messages.error(request, f"Error in {field}: {error}")
         context = {'form':form,'guest':cur_settings,'active_page':'guest-settings'}
         return render(request,'base/guest-settings.html',context)
     else:
@@ -256,7 +260,7 @@ def pair_with(request,pk):
             pair = create_pair(host,guest,room,request.user)
             if pair==True:
                 send_notification(
-                    str(request.user.get_full_name)+' sent you a pair request. Get in touch with them to check your compatibility and start living together.',
+                    str(request.user.get_full_name())+' sent you a pair request. Get in touch with them to check your compatibility and start living together.',
                     'New Pair Request',
                     user2,
                     user1,
@@ -330,8 +334,10 @@ def user_pairs(request):
         #use a better algorithm here instead of calling the function everytime a view is loaded
         reccommended_pairs=suggestPair(user.id)[0:30]
         reccommended_pairs_count=len(reccommended_pairs)
-        
-        guest_obj = Guest.objects.get(userId=user)
+        try:
+            guest_obj = Guest.objects.get(userId=user)
+        except:
+            guest_obj = None
         requested_rooms = booked_rooms(guest_obj)
         # messages.info(request,requested_rooms)
     else:
@@ -428,6 +434,10 @@ def createRoom(request):
                 room.save()
                 messages.success(request,'Your room has been added successfully!!')
                 return redirect('home')
+            else:
+                for field, errors in form.errors.items():
+                    for error in errors:
+                        messages.error(request, f"Error in {field}: {error}")
         context = {'form':form,'active_page':'add-room'}
     return render(request,'base/add-room.html',context)
 
@@ -537,6 +547,10 @@ def room(request, pk):
                         'Review',
                         "/room/"+str(room.id)+"/#reviews"
                     )
+                else:                    
+                    for field, errors in form.errors.items():
+                        for error in errors:
+                            messages.error(request, f"Error in {field}: {error}")
             
             hobbies = room.host.hobbies.all()
             hobbies_count = hobbies.count()
@@ -592,7 +606,9 @@ def updateRoom(request,pk):
             messages.success(request,'Your room was updated successfully 😉.')
             return redirect(request.META['HTTP_REFERER'])
         else:
-            messages.error(request,form.errors)
+            for field, errors in form.errors.items():
+                for error in errors:
+                    messages.error(request, f"Error in {field}: {error}")
 
     context = {'form': form, 'room': room}
     return render(request, 'base/edit-room.html', context)

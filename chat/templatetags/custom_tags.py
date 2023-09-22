@@ -1,7 +1,7 @@
 from django import template
 from django.template.defaultfilters import stringfilter
 from KejaPair.settings import SECRET_KEY
-from base.basicFunctions import createId,encrypt_text,decrypt_text
+from base.utils import createId,encrypt_text,decrypt_text
 
 register = template.Library()
 

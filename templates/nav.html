@@ -46,7 +46,7 @@
             <a href="{% url 'notifications' %}" title="Notifications" {% if active_page == 'notif'%}class="active-page"{%endif%}><i class="bi-bell-fill"></i><span class="side-nav-link"> Notifications </span><span class="badge alert-badge notif-alert"></span></a>
             <a href="{% url 'edit-profile' %}" title="Settings" {% if active_page == 'settings'%}class="active-page"{%endif%}><i class="bi-gear"></i><span class="side-nav-link"> Settings</span></a>
             {% if user.category != 'Owner' %}
-            <a href="{% url 'user-pairs' %}" title="My Pairs" {% if active_page == 'pairs'%}class="active-page"{%endif%}><i class="bi-people-fill"></i><span class="side-nav-link"> My Pairs </span><span class="badge alert-badge pairs-alert"></span></a>
+            <a href="{% url 'user-pairs' %}" title="My Pairs" {% if active_page == 'pairs' %}class="active-page"{%endif%}><i class="bi-people-fill"></i><span class="side-nav-link"> My Pairs </span><span class="badge alert-badge pairs-alert"></span></a>
             <a href="{% url 'my-matches' %}" title="My Matches" {% if active_page == 'matches'%}class="active-page"{%endif%}><i class="bi-people-fill bold"><small>&check;</small></i><span class="side-nav-link"> My Matches </span><span class="badge alert-badge matches-alert"></span></a>
             {%endif%}
             {% if user.category == 'Owner' %}

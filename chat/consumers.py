@@ -5,7 +5,7 @@ from channels.db import database_sync_to_async
 
 from chat.models import Thread, Chat,User
 from django.conf.global_settings import SECRET_KEY
-from base.basicFunctions import createId,encrypt_text
+from base.utils import createId,encrypt_text
 
 class ChatConsumer(AsyncConsumer):
     async def websocket_connect(self, event):

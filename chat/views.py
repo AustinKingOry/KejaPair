@@ -2,7 +2,7 @@ from django.shortcuts import render,redirect
 from django.contrib.auth.decorators import login_required
 from chat.models import Thread,Chat
 from base.models import User
-from base.basicFunctions import encrypt_text,decrypt_text
+from base.utils import encrypt_text,decrypt_text
 from django.db.models import Q
 from django.contrib import messages
 from django import template

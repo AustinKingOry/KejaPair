@@ -43,7 +43,6 @@ INSTALLED_APPS = [
 
     'base.apps.BaseConfig',
     'chat',
-    'sslserver',
 
     # 'rest_framework',
     # "corsheaders",

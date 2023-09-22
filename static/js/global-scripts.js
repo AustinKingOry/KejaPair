@@ -63,7 +63,7 @@ function(e)
 var swiper = new Swiper(".mySwiper", {
     slidesPerView: 1,
     grabCursor: true,
-    loop: true,
+    loop: false,
     pagination: {
         el: ".swiper-pagination",
         clickable: true,
@@ -235,7 +235,7 @@ function checkLiveData(){
     let nav_socket  = new WebSocket(nav_socket_url);
 
     nav_socket.onopen = async function(e){
-        console.log('open',e);
+        // console.log('open',e);
         let data = {
             'rqst_type':'*',
             'request_user':document.getElementById('nav-toggle').querySelector('.l-u-name').getAttribute('user-id'),
@@ -247,7 +247,7 @@ function checkLiveData(){
         nav_socket.send(data);
     }
     nav_socket.onmessage = async function(e){
-        console.log('message',e);
+        // console.log('message',e);
         let data = JSON.parse(e.data);
         let total_count = data['total_count'];
         let notif_count = data['notif_count'];
@@ -266,10 +266,10 @@ function checkLiveData(){
         return status;
     }
     nav_socket.onclose = async function(e){
-        console.log('close',e);
+        // console.log('close',e);
     }
     nav_socket.onerror = async function(e){
-        console.log('error',e);
+        // console.log('error',e);
     }
 }
 
