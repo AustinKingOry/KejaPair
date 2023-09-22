@@ -1,5 +1,5 @@
 from django.db import models
-from base.models import User,Home
+from base.models import User,Property
 from django.db.models import Q
 
 # Create your models here.
@@ -29,7 +29,7 @@ class Chat(models.Model):
     msgId = models.CharField(max_length=10)
     user = models.ForeignKey(User,null=False,on_delete=models.CASCADE,related_name='sending')
     # receiver = models.ForeignKey(User,null=False,on_delete=models.CASCADE,related_name='receiving')
-    home = models.ForeignKey(Home,null=True,on_delete=models.CASCADE)
+    property = models.ForeignKey(Property,null=True,on_delete=models.CASCADE)
     body = models.TextField(null=False)
     unread = models.BooleanField(default=True)
     receiverNotified = models.BooleanField(default=False)

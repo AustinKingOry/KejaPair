@@ -1,6 +1,6 @@
 from django.shortcuts import render,redirect
 from django.contrib.auth.decorators import login_required
-from .models import User,Home as Room,Review,Guest,Like,RoomPhoto,UserPhoto,Hobby,Notification,PairRequest,ActivityLog as Log,Match
+from .models import User,Property as Room,Review,Guest,Like,RoomPhoto,UserPhoto,Hobby,Notification,PairRequest,ActivityLog as Log,Match
 from chat.models import Chat,Thread
 from .forms import MyUserCreationForm,RoomForm,GuestForm,ReviewForm
 from .utils import createId,send_notification,pairable,create_pair,pair_exists,suggestPair,createLog,createMatch,book_room,booked_rooms
@@ -429,7 +429,7 @@ def createRoom(request):
             form = RoomForm(request.POST,request.FILES)
             if form.is_valid():       
                 room = form.save(commit=False)
-                room.homeId = str(createId(Room,Room.homeId,'RM'))
+                room.propertyId = str(createId(Room,Room.propertyId,'RM'))
                 room.host = request.user
                 room.save()
                 messages.success(request,'Your room has been added successfully!!')
@@ -525,7 +525,7 @@ def room(request, pk):
             reviewForm = ReviewForm()
             photos = room.photosList.all()
             if request.user.is_authenticated:
-                user_likes = Like.objects.filter(guest=request.user,home=room).exists()
+                user_likes = Like.objects.filter(guest=request.user,property=room).exists()
             else:
                 user_likes = False
                 
@@ -536,7 +536,7 @@ def room(request, pk):
                     review.reviewId=createId(Review,Review.reviewId,'RVW')
                     review.host = room.host
                     review.guest = request.user
-                    review.home = room
+                    review.property = room
                     review.save()
                     
                     send_notification(

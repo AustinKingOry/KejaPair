@@ -152,16 +152,16 @@
             <div class="activity-card rooms-feed-item">
                 <div class="activity-card-header">
                     <div class="user-info">
-                        <img src="{% static like.home.host.profilePhoto.url %}" alt="">
-                        <p>{{like.home.host.get_full_name}} {% if like.home.host.verified %}<i class="bi-patch-check-fill verified-badge"></i>{%endif%}<br><small>@{{like.home.host}}</small></p>
+                        <img src="{% static like.property.host.profilePhoto.url %}" alt="">
+                        <p>{{like.property.host.get_full_name}} {% if like.property.host.verified %}<i class="bi-patch-check-fill verified-badge"></i>{%endif%}<br><small>@{{like.property.host}}</small></p>
                     </div>                    
                     <span><small>{{like.created|timesince}} ago</small></span>
                 </div>
                 <div class="activity-card-caption">
-                    <p class="cutoff-text-shift">{{like.home.host.get_full_name}} liked the room "{{like.home.description|truncatewords:"10"}}"</p><a href="{% url 'room' like.home.id %}"> Checkout this room.</a>
+                    <p class="cutoff-text-shift">{{like.property.host.get_full_name}} liked the room "{{like.property.description|truncatewords:"10"}}"</p><a href="{% url 'room' like.property.id %}"> Checkout this room.</a>
                 </div>
                 <div class="activity-card-image">
-                    <img src="{% static like.home.coverPhoto.url %}" alt="room photo">
+                    <img src="{% static like.property.coverPhoto.url %}" alt="room photo">
                 </div>
             </div>
             {% endfor %}

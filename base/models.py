@@ -103,7 +103,7 @@ class Guest(models.Model):
 class RoomPhoto(models.Model):
     photoId = models.CharField(max_length=10,unique=True)
     host = models.ForeignKey(User,on_delete=models.CASCADE,null=True)
-    room = models.ForeignKey('Home',on_delete=models.CASCADE,null=True)
+    room = models.ForeignKey('Property',on_delete=models.CASCADE,null=True)
     image = models.ImageField(null=False,blank=False,upload_to=upload_path_handler_room)
     created = models.DateTimeField(auto_now_add=True)
     category = models.CharField(null=False,default='room',max_length=200)
@@ -117,9 +117,9 @@ class RoomPhoto(models.Model):
     def field_id(self):
         return self.photoId
 
-class Home(models.Model):
-    homeId = models.CharField(max_length=10,unique=True)
-    host = models.ForeignKey(User,on_delete=models.CASCADE,null=True,related_name='home_host')
+class Property(models.Model):
+    propertyId = models.CharField(max_length=10,unique=True)
+    host = models.ForeignKey(User,on_delete=models.CASCADE,null=True,related_name='property_host')
     name = models.CharField(max_length=200)
     description = models.TextField(null=True,blank=True)
     location = models.CharField(max_length=200)
@@ -146,7 +146,7 @@ class Home(models.Model):
     def __str__(self):
         return self.name
     def field_id(self):
-        return self.homeId
+        return self.propertyId
     
 
 class PairRequest(models.Model):
@@ -154,7 +154,7 @@ class PairRequest(models.Model):
     host = models.ForeignKey(User,null=False,on_delete=models.CASCADE,related_name='pr_hosting')
     guest = models.ForeignKey(User,null=False,on_delete=models.CASCADE,related_name='pr_searching')
     trigger = models.ForeignKey(User,null=False,on_delete=models.CASCADE,related_name='initiator')
-    home = models.ForeignKey(Home,null=False,on_delete=models.CASCADE)
+    property = models.ForeignKey(Property,null=False,on_delete=models.CASCADE)
     status = models.CharField(null=False,max_length=20)
     seen = models.BooleanField(default=False)
     created = models.DateTimeField(auto_now_add=True)
@@ -168,7 +168,7 @@ class Match(models.Model):
     matchId = models.CharField(max_length=10,unique=True)
     host = models.ForeignKey(User,null=False,on_delete=models.CASCADE,related_name='Match_hosting')
     guest = models.ForeignKey(User,null=False,on_delete=models.CASCADE,related_name='Match_searching')
-    home = models.ForeignKey(Home,null=False,on_delete=models.CASCADE)
+    property = models.ForeignKey(Property,null=False,on_delete=models.CASCADE)
     matchType = models.CharField(null=False,max_length=20)
     created = models.DateTimeField(auto_now_add=True)
 
@@ -183,7 +183,7 @@ class Like(models.Model):
     likeId = models.CharField(max_length=10,unique=True)
     host = models.ForeignKey(User,null=False,on_delete=models.CASCADE,related_name='receiver')
     guest = models.ForeignKey(User,null=False,on_delete=models.CASCADE,related_name='sender')
-    home = models.ForeignKey(Home,null=False,on_delete=models.CASCADE)
+    property = models.ForeignKey(Property,null=False,on_delete=models.CASCADE)
     created = models.DateTimeField(auto_now_add=True)
     
     class Meta:
@@ -198,7 +198,7 @@ class Review(models.Model):
     reviewId = models.CharField(max_length=10,unique=True)
     host = models.ForeignKey(User,on_delete=models.CASCADE,related_name='User')
     guest = models.ForeignKey(User,on_delete=models.CASCADE,related_name='participant')
-    home = models.ForeignKey(Home,on_delete=models.CASCADE)
+    property = models.ForeignKey(Property,on_delete=models.CASCADE)
     body = models.TextField(null=False)
     rating = models.IntegerField(null=False,default=1)
     created = models.DateTimeField(auto_now_add=True)
@@ -260,7 +260,7 @@ class CompletedMatch(models.Model):
     cmId = models.CharField(max_length=10,unique=True)
     host = models.ForeignKey(User,null=False,on_delete=models.CASCADE,related_name='cm_hosting')
     guest = models.ForeignKey(User,null=False,on_delete=models.CASCADE,related_name='cm_searching')
-    home = models.ForeignKey(Home,null=False,on_delete=models.CASCADE)
+    property = models.ForeignKey(Property,null=False,on_delete=models.CASCADE)
     # matchType = models.CharField(null=False,max_length=20)
     created = models.DateTimeField(auto_now_add=True)
 

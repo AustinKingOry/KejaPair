@@ -219,7 +219,7 @@ code{
     transform-origin: 0 100%;
 }
 
-/* styles for the home page  */
+/* styles for the property page  */
 
 .showcase{
     position: relative;
@@ -230,7 +230,7 @@ code{
     gap: 1em;
     align-items: center;
     justify-content: flex-start;
-    background: url("../img/homebg.jpg");
+    background: url("../img/propertybg.jpg");
     background-size: cover;
     background-position: center;
     background-repeat: no-repeat;

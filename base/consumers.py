@@ -3,7 +3,7 @@ from channels.consumer import AsyncConsumer
 from channels.db import database_sync_to_async
 
 from chat.models import Chat,Thread
-from base.models import Home,Like,Hobby,User,RoomPhoto,Notification,ActivityLog as Log
+from base.models import Property,Like,Hobby,User,RoomPhoto,Notification,ActivityLog as Log
 from base.utils import createId,send_notification,suggestPair,createLog
 from django.db.models import Q
 
@@ -95,7 +95,7 @@ class RoomLikesConsumer(AsyncConsumer):
         return obj
     @database_sync_to_async
     def get_host_object(self,room_id):
-        qs = Home.objects.filter(id=room_id)
+        qs = Property.objects.filter(id=room_id)
         if qs.exists():
             room_obj = qs.first()
             obj = room_obj.host
@@ -106,7 +106,7 @@ class RoomLikesConsumer(AsyncConsumer):
     @database_sync_to_async
     def get_room_object(self, room_id):
         if room_id is not None:
-            qs = Home.objects.filter(id=room_id)
+            qs = Property.objects.filter(id=room_id)
             if qs.exists():
                 obj = qs.first()
             else:
@@ -118,7 +118,7 @@ class RoomLikesConsumer(AsyncConsumer):
     @database_sync_to_async
     def get_room_likes(self, room_id):
         if room_id is not None:
-            qs = Home.objects.filter(id=room_id)
+            qs = Property.objects.filter(id=room_id)
             if qs.exists():
                 obj = qs.first()
                 likes = obj.likesCount
@@ -132,13 +132,13 @@ class RoomLikesConsumer(AsyncConsumer):
     
     @database_sync_to_async
     def submit_reaction(self, room_obj, liked_by_obj,owner_obj):
-        existing_reaction = Like.objects.filter(host=owner_obj,guest=liked_by_obj,home=room_obj)
+        existing_reaction = Like.objects.filter(host=owner_obj,guest=liked_by_obj,property=room_obj)
         if existing_reaction.exists():
             action = 0
             for reaction in existing_reaction:
                 reaction.delete()
             
-            sbj_room = Home.objects.filter(id=room_obj.id)
+            sbj_room = Property.objects.filter(id=room_obj.id)
             if sbj_room:
                 for room in sbj_room:
                     if room.likesCount < 0:
@@ -156,10 +156,10 @@ class RoomLikesConsumer(AsyncConsumer):
                 likeId = createId(Like,Like.likeId,'LK'),
                 host  = owner_obj,
                 guest = liked_by_obj,
-                home = room_obj,
+                property = room_obj,
             )
             
-            sbj_room = Home.objects.filter(id=room_obj.id)
+            sbj_room = Property.objects.filter(id=room_obj.id)
             if sbj_room:
                 for room in sbj_room:
                     if room.likesCount < 0:
@@ -440,9 +440,9 @@ class HandlePhotosConsumer(AsyncConsumer):
     
     @database_sync_to_async
     def get_room_object(self,room_id,user_obj):
-        room = Home.objects.filter(id=room_id,host=user_obj)
+        room = Property.objects.filter(id=room_id,host=user_obj)
         if room.exists():
-            obj = Home.objects.get(id=room_id)
+            obj = Property.objects.get(id=room_id)
         else:
             obj = None
         return obj
@@ -454,10 +454,10 @@ class HandlePhotosConsumer(AsyncConsumer):
             user = User.objects.get(id=user_id)
             
             if str(table_name).lower() == 'house':
-                sbj_table = Home
-                sbj_room = Home.objects.filter(id=photo_id)
+                sbj_table = Property
+                sbj_room = Property.objects.filter(id=photo_id)
                 if sbj_room.exists():
-                    obj = Home.objects.get(id=sbj_room.first().id)
+                    obj = Property.objects.get(id=sbj_room.first().id)
                 else:
                     obj=None
             elif str(table_name).lower() == 'house_photo':
@@ -486,7 +486,7 @@ class HandlePhotosConsumer(AsyncConsumer):
             else:
                 response = 'Photo does not exist!'
         elif str(img_table).lower() == 'cover':
-            photo = Home.objects.filter(id=photo_obj.id,host=user_obj)
+            photo = Property.objects.filter(id=photo_obj.id,host=user_obj)
             response = 'You cannot delete the room\'s cover photo'
         else:
             response = 'Error in identifying the photo. Try again.'
@@ -499,9 +499,9 @@ class HandlePhotosConsumer(AsyncConsumer):
         if photo.exists():
             photo = RoomPhoto.objects.get(id=photo_obj.id)
             photo_url = photo.image
-            sbj_room = Home.objects.filter(id=room_obj.id,host=user_obj)
+            sbj_room = Property.objects.filter(id=room_obj.id,host=user_obj)
             if sbj_room.exists():
-                sbj_room = Home.objects.get(id=room_obj.id)
+                sbj_room = Property.objects.get(id=room_obj.id)
                 cur_cover = sbj_room.coverPhoto
                 new_photo = RoomPhoto.objects.create(
                     photoId = createId(RoomPhoto,RoomPhoto.photoId,'PHR'),

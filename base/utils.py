@@ -1,4 +1,4 @@
-from .models import Notification,User,PairRequest,Home as Room,Guest,ActivityLog as Log,Match
+from .models import Notification,User,PairRequest,Property as Room,Guest,ActivityLog as Log,Match
 from django.contrib.auth.decorators import login_required
 from django.db.models import Q
 from Crypto.Cipher import AES
@@ -141,20 +141,20 @@ def pairable(host,guest):
     return pr
 
 def match_exists(room,host,guest):
-    return Match.objects.filter(host=host,guest=guest,home=room).exists()
+    return Match.objects.filter(host=host,guest=guest,property=room).exists()
 def get_match(room,host,guest):
-    return Match.objects.filter(host=host,guest=guest,home=room).first()
+    return Match.objects.filter(host=host,guest=guest,property=room).first()
 def pair_exists(host,guest):
     if Room.objects.filter(host=host).exists():
         pairCheck = PairRequest.objects.filter(host=host,guest=guest)
-        # pairCheck = PairRequest.objects.filter(host=host,guest=guest,home=room)
+        # pairCheck = PairRequest.objects.filter(host=host,guest=guest,property=room)
         if pairCheck.exists():
             status=True
         else:
             status=False
     elif Room.objects.filter(host=guest).exists():
         pairCheck = PairRequest.objects.filter(host=guest,guest=host)
-        # pairCheck = PairRequest.objects.filter(host=host,guest=guest,home=room)
+        # pairCheck = PairRequest.objects.filter(host=host,guest=guest,property=room)
         if pairCheck.exists():
             status=True
         else:
@@ -201,7 +201,7 @@ def create_pair(host,guest,room,trigger):
             rqstId=createId(PairRequest,PairRequest.rqstId,'PRQ'),
             host=host,
             guest=guest,
-            home=room,
+            property=room,
             trigger=trigger,
             status='Pending',
             seen=False
@@ -404,7 +404,7 @@ def createMatch(guest,host,room,trigger):
             matchId = createId(Match,Match.matchId,'MCH'),
             host = host_obj,
             guest = guest_obj,
-            home = room_obj,
+            property = room_obj,
             matchType = 'completed'
         )
         if new_match:
@@ -421,7 +421,7 @@ def createMatch(guest,host,room,trigger):
                 target = new_match
                 
             send_notification(
-                'It\'s a match! You have successfully matched with '+str(trigger.get_full_name())+'. Take things to the next level and start preparing your new home.',
+                'It\'s a match! You have successfully matched with '+str(trigger.get_full_name())+'. Take things to the next level and start preparing your new property.',
                 'New Match',
                 trigger,
                 target,
@@ -455,7 +455,7 @@ def book_room(guest,owner,room):
         createLog(
             user_obj,
             room_obj.id,
-            'Home',
+            'Property',
             str(user_obj.get_full_name())+' requested for a room.'
         )
         res = True

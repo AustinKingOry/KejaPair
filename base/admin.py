@@ -1,11 +1,11 @@
 from django.contrib import admin
-from .models import Hobby,UserPhoto,RoomPhoto,User,Guest,Home,PairRequest,Match,Review,SignInLog,Notification,CompletedMatch,Like,Mail,PwdReset,ActivityLog
+from .models import Hobby,UserPhoto,RoomPhoto,User,Guest,Property,PairRequest,Match,Review,SignInLog,Notification,CompletedMatch,Like,Mail,PwdReset,ActivityLog
 # Register your models here.
 
 admin.site.register(Guest)
 admin.site.register(Hobby)
 admin.site.register(User)
-admin.site.register(Home)
+admin.site.register(Property)
 admin.site.register(UserPhoto)
 admin.site.register(RoomPhoto)
 admin.site.register(PairRequest)

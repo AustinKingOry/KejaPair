@@ -1,6 +1,6 @@
 from django.forms import ModelForm
 from django.contrib.auth.forms import UserCreationForm
-from .models import User, Home, Guest,Review
+from .models import User, Property, Guest,Review
 # from django.contrib.auth.models import user
 
 class MyUserCreationForm(UserCreationForm):
@@ -16,13 +16,13 @@ class GuestForm(ModelForm):
     class Meta:
         model = Guest
         fields = ['budget','moving_date']
-        # exclude = ['num','homeId','host','available','likesCount','valid','verified','created','updated','photosDir']
+        # exclude = ['num','propertyId','host','available','likesCount','valid','verified','created','updated','photosDir']
 
 class RoomForm(ModelForm):
     class Meta:
-        model = Home
+        model = Property
         fields = '__all__'
-        exclude = ['num','homeId','host','available','likesCount','valid','verified','created','updated','photosDir']
+        exclude = ['num','propertyId','host','available','likesCount','valid','verified','created','updated','photosDir']
         
 class ReviewForm(ModelForm):
     class Meta:
