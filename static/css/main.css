@@ -118,7 +118,7 @@ a{
 }
 /* text colors */
 .text-primary{
-    color: var(--fontBlue) !important;
+    color: var(--bgBlue2) !important;
 }
 .text-secondary{
     color: var(--fontGray) !important;
@@ -176,7 +176,6 @@ nav .logo-sect{
     display: flex;
     flex-direction: row;
     align-items: center;
-    padding: 0.5em;
     gap: 0.5em;
 }
 nav .logo-sect a{

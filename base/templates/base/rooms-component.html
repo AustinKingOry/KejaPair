@@ -2,7 +2,9 @@
 <head>
     <link rel="stylesheet" href="{% static 'css/rooms-styles.css' %}" type="text/css">
 </head>
-<h1 class="text-primary p-2 bold">All Rooms</h1>
+<div class="my-4">
+    <h1 class="text-primary p-2 bold">Explore All Availble Rooms</h1>
+</div>
 <div class="rooms-filter-container">
     <div class="field">
         <select id="locationFilter" class="filter-field">
@@ -54,7 +56,7 @@
 </div>
 <div class="rooms-container" id="rooms-container-main">
     {% if rooms.count == 0 %}
-    <h3>Empty</h3>
+    <p class="text-muted">No rooms listed yet.</p>
     {% else %}
     {% for room in rooms %}
     <a href="{% url 'room' room.id %}" class="room-card" capacity="{{room.capacity}}" rent="{{room.rent}}" loc="{{room.location}}">

@@ -6,39 +6,42 @@
     <title>Find Your Perfect Preferred Roommate</title>
 </head>
 <div class="showcase">
-    <div class="showcase-headers">
-        <h1>Kenya's leading roommate finder</h1>
-        <p class="blockquote">
-            Lorem ipsum dolor sit amet consectetur adipisicing elit. Sed ipsam nam reprehenderit explicabo, officiis delectus.
-        </p>
-    </div>
-    <div class="showcase-search">
-        <form action="/rooms" method="get">
-            <div class="field">
-                <input type="search" name="q" id="id_search" placeholder="search KejaPair" required>
-                <button type="submit" class="bi-search" autocomplete="on"></button>
-            </div>
-        </form>
-    </div>
-    <div class="showcase-btns">
-        {% if request.user.is_authenticated %}
-        {% if user.category != 'Guest' %}
-        <a href="{%url 'add-room'%}"> List Your Room</a>
-        {% else %}
-        <a href="{%url 'hosts'%}"> Explore Hosts</a>
-        {% endif %}
-        {% else %}
-        <a href="{%url 'add-room'%}"> List Your Room</a>
-        {% endif %}
-        {% if user.category == 'Host' or user.category == 'Owner' %}
-        <a href="{%url 'guests-listing'%}"> Explore Guests</a>
-        {% else %}
-        <a href="{%url 'all-room'%}"> Find A Room</a>
-        {% endif %}
+    <div class="overlay">
+        <div class="showcase-headers">
+            <h1>Your gateway to effortless housing solutions</h1>
+            <p class="blockquote text-white col-md-6">
+                Discover ideal rental homes, find compatible roommates, and simplify your journey towards comfortable living as a student or young professional.
+            </p>
+        </div>
+        <div class="showcase-search">
+            <form action="/rooms" method="get">
+                <div class="field">
+                    <input type="search" name="q" id="id_search" placeholder="search KejaPair" required>
+                    <button type="submit" class="bi-search" autocomplete="on"></button>
+                </div>
+            </form>
+        </div>
+        <div class="showcase-btns">
+            {% if request.user.is_authenticated %}
+            {% if user.category != 'Guest' %}
+            <a href="{%url 'add-room'%}"> List Your Room</a>
+            {% else %}
+            <a href="{%url 'hosts'%}"> Explore Hosts</a>
+            {% endif %}
+            {% else %}
+            <a href="{%url 'add-room'%}"> List Your Room</a>
+            {% endif %}
+            {% if user.category == 'Host' or user.category == 'Owner' %}
+            <a href="{%url 'guests-listing'%}"> Explore Guests</a>
+            {% else %}
+            <a href="{%url 'all-room'%}"> Find A Room</a>
+            {% endif %}
+        </div>
+
     </div>
 </div>
 <main>
-    <div class="container">
+    <div class="container border mt-4">
         <!-- rooms page starts here  -->
 
         {% include 'base/rooms-component.html' %}

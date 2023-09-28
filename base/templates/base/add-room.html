@@ -3,105 +3,143 @@
 {% load static %}
 <head>
     <title>Advertise Your Room On Kejapair</title>
-    <link rel="stylesheet" href="{% static 'css/add-room-styles.css' %}" type="text/css">
+    <!-- <link rel="stylesheet" href="{% static 'css/add-room-styles.css' %}" type="text/css"> -->
 </head>
 <div class="container">
     <div class="row mt-5 height-500 form-cont">
-        <div class="col-sm-3"></div>
-        <div class="col-sm-12">
-            <div class="card">
-                <div class="card-header text-center bg-primary text-white text-uppercase">
-                    ENLIST YOUR ROOM
+        <div class="col-md-10 mx-auto">
+            <form action="" method="POST" enctype="multipart/form-data">
+                {% csrf_token %}
+                {% if messages %}
+                <div class="form-group">
+                    {% for message in messages %}
+                    <span class="error-message">{{message}}</span>
+                    {% endfor %}
+                    <a href="{% url 'my-rooms' %}"> Go To My Rooms</a>
                 </div>
-                <div class="card-body">
-                <form action="" method="POST" enctype="multipart/form-data">
-                    {% csrf_token %}
-                    <!-- {{form.as_p}} -->
-                    <!-- {% for field in form %}
-                    <div class="form-group form__group">
-                      <label for="room_name">{{field.label}}</label>
-                      {{field}}
+                {% endif %}
+                {% if form is not None %}
+                <div class="col-md-12">
+                    <div class="card">
+                        <div class="card-header text-center bg-primary text-white text-uppercase">
+                            <h3 class="card-title">ENLIST YOUR ROOM</h3>
+                        </div>
+                        <div class="card-body p-0">
+                            <div class="bs-stepper">
+                                <div class="bs-stepper-header" role="tablist">
+                                    <!-- your steps here -->
+                                    <div class="step" data-target="#logins-part">
+                                        <button type="button" class="step-trigger" role="tab" aria-controls="logins-part" id="logins-part-trigger">
+                                            <span class="bs-stepper-circle">1</span>
+                                            <span class="bs-stepper-label">Basic Info</span>
+                                        </button>
+                                    </div>
+                                    <div class="line"></div>
+                                    <div class="step" data-target="#information-part">
+                                        <button type="button" class="step-trigger" role="tab" aria-controls="information-part" id="information-part-trigger">
+                                            <span class="bs-stepper-circle">2</span>
+                                            <span class="bs-stepper-label">Various information</span>
+                                        </button>
+                                    </div>
+                                    <div class="line"></div>
+                                    <div class="step" data-target="#final-part">
+                                        <button type="button" class="step-trigger" role="tab" aria-controls="final-part" id="final-part-trigger">
+                                            <span class="bs-stepper-circle">2</span>
+                                            <span class="bs-stepper-label">Finish Up</span>
+                                        </button>
+                                    </div>
+                                </div>
+                                <div class="bs-stepper-content">
+                                <!-- your steps content here -->
+                                    <div id="logins-part" class="content" role="tabpanel" aria-labelledby="logins-part-trigger">
+                                        <!-- <div class="form-row"> -->
+                                            <div class="form-group">
+                                                <label for="id_name">Title: <code>*</code></label>
+                                                <input type="text" name="name" id="id_name" class="form-control aptinput" required placeholder="Title" maxlength="200">
+                        
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="id_location">House Location: <code>*</code></label>
+                                                <input type="text" name="location" id="id_location" class="form-control aptinput" required placeholder="eg. Nairobi" maxlength="200">
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="id_maps_link">Geo-Maps Link: <code>*</code></label>
+                                                <input type="url" name="maps_link" maxlength="200" id="id_maps_link" class="form-control aptinput" placeholder="Share a google maps link for verification">
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="id_capacity">Capacity: <code>*</code></label>
+                                                <input type="number" name="capacity" id="id_capacity" class="form-control aptinput" required placeholder="Capacity" value="1" required>
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="id_occupants">Current Number Of Occupants: <code>*</code></label>
+                                                <input type="number" name="occupants" value="0"  class="form-control aptinput" required id="id_occupants" placeholder="current occupants">
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="id_rent">House Rent: <code>*</code></label>
+                                                <input type="number" name="rent" id="id_rent" class="form-control aptinput" required placeholder="House Rent">
+                                            </div>
+                                        <!-- </div> -->
+                                        <button class="btn btn-primary" type="button" onclick="stepper.next()">Next</button>
+                                    </div>
+                                    <div id="information-part" class="content" role="tabpanel" aria-labelledby="information-part-trigger">
+                                        <!-- <div class="form-row"> -->
+                                            <div class="form-group">
+                                                <label for="id_security_deposit">Security Deposit: <code>*</code></label>
+                                                <input type="number" name="security_deposit" id="id_security_deposit" class="form-control aptinput" required placeholder="An amount for security deposit">
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="id_bills_included">Does The Rent Cover Bills: <code>*</code></label>
+                                                <select name="bills_included" id="id_bills_included" class="form-control aptinput" required>
+                                                    <option value="">--select--</option>
+                                                    <option value="True">Yes, Rent covers bills.</option>
+                                                    <option value="False">No, bills are exclusive.</option>
+                                                </select>
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="id_preferredGender">Preffered Gender: <code>*</code></label>
+                                                <select name="preferredGender" id="id_preferredGender" class="form-control aptinput" required>
+                                                    <option value="">--select--</option>
+                                                    <option value="Not Necessary">Not Necessary</option>
+                                                    <option value="Male">Male</option>
+                                                    <option value="Female">Female</option>
+                                                    <option value="Unspecified">Rather Not Say</option>
+                                                </select>
+                        
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="id_description">Describe The Room:</label>
+                                                <textarea name="description" id="id_description" cols="30" rows="4" class="form-control aptinput" placeholder="A brief description of this room..."></textarea>
+                                            </div>
+                                        <!-- </div> -->
+                                        <button class="btn btn-primary" type="button" onclick="stepper.previous()">Previous</button>
+                                        <button type="button" class="btn btn-primary" onclick="stepper.next()">Next</button>
+                                    </div>
+                                    <div id="final-part" class="content" role="tabpanel" aria-labelledby="final-part-trigger">
+                                        <!-- <div class="form-row"> -->
+                                            <div class="form-group">
+                                                <label for="id_coverPhoto">Cover Photo:</label>
+                                                <input type="file" name="coverPhoto" id="id_coverPhoto" accept="image/*" class="form-control aptinput">
+                                            </div>
+                                        <!-- </div> -->
+                                        <button class="btn btn-primary" type="button" onclick="stepper.previous()">Previous</button>
+                                        <button type="submit" class="btn btn-primary aptinput">Save Room</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                     </div>
-                    {% endfor %} -->
-                    {% if messages %}
-                    <div class="form-group">
-                        {% for message in messages %}
-                        <span class="error-message">{{message}}</span>
-                        {% endfor %}
-                        <a href="{% url 'my-rooms' %}"> Go To My Rooms</a>
-                    </div>
-                    {% endif %}
-                    {% if form is not None %}
-                    <div class="form-group">
-                        <label for="id_name">Title: <code>*</code></label>
-                        <input type="text" name="name" id="id_name" class="form-control aptinput" required placeholder="Title" maxlength="200">
-
-                    </div>
-                    <div class="form-group">
-                        <label for="id_location">House Location: <code>*</code></label>
-                        <input type="text" name="location" id="id_location" class="form-control aptinput" required placeholder="eg. Nairobi" maxlength="200">
-                    </div>
-                    <div class="form-group">
-                        <label for="id_maps_link">Geo-Maps Link: <code>*</code></label>
-                        <input type="url" name="maps_link" maxlength="200" id="id_maps_link" class="form-control aptinput" placeholder="Share a google maps link for verification">
-                    </div>
-                    <div class="form-group">
-                        <label for="id_capacity">Capacity: <code>*</code></label>
-                        <input type="number" name="capacity" id="id_capacity" class="form-control aptinput" required placeholder="Capacity" value="1" required>
-                    </div>
-                    <div class="form-group">
-                        <label for="id_occupants">Current Number Of Occupants: <code>*</code></label>
-                        <input type="number" name="occupants" value="0"  class="form-control aptinput" required id="id_occupants" placeholder="current occupants">
-                    </div>
-                    <div class="form-group">
-                        <label for="id_rent">House Rent: <code>*</code></label>
-                        <input type="number" name="rent" id="id_rent" class="form-control aptinput" required placeholder="House Rent">
-                    </div>
-                    <div class="form-group">
-                        <label for="id_security_deposit">Security Deposit: <code>*</code></label>
-                        <input type="number" name="security_deposit" id="id_security_deposit" class="form-control aptinput" required placeholder="An amount for security deposit">
-                    </div>
-                    <div class="form-group">
-                        <label for="id_bills_included">Does The Rent Cover Bills: <code>*</code></label>
-                        <select name="bills_included" id="id_bills_included" class="form-control aptinput" required>
-                            <option value="">--select--</option>
-                            <option value="True">Yes, Rent covers bills.</option>
-                            <option value="False">No, bills are exclusive.</option>
-                        </select>
-                    </div>
-                    <div class="form-group">
-                        <label for="id_preferredGender">Preffered Gender: <code>*</code></label>
-                        <select name="preferredGender" id="id_preferredGender" class="form-control aptinput" required>
-                            <option value="">--select--</option>
-                            <option value="Not Necessary">Not Necessary</option>
-                            <option value="Male">Male</option>
-                            <option value="Female">Female</option>
-                            <option value="Unspecified">Rather Not Say</option>
-                        </select>
-
-                    </div>
-                    <div class="form-group">
-                        <label for="id_description">Describe The Room:</label>
-                        <textarea name="description" id="id_description" cols="30" rows="4" class="form-control aptinput" placeholder="A brief description of this room..."></textarea>
-                    </div>
-                    <div class="form-group">
-                        <label for="id_coverPhoto">Cover Photo:</label>
-                        <input type="file" name="coverPhoto" id="id_coverPhoto" accept="image/*" class="form-control aptinput">
-                    </div>
-                    <div class="form-group">
-                        <input type="submit" id="submitNewRoom" value="Save Room" class="btn btn-primary aptinput">
-                    </div>
-                    {% endif %}
-                </form>
+                    <!-- /.card -->
                 </div>
-            </div>
+                {% endif %}
+            </form>
         </div>
     </div>
-    <div class="rel-txt">
+    
+    <!-- <div class="rel-txt">
         <p><small>Lorem ipsum dolor sit.</small></p>
         <blockquote>Lorem ipsum dolor, sit amet consectetur adipisicing elit. Doloribus similique voluptatum sint odit voluptatem assumenda. Necessitatibus rerum aperiam nesciunt officiis.</blockquote>
         <a href="">Learn More</a>
-    </div>
+    </div> -->
 </div>
 
 {% endblock content %}

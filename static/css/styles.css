@@ -224,18 +224,22 @@ code{
 .showcase{
     position: relative;
     width: 100%;
+    background: url("../img/homebg.jpg");
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    /* background-attachment: fixed; */
+    min-height: 400px;
+}
+.overlay{
+    width: 100%;
     padding: 2em;
     display: flex;
     flex-direction: column;
     gap: 1em;
     align-items: center;
     justify-content: flex-start;
-    background: url("../img/propertybg.jpg");
-    background-size: cover;
-    background-position: center;
-    background-repeat: no-repeat;
-    /* background-attachment: fixed; */
-    min-height: 400px;
+    background-color:rgba(37, 42, 62, 0.453);
 }
 .showcase .showcase-headers{
     position: relative;
@@ -252,15 +256,14 @@ code{
     text-align: center;
     padding: 0.5em;
     background-color: var(--bgWhiteTr);
-    color: var(--fontGreen);
+    /* text-shadow: 1px 1px var(--fontWhite); */
+    color: var(--bgBlue);
+    font-size: 50px;
     font-weight: 600;
 }
 .showcase .showcase-headers .blockquote{
     position: relative;
-    width: 70%;
-    color: var(--fontBlue);
-    text-shadow: 1px 1px 3px var(--grayShadow);
-    background-color: var(--bgWhiteTr2);
+    color: var(--fontWhite);
     font-size: 16px;
     margin: 0 auto;
     padding: 0.3em;
@@ -281,7 +284,7 @@ code{
 .showcase .showcase-search form .field{
     width: 100%;
     position: relative;
-    padding: 0.7em;
+    padding: 0.5em;
     display: flex;
     flex-direction: row;
     align-items: center;
@@ -476,11 +479,14 @@ code{
 
 
 @media (max-width:600px) {
-    .showcase{
+    .showcase .overlay{
         padding: 2em 1em;
     }
     .showcase .showcase-btns{
         width: 100%;
+    }
+    .showcase .showcase-headers h1{
+        font-size: 35px;
     }
 }
 /* added code */

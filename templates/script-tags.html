@@ -1,0 +1,25 @@
+{% load static %}
+<script src="{% static 'js/main.js' %}"></script>
+<!-- jQuery -->
+<!-- <script src="{% static 'plugins/jquery/jquery.min.js' %}"></script> -->
+<script src="{% static 'plugins/popper.min.js' %}"></script>
+<script src="{% static 'plugins/select2/js/select2.full.min.js' %}"></script>
+<script src="{% static '/plugins/jquery-ui/jquery-ui.min.js' %}"></script>
+<!-- Resolve conflict in jQuery UI tooltip with Bootstrap tooltip -->
+<script>
+    $.widget.bridge('uibutton', $.ui.button)
+</script>
+<script src="{% static 'plugins/bs-stepper/js/bs-stepper.min.js' %}"></script>
+<script>
+    $(function () {
+        //Initialize Select2 Elements
+        $('.select2').select2()
+        //Initialize Select2 Elements
+        $('.select2bs4').select2({
+            theme: 'bootstrap4'
+        });
+    });
+	// document.addEventListener('DOMContentLoaded', function () {
+		var stepper = new Stepper(document.querySelector('.bs-stepper'));
+	// });
+</script>

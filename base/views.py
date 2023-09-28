@@ -147,8 +147,8 @@ def signin(request):
 
         if user is not None:
             login(request,user)
-            # return redirect('home')
-            return redirect(request.META['HTTP_REFERER'])
+            return redirect('/')
+            # return redirect(request.META['HTTP_REFERER'])
         else:
             messages.error(request,'Incorrect username/password combination!')
     context = {}

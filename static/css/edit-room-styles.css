@@ -271,7 +271,6 @@
 .edit-profile-container .room-details-wrapper .form-container .edit-room-form .form-sect .field{
     position: relative;
     width: 100%;
-    max-width: 500px;
     margin: 0 auto;
     /* padding: 0.5em; */
     display: flex;
@@ -279,6 +278,10 @@
     /* gap: 0.5em; */
     justify-content: center;
     /* align-items: center; */
+}
+.edit-profile-container .room-details-wrapper .form-container .edit-room-form .form-sect .field:not(.long-field){
+    width: 100%;
+    max-width: 500px;
 }
 .edit-profile-container .room-details-wrapper .form-container .edit-room-form .form-sect .field .field-input{
     width: 100%;
@@ -309,7 +312,7 @@
 .edit-profile-container .room-details-wrapper .form-container .edit-room-form .form-sect .submit-field{
     position: relative;
     width: 100%;
-    max-width: 500px;
+    /* max-width: 500px; */
     margin: 0 auto;
     padding: 0.5em;
     display: flex;

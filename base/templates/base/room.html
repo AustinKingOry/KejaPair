@@ -73,7 +73,7 @@
                     </div>
                     {% if room.available %}
                     <div class="d-flex flex-row align-items-center p-2">
-                        <span class="bi-check-circle-fill p-1 text-success"> Available For Booking</span>
+                        <span class="bi-check-circle-fill p-1 text-success"> <div class="badge badge-success md">Available For Booking</div></span>
                     </div>
                     {% endif %}
                     <div class="d-flex flex-row align-items-center p-3">
@@ -244,65 +244,68 @@
             {% endif %}
         </div>
     </div>
-    <h3 class="blue-el">Some Reviews About The Host:</h3>
-    <div class="review-form-container bgPopUpWrapper" id="review-form-container">
-        <form action="" method="post" class="review-form">
-            {% csrf_token %}
-            <div class="star-field">
-                <div class="formStarsDiv">
-                    <i id="starBtn1" class="bi-star-fill" title="ONE STAR" data-tool-tip="ONE STAR" onclick="starClick(1)"></i>
-                    <i id="starBtn2" class="bi-star" title="TWO STARS" data-tool-tip="TWO STARS" onclick="starClick(2)"></i>
-                    <i id="starBtn3" class="bi-star" title="THREE STARS" data-tool-tip="THREE STARS"  onclick="starClick(3)"></i>
-                    <i id="starBtn4" class="bi-star" title="FOUR STARS" data-tool-tip="FOUR STARS" onclick="starClick(4)"></i>
-                    <i id="starBtn5" class="bi-star" title="FIVE STARS" data-tool-tip="FIVE STARS" onclick="starClick(5)"></i>
-                </div>
-            </div>
-            
-            <div class="input-fields">
-                <div class="field">
-                    <label for="id_rating">Rating: <span id="rating-figures">1 star(s)</span></label>
-                    <input type="range" name="rating" id="id_rating" min="1" max="5" value="1" required>
-                </div>
-                <div class="field">
-                    <label for="id_body">Comment:</label>
-                    <textarea name="body" id="id_body" cols="30" rows="4" required placeholder="My thoughts about this user..."></textarea>
-                </div>
-            </div>
-            <div class="submit-field">
-                <span class="hide-form cancelBgPopUpWrapper">&times;</span>
-                <input type="submit" value="Send Review">
-            </div>
-        </form>
-    </div>    
-    <div class="room-reviews" id="reviews">
-        {% if reviews_count == 0 %}
-        <span>No reviews for now.</span>
-        {% else %}
-        {% for review in reviews %}
-        <div class="review-card">
-            <div class="reviewer-info">
-                <img src="{% static review.guest.profilePhoto.url %}" alt="">
-                <div class="pt2">
-                    <span class="commentor-name">{{review.guest.get_full_name}} {% if review.guest.verified %}<i class="bi-patch-check-fill verified-badge"></i>{%endif%}</span>
-                    <div class="stars-wrapper" title="{{review.rating}} stars">
-                        <i class="{% if review.rating > 0 %} bi-star-fill {% else %} bi-star {% endif %}"></i>
-                        <i class="{% if review.rating > 1 %} {% if review.rating <= 1.5 %} bi-star-half {% else %}bi-star-fill {% endif %} {% else %} bi-star {% endif %}"></i>
-                        <i class="{% if review.rating > 2 %} {% if review.rating <= 2.5 %} bi-star-half {% else %}bi-star-fill {% endif %} {% else %} bi-star {% endif %}"></i>
-                        <i class="{% if review.rating > 3 %} {% if review.rating <= 3.5 %} bi-star-half {% else %}bi-star-fill {% endif %} {% else %} bi-star {% endif %}"></i>
-                        <i class="{% if review.rating > 4 %} {% if review.rating <= 4.5 %} bi-star-half {% else %}bi-star-fill {% endif %} {% else %} bi-star {% endif %}"></i>
+    <div class="container">
+        <h3 class="blue-el text-center">Some Reviews About The Host:</h3>
+        <div class="review-form-container bgPopUpWrapper" id="review-form-container">
+            <form action="" method="post" class="review-form">
+                {% csrf_token %}
+                <div class="star-field">
+                    <div class="formStarsDiv">
+                        <i id="starBtn1" class="bi-star-fill" title="ONE STAR" data-tool-tip="ONE STAR" onclick="starClick(1)"></i>
+                        <i id="starBtn2" class="bi-star" title="TWO STARS" data-tool-tip="TWO STARS" onclick="starClick(2)"></i>
+                        <i id="starBtn3" class="bi-star" title="THREE STARS" data-tool-tip="THREE STARS"  onclick="starClick(3)"></i>
+                        <i id="starBtn4" class="bi-star" title="FOUR STARS" data-tool-tip="FOUR STARS" onclick="starClick(4)"></i>
+                        <i id="starBtn5" class="bi-star" title="FIVE STARS" data-tool-tip="FIVE STARS" onclick="starClick(5)"></i>
                     </div>
                 </div>
+                
+                <div class="input-fields">
+                    <div class="field">
+                        <label for="id_rating">Rating: <span id="rating-figures">1 star(s)</span></label>
+                        <input type="range" name="rating" id="id_rating" min="1" max="5" value="1" required>
+                    </div>
+                    <div class="field">
+                        <label for="id_body">Comment:</label>
+                        <textarea name="body" id="id_body" cols="30" rows="4" required placeholder="My thoughts about this user..."></textarea>
+                    </div>
+                </div>
+                <div class="submit-field">
+                    <span class="hide-form cancelBgPopUpWrapper">&times;</span>
+                    <input type="submit" value="Send Review">
+                </div>
+            </form>
+        </div>    
+        <div class="room-reviews" id="reviews">
+            {% if reviews_count == 0 %}
+            <span>No reviews for now.</span>
+            {% else %}
+            {% for review in reviews %}
+            <div class="review-card">
+                <div class="reviewer-info">
+                    <img src="{% static review.guest.profilePhoto.url %}" alt="">
+                    <div class="pt2">
+                        <span class="commentor-name">{{review.guest.get_full_name}} {% if review.guest.verified %}<i class="bi-patch-check-fill verified-badge"></i>{%endif%}</span>
+                        <div class="stars-wrapper" title="{{review.rating}} stars">
+                            <i class="{% if review.rating > 0 %} bi-star-fill {% else %} bi-star {% endif %}"></i>
+                            <i class="{% if review.rating > 1 %} {% if review.rating <= 1.5 %} bi-star-half {% else %}bi-star-fill {% endif %} {% else %} bi-star {% endif %}"></i>
+                            <i class="{% if review.rating > 2 %} {% if review.rating <= 2.5 %} bi-star-half {% else %}bi-star-fill {% endif %} {% else %} bi-star {% endif %}"></i>
+                            <i class="{% if review.rating > 3 %} {% if review.rating <= 3.5 %} bi-star-half {% else %}bi-star-fill {% endif %} {% else %} bi-star {% endif %}"></i>
+                            <i class="{% if review.rating > 4 %} {% if review.rating <= 4.5 %} bi-star-half {% else %}bi-star-fill {% endif %} {% else %} bi-star {% endif %}"></i>
+                        </div>
+                    </div>
+                </div>
+                <div class="comment-body">
+                    <p class="cutoff-text">{{review}}</p>
+                </div>
+                <div class="comment-time">
+                    <span>{{review.created|timesince}} ago</span>
+                </div>
             </div>
-            <div class="comment-body">
-                <p class="cutoff-text">{{review}}</p>
-            </div>
-            <div class="comment-time">
-                <span>{{review.created|timesince}} ago</span>
-            </div>
+            {% endfor %}
+            {% endif %}
         </div>
-        {% endfor %}
-        {% endif %}
     </div>
+    
     
 </div>
 <script src="{% static 'js/view-room-scripts.js' %}"></script>

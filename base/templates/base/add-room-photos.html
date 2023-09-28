@@ -5,57 +5,60 @@
     <link rel="stylesheet" href="{% static 'css/add-photos-styles.css' %}" type="text/css">
     <title>New Room Photo</title>
 </head>
-<div class="image-selector-wrapper x-scrollable">
-    <div class="selector-slide active-modal">
-        <img src="{% static room.coverPhoto.url %}" alt="image" class="selector-img" id="selector-img">
-    </div>
-    {% for photo in photos %}
-    <div class="selector-slide" photo_id="{{photo.id}}">
-        <span class="clear-slider bi-three-dots-vertical actions-btn"></span>
-        <img src="{% static photo.image.url %}" alt="image" class="selector-img" id="selector-img{{forloop.counter}}" description="{{photo.description}}">
-        <div class="actions-sect photo-actions">
-            <span class="pointed bi-trash2 del-img"> Delete Image</span>
-            <span class="pointed bi-mage-fill sup2cover">Make Cover Photo</span>
-        </div> 
-    </div>
-    {% endfor %}
-</div>
-<div class="par-items-container">
-    <div class="room-info">
-        <img src="{% static room.host.profilePhoto.url %}" alt="room_user" class="host-profile-photo">
-        <h2>{{room}}</h2>
-        <p>{{room.description}}</p>
-        <div class="header-btns-wrapper">
-            <form method="post" action="" class="photo-form" id="photo-form" enctype="multipart/form-data">
-                {% csrf_token %}
-                <input type="hidden" name="USER_ID" id="USER_ID" value="{{user.id}}">
-                <input type="hidden" name="ROOM_ID" id="ROOM_ID" value="{{room.id}}">
-                <label for="new-photo-btn" class="bi-camera photo-btn-label"> New Photo</label>
-                <input type="file" name="new-photo-input" id="new-photo-btn" accept="image/*" class="hidden" multiple>
-                <div class="pre-submit-edit-container bgPopUpWrapper" id="pre-submit-edit-container">
-                    <div class="preview-container">
-                        <div class="editable-img-wrapper">
-                            <img src="{% static 'img/house-avatar.svg' %}" alt="preview" id="photo_edit_preview">
-                        </div>
-                        <textarea name="description" id="id_description" cols="30" rows="4" placeholder="Say something about the photo..."></textarea>
-                        <button class="finalize-edit cancelBgPopUpWrapper" id="finalize-edit">Done</button>
-                    </div>
-                </div>
-            </form>
-            <div class="field">
-                <a href="{% url 'my-rooms' %}" class="rooms-link">My Rooms</a>
-            </div>            
-        </div>        
-    </div>
-    <div class="image-slider-wrapper">
-        <div class="slide">            
-            <img src="{% static room.coverPhoto.url %}" alt="cover photo" class="cover-photo" id="preview_modal">
+<div class="container-lg border mt-3 p-0 bg-white shadow-sm">
+    <h3 class="p-2 text-primary bold">Edit Room Photos</h3>
+    <div class="image-selector-wrapper x-scrollable col-md-12 pb-3">
+        <div class="selector-slide active-modal">
+            <img src="{% static room.coverPhoto.url %}" alt="image" class="selector-img" id="selector-img">
         </div>
-        <div class="img-description-wrapper">
-            <div class="field">
-                <textarea name="description_edit" id="id_description_edit" cols="30" rows="4" placeholder="comments about this photo..."></textarea>
-                <button>Edit</button>
+        {% for photo in photos %}
+        <div class="selector-slide" photo_id="{{photo.id}}">
+            <span class="clear-slider bi-three-dots-vertical actions-btn"></span>
+            <img src="{% static photo.image.url %}" alt="image" class="selector-img" id="selector-img{{forloop.counter}}" description="{{photo.description}}">
+            <div class="actions-sect photo-actions">
+                <span class="pointed bi-trash2 del-img"> Delete Image</span>
+                <span class="pointed bi-mage-fill sup2cover">Make Cover Photo</span>
+            </div> 
+        </div>
+        {% endfor %}
+    </div>
+    <div class="par-items-container col-md-12 mt-3">
+        <div class="image-slider-wrapper col-md-8">
+            <div class="slide">            
+                <img src="{% static room.coverPhoto.url %}" alt="cover photo" class="cover-photo" id="preview_modal">
             </div>
+            <div class="img-description-wrapper">
+                <div class="field">
+                    <textarea name="description_edit" id="id_description_edit" cols="30" rows="4" placeholder="comments about this photo..."></textarea>
+                    <button>Edit</button>
+                </div>
+            </div>
+        </div>
+        <div class="room-info col-md-4 border-left text-center">
+            <img src="{% static room.host.profilePhoto.url %}" alt="room_user" class="host-profile-photo">
+            <h2>{{room}}</h2>
+            <p>{{room.description}}</p>
+            <div class="header-btns-wrapper">
+                <form method="post" action="" class="photo-form" id="photo-form" enctype="multipart/form-data">
+                    {% csrf_token %}
+                    <input type="hidden" name="USER_ID" id="USER_ID" value="{{user.id}}">
+                    <input type="hidden" name="ROOM_ID" id="ROOM_ID" value="{{room.id}}">
+                    <label for="new-photo-btn" class="bi-camera photo-btn-label"> New Photo</label>
+                    <input type="file" name="new-photo-input" id="new-photo-btn" accept="image/*" class="hidden" multiple>
+                    <div class="pre-submit-edit-container bgPopUpWrapper" id="pre-submit-edit-container">
+                        <div class="preview-container">
+                            <div class="editable-img-wrapper">
+                                <img src="{% static 'img/house-avatar.svg' %}" alt="preview" id="photo_edit_preview">
+                            </div>
+                            <textarea name="description" id="id_description" cols="30" rows="4" placeholder="Say something about the photo..."></textarea>
+                            <button class="finalize-edit cancelBgPopUpWrapper" id="finalize-edit">Done</button>
+                        </div>
+                    </div>
+                </form>
+                <div class="field">
+                    <a href="{% url 'my-rooms' %}" class="rooms-link">My Rooms</a>
+                </div>            
+            </div>        
         </div>
     </div>
 </div>

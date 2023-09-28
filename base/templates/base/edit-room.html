@@ -65,21 +65,14 @@
                 {% csrf_token %}
                 <div class="form-title">
                     <h3>Edit Room</h3>
-                    <div class="field">
-                        <input type="text" name="name" value="{{room.name}}" maxlength="200" id="id_name" required placeholder="Room Title" class="field-input">
-                    </div>
                     <span class="hide-form cancelBgPopUpWrapper">&times;</span>
                 </div>
                 <div class="form-sect">
-                    <div class="form-mini-sect">
-                        <!-- <div class="field">
-                            <label for="id_coverPhoto">Cover Photo:</label>
-                            <input type="file" name="coverPhoto" id="id_coverPhoto" accept="image/*" class="field-input" onchange="previewFile('imgPreview','id_coverPhoto');">
-                        </div> -->
-                        <!-- <div class="field">
-                            <label for="id_name">Title: <code>*</code></label>
-                            <input type="text" name="name" value="{{room.name}}" maxlength="200" id="id_name" required placeholder="Room Title" class="field-input">
-                        </div> -->
+                    <div class="form-group col-md-12">
+                        <label for="id_name" class="custom-label">Property Name:</label>
+                        <input type="text" name="name" value="{{room.name}}" maxlength="200" id="id_name" required placeholder="Room Title" class="form-control">
+                    </div>
+                    <div class="form-mini-sect col-md-6">
                         <div class="field">
                             <label for="id_location">Location: <code>*</code></label>
                             <input type="text" name="location" value="{{room.location}}" maxlength="200" required id="id_location" placeholder="Your Location" class="field-input">
@@ -97,7 +90,7 @@
                             <input type="url" name="maps_link" value="{{room.maps_link}}" maxlength="200" id="id_maps_link" required placeholder="share a location link for verification" class="field-input">
                         </div>
                     </div>
-                    <div class="form-mini-sect">
+                    <div class="form-mini-sect col-md-6">
                         <div class="field">
                             <label for="id_rent">Rent: <code>*</code></label>
                             <input type="number" name="rent" value="{{room.rent}}" required id="id_rent" placeholder="amount" class="field-input">
@@ -134,9 +127,9 @@
                     </div>
                 </div>
                 <div class="form-sect">
-                    <div class="field">
+                    <div class="field long-field">
                         <label for="id_description">Description:</label>
-                        <textarea name="description" cols="30" rows="4" id="id_description" placeholder=" describe your room..." class="field-input y-scrollable">{{room.description}}</textarea>
+                        <textarea name="description" cols="30" rows="4" id="id_description" placeholder=" describe your room..." class="field-input y-scrollable border">{{room.description}}</textarea>
                     </div>
                 </div>
                 <div class="form-sect">
