@@ -93,15 +93,25 @@ ASGI_APPLICATION = 'KejaPair.asgi.application'
 #         'NAME': BASE_DIR / 'db.sqlite3',
 #     }
 # }
-
+# localhost postgresql
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.postgresql_psycopg2',
+#         'NAME': 'kejapair',
+#         'USER':'postgres',
+#         'PASSWORD':'98xv39pydjangoadmin',
+#         'HOST':'localhost',
+#         'PORT':'5432',
+#     }
+# }
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': 'kejapair',
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': 'railway',
         'USER':'postgres',
-        'PASSWORD':'98xv39pydjangoadmin',
-        'HOST':'localhost',
-        'PORT':'5432',
+        'PASSWORD':'PuOOOSfgflwaN0XZLMxZ',
+        'HOST':'containers-us-west-65.railway.app',
+        'PORT':'5915',
     }
 }
 
