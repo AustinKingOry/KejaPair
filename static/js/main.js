@@ -335,7 +335,7 @@ function checkLiveData(){
     let nav_alert_badge = document.getElementById('global-side-nav').querySelector('.alerts-icon');
 
     let wsStart = 'ws://';
-    if(window.location.protocol == 'https'){
+    if(location.protocol == 'https'){
         wsStart = 'wss://';
     }
     let nav_socket_url = wsStart + window.location.host + '/live-updates/';
