@@ -53,13 +53,21 @@ class User(AbstractUser):
         (gender_2,'Female'),
         (gender_3,'Other'),
         ]
+    type_1 = 'Host'
+    type_2 = 'Owner'
+    type_3 = 'Guest'
+    account_types = [
+        (type_1,"I have a house/room and I'm looking for a roommate."),
+        (type_2,"I'm a property owner looking for tenants."),
+        (type_3,"I'm looking for a place to stay."),
+    ]
     UID = models.CharField(max_length=11,unique=True)
     hobbies = models.ManyToManyField(Hobby, related_name='hobbies', blank=True)
     pairs = models.ManyToManyField('PairRequest', related_name='pairs', blank=True)
     matches = models.ManyToManyField('Match', related_name='matches', blank=True)
     phone = models.CharField(max_length=15)
-    category = models.CharField(default='Host', max_length=50)
-    bio = models.TextField(null=True,blank=True)
+    category = models.CharField(max_length=50,choices=account_types,default=type_1)
+    bio = models.TextField(null=True,blank=True,default='No bio.')
     age = models.IntegerField(default=18)
     gender = models.CharField(max_length=50,choices=gender_choices,default=gender_1)
     location = models.CharField(max_length=200)

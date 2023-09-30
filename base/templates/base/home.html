@@ -23,7 +23,7 @@
         </div>
         <div class="showcase-btns">
             {% if request.user.is_authenticated %}
-            {% if user.category != 'Guest' %}
+            {% if user.category|lower != 'guest' %}
             <a href="{%url 'add-room'%}"> List Your Room</a>
             {% else %}
             <a href="{%url 'hosts'%}"> Explore Hosts</a>
@@ -31,7 +31,7 @@
             {% else %}
             <a href="{%url 'add-room'%}"> List Your Room</a>
             {% endif %}
-            {% if user.category == 'Host' or user.category == 'Owner' %}
+            {% if user.category|lower == 'host' or user.category|lower == 'owner' %}
             <a href="{%url 'guests-listing'%}"> Explore Guests</a>
             {% else %}
             <a href="{%url 'all-room'%}"> Find A Room</a>
@@ -41,7 +41,7 @@
     </div>
 </div>
 <main>
-    <div class="container border mt-4">
+    <div class="container mt-4">
         <!-- rooms page starts here  -->
 
         {% include 'base/rooms-component.html' %}

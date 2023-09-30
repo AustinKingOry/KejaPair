@@ -63,7 +63,7 @@
     </div>
 </aside>
 {%endif%}
-{% if messages %}
+<!-- {% if messages %}
         {% for message in messages %}
     <div class="messages {{ message.tags }} messages-alert alert alert-primary" role="alert">
         <p>{{ message }}</p>
@@ -71,5 +71,10 @@
             <span aria-hidden="true">&times;</span>
         </button>
     </div>
+        {% endfor %}
+{% endif %} -->
+{% if messages %}
+        {% for message in messages %}
+        <div class="backend-message" message_tags="{{ message.tags }}" message_text="{{ message }}"></div>
         {% endfor %}
 {% endif %}

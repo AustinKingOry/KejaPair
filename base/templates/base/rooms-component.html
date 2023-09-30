@@ -5,7 +5,7 @@
 <div class="my-4">
     <h1 class="text-primary p-2 bold">Explore All Availble Rooms</h1>
 </div>
-<div class="rooms-filter-container">
+<div class="rooms-filter-container border">
     <div class="field">
         <select id="locationFilter" class="filter-field">
             <option value="*">Location</option>
@@ -51,10 +51,10 @@
         <button class="filter-field bi-arrow-counterclockwise" value="*" id="reset_filters" onclick="filter_rooms('reset_filters');"> Reset</button>
     </div>
 </div>
-<div class="rooms-counter">    
+<div class="rooms-counter mt-4">    
     <span>{{room_count}} rooms available</span>
 </div>
-<div class="rooms-container" id="rooms-container-main">
+<div class="rooms-container mt-2" id="rooms-container-main">
     {% if rooms.count == 0 %}
     <p class="text-muted">No rooms listed yet.</p>
     {% else %}
@@ -83,7 +83,7 @@
                 <p class="room-description cutoff-text-shift">{{room.description}}</p>
             </div>
             <div class="room-footer">
-                <span>{{room.created|timesince}} ago</span>
+                <small class="text-muted help-text">{{room.created|timesince}} ago</small>
             </div>
         </div>
         {% if room.host == request.user %}

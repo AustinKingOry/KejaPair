@@ -7,7 +7,7 @@
 </head>
 <div class="container">
     <div class="row mt-5 height-500 form-cont">
-        <div class="col-md-10 mx-auto">
+        <div class="col-md-12 mx-auto">
             <form action="" method="POST" enctype="multipart/form-data">
                 {% csrf_token %}
                 {% if messages %}
@@ -22,50 +22,46 @@
                 <div class="col-md-12">
                     <div class="card">
                         <div class="card-header text-center bg-primary text-white text-uppercase">
-                            <h3 class="card-title">ENLIST YOUR ROOM</h3>
+                            <h3 class="card-title">Enlist Your Property</h3>
                         </div>
-                        <div class="card-body p-0">
+                        <div class="card-body p-2">
                             <div class="bs-stepper">
                                 <div class="bs-stepper-header" role="tablist">
                                     <!-- your steps here -->
-                                    <div class="step" data-target="#logins-part">
-                                        <button type="button" class="step-trigger" role="tab" aria-controls="logins-part" id="logins-part-trigger">
+                                    <div class="step" data-target="#step-1">
+                                        <button type="button" class="step-trigger" role="tab" aria-controls="step-1" id="step-1-trigger">
                                             <span class="bs-stepper-circle">1</span>
-                                            <span class="bs-stepper-label">Basic Info</span>
+                                            <!-- <span class="bs-stepper-label">Basic Info</span> -->
                                         </button>
                                     </div>
                                     <div class="line"></div>
-                                    <div class="step" data-target="#information-part">
-                                        <button type="button" class="step-trigger" role="tab" aria-controls="information-part" id="information-part-trigger">
+                                    <div class="step" data-target="#step-2">
+                                        <button type="button" class="step-trigger" role="tab" aria-controls="step-2" id="step-2-trigger">
                                             <span class="bs-stepper-circle">2</span>
-                                            <span class="bs-stepper-label">Various information</span>
+                                            <!-- <span class="bs-stepper-label">Secondary info</span> -->
                                         </button>
                                     </div>
                                     <div class="line"></div>
-                                    <div class="step" data-target="#final-part">
-                                        <button type="button" class="step-trigger" role="tab" aria-controls="final-part" id="final-part-trigger">
-                                            <span class="bs-stepper-circle">2</span>
-                                            <span class="bs-stepper-label">Finish Up</span>
+                                    <div class="step" data-target="#step-3">
+                                        <button type="button" class="step-trigger" role="tab" aria-controls="step-3" id="step-3-trigger">
+                                            <span class="bs-stepper-circle">3</span>
+                                            <!-- <span class="bs-stepper-label">Finish Up</span> -->
                                         </button>
                                     </div>
                                 </div>
                                 <div class="bs-stepper-content">
                                 <!-- your steps content here -->
-                                    <div id="logins-part" class="content" role="tabpanel" aria-labelledby="logins-part-trigger">
+                                    <div id="step-1" class="content" role="tabpanel" aria-labelledby="step-1-trigger">
                                         <!-- <div class="form-row"> -->
                                             <div class="form-group">
                                                 <label for="id_name">Title: <code>*</code></label>
-                                                <input type="text" name="name" id="id_name" class="form-control aptinput" required placeholder="Title" maxlength="200">
+                                                <input type="text" name="name" id="id_name" class="form-control aptinput" required placeholder="Name Of Property" maxlength="200">
                         
                                             </div>
                                             <div class="form-group">
                                                 <label for="id_location">House Location: <code>*</code></label>
                                                 <input type="text" name="location" id="id_location" class="form-control aptinput" required placeholder="eg. Nairobi" maxlength="200">
-                                            </div>
-                                            <div class="form-group">
-                                                <label for="id_maps_link">Geo-Maps Link: <code>*</code></label>
-                                                <input type="url" name="maps_link" maxlength="200" id="id_maps_link" class="form-control aptinput" placeholder="Share a google maps link for verification">
-                                            </div>
+                                            </div>                                           
                                             <div class="form-group">
                                                 <label for="id_capacity">Capacity: <code>*</code></label>
                                                 <input type="number" name="capacity" id="id_capacity" class="form-control aptinput" required placeholder="Capacity" value="1" required>
@@ -74,15 +70,15 @@
                                                 <label for="id_occupants">Current Number Of Occupants: <code>*</code></label>
                                                 <input type="number" name="occupants" value="0"  class="form-control aptinput" required id="id_occupants" placeholder="current occupants">
                                             </div>
+                                        <!-- </div> -->
+                                        <button class="btn btn-primary" type="button" onclick="stepper.next()">Next</button>
+                                    </div>
+                                    <div id="step-2" class="content" role="tabpanel" aria-labelledby="step-2-trigger">
+                                        <!-- <div class="form-row"> -->
                                             <div class="form-group">
                                                 <label for="id_rent">House Rent: <code>*</code></label>
                                                 <input type="number" name="rent" id="id_rent" class="form-control aptinput" required placeholder="House Rent">
                                             </div>
-                                        <!-- </div> -->
-                                        <button class="btn btn-primary" type="button" onclick="stepper.next()">Next</button>
-                                    </div>
-                                    <div id="information-part" class="content" role="tabpanel" aria-labelledby="information-part-trigger">
-                                        <!-- <div class="form-row"> -->
                                             <div class="form-group">
                                                 <label for="id_security_deposit">Security Deposit: <code>*</code></label>
                                                 <input type="number" name="security_deposit" id="id_security_deposit" class="form-control aptinput" required placeholder="An amount for security deposit">
@@ -114,12 +110,30 @@
                                         <button class="btn btn-primary" type="button" onclick="stepper.previous()">Previous</button>
                                         <button type="button" class="btn btn-primary" onclick="stepper.next()">Next</button>
                                     </div>
-                                    <div id="final-part" class="content" role="tabpanel" aria-labelledby="final-part-trigger">
-                                        <!-- <div class="form-row"> -->
-                                            <div class="form-group">
-                                                <label for="id_coverPhoto">Cover Photo:</label>
-                                                <input type="file" name="coverPhoto" id="id_coverPhoto" accept="image/*" class="form-control aptinput">
+                                    <div id="step-3" class="content" role="tabpanel" aria-labelledby="step-3-trigger">
+                                        <div class="form-group">
+                                            <label for="id_maps_link">Geo-Maps Link: <code>*</code></label>
+                                            <div class="input-group input-group-sm">
+                                                <input type="text" name="maps_link" maxlength="200" id="id_maps_link" class="form-control aptinput" placeholder="Share a google maps link for verification">
+                                                <span class="input-group-append">
+                                                  <button onclick="displayLocation()" type="button" class="btn btn-info btn-flat">Display Location</button>
+                                                </span>
                                             </div>
+                                        </div> 
+                                        <div class="col-md-12 p-3 row">
+                                            <div id="map" style="height: 400px;" class="hidden"></div>
+                                        </div>
+                                        <div class="col-md-12 row p-3">
+                                            <span>Cover Photo:</span>
+                                            <label for="id_coverPhoto" class="file-placeholder empty-placeholder col-md-4 p-0">
+                                                <img src="" alt="cover photo" id="coverPhoto_holder" class="image-responsive hidden preview-field">
+                                                <div class="file-add fas fa-plus" id="img_holder1"></div>
+                                                <!-- <div class="form-group"> -->
+                                                    <input type="file" name="coverPhoto" id="id_coverPhoto" accept="image/*" class="form-control aptinput hidden" required onchange="showPreview('img_holder1','coverPhoto_holder','id_coverPhoto',10)">
+                                                <!-- </div> -->
+                                            </label>
+                                        </div>
+                                        <!-- <div class="form-row"> -->
                                         <!-- </div> -->
                                         <button class="btn btn-primary" type="button" onclick="stepper.previous()">Previous</button>
                                         <button type="submit" class="btn btn-primary aptinput">Save Room</button>

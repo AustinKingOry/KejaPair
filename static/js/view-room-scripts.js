@@ -84,3 +84,20 @@ function starClick(starIndex){
     }
     document.getElementById('rating-figures').innerHTML = rangeValue+' star(s)';
 }
+//integration with openstreetmap
+function initMap() {
+    const propertyLocation = [PROPERTY_LATITUDE, PROPERTY_LONGITUDE];  // Replace with actual latitude and longitude
+    const map = L.map('map').setView(propertyLocation, 15);
+
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+    }).addTo(map);
+
+    L.marker(propertyLocation).addTo(map)
+        .bindPopup('Property Location')
+        .openPopup();
+}
+
+// Call the initMap function when the window has finished loading
+window.onload = initMap;
+  

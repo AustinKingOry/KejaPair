@@ -12,6 +12,7 @@ function previewFile(sectId,photoId,fileSize) {
     if(file.size > 1024*1024*f_size){
         alert("File is too big!");
         document.getElementById(photoId).value = "";
+        return false;
     }
     else{
         reader.onloadend = function () {
@@ -23,7 +24,26 @@ function previewFile(sectId,photoId,fileSize) {
         } else {
             preview.src = "";
         }
+        return true;
     }
+}
+function showPreview(holder_id,image_field,input_field,size){
+    let p = new Promise((resolve,reject)=>{
+        let preview_set = previewFile(image_field,input_field,size);
+        if(preview_set==true){
+            resolve('file has been successfully added!');
+        }
+        else{
+            reject('failed. Try again.');
+        }
+    });
+    p.then((message)=>{
+        document.getElementById(image_field).classList.remove('hidden');
+        document.getElementById(holder_id).classList.add('hidden');
+        make_toast(message,true);
+    }).catch((message)=>{
+        make_toast(message,false);
+    });
 }
 
 document.body.addEventListener('click',function(e){
@@ -127,6 +147,93 @@ function make_toast(text,status){
     }
     let time_out_progress = document.getElementById('time-out-progress');
     animate_progress(time_out_progress);        
+}
+// toasts by sweetalert2
+function alertMessage(tag,message){
+	Swal.fire({
+		title: tag+'!',
+		text: message,
+		icon: tag,
+		confirmButtonText: 'Ok'
+	});
+}
+const makeToast=(icon,title)=>{
+	const Toast = Swal.mixin({
+		toast: true,
+		position: 'bottom-end',
+		showConfirmButton: false,
+		timer: 3000,
+		timerProgressBar: true,
+		didOpen: (toast) => {
+		  toast.addEventListener('mouseenter', Swal.stopTimer)
+		  toast.addEventListener('mouseleave', Swal.resumeTimer)
+		}
+	  })
+	  
+	  Toast.fire({
+		icon: icon,
+		title: title
+	  });
+}
+function makeTimerToast(){
+	let timerInterval
+	Swal.fire({
+	title: 'Auto close alert!',
+	html: 'I will close in <b></b> milliseconds.',
+	timer: 2000,
+	timerProgressBar: true,
+	didOpen: () => {
+		Swal.showLoading()
+		const b = Swal.getHtmlContainer().querySelector('b')
+		timerInterval = setInterval(() => {
+		b.textContent = Swal.getTimerLeft()
+		}, 100)
+	},
+	willClose: () => {
+		clearInterval(timerInterval)
+	}
+	}).then((result) => {
+	/* Read more about handling dismissals below */
+	if (result.dismiss === Swal.DismissReason.timer) {
+		console.log('I was closed by the timer')
+	}
+	})
+}
+function makeConfirmationToast(){
+	const swalWithBootstrapButtons = Swal.mixin({
+		customClass: {
+		  confirmButton: 'btn btn-success',
+		  cancelButton: 'btn btn-danger'
+		},
+		buttonsStyling: true
+	  })
+	  
+	  swalWithBootstrapButtons.fire({
+		title: 'Are you sure?',
+		text: "You won't be able to revert this!",
+		icon: 'warning',
+		showCancelButton: true,
+		confirmButtonText: 'Yes, delete it!',
+		cancelButtonText: 'No, cancel!',
+		reverseButtons: true
+	  }).then((result) => {
+		if (result.isConfirmed) {
+		  swalWithBootstrapButtons.fire(
+			'Deleted!',
+			'Your file has been deleted.',
+			'success'
+		  )
+		} else if (
+		  /* Read more about handling dismissals below */
+		  result.dismiss === Swal.DismissReason.cancel
+		) {
+		  swalWithBootstrapButtons.fire(
+			'Cancelled',
+			'Your imaginary file is safe :)',
+			'error'
+		  )
+		}
+	  })
 }
 
 function animate_progress(ele){
@@ -313,3 +420,49 @@ function toggle_aside(){
         side_nav_toggle.classList.replace('bi-list','bi-x');
     }
 }
+window.addEventListener('load',()=>{
+	if (document.querySelectorAll('.backend-message')){
+		let messages = document.querySelectorAll('.backend-message');
+		messages.forEach(m=>{
+			let message=m.getAttribute('message_text');
+			let tags=m.getAttribute('message_tags');
+			// alertMessage(tags,message);
+			makeToast(tags,message);
+		});
+	}
+});
+
+function displayLocation(latitude, longitude) {
+    // Set the values of the hidden input fields
+    document.getElementById('id_maps_link').value = latitude+","+longitude;
+    document.getElementById('map').classList.toggle('hidden');
+  
+    // Display the location on the map
+    const map = L.map('map').setView([latitude, longitude], 15);
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+    }).addTo(map);
+  
+    L.marker([latitude, longitude]).addTo(map)
+        .bindPopup('Your Location')
+        .openPopup();
+  }
+  
+  
+function getUserLocation() {
+    if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(
+        (position) => {
+            const { latitude, longitude } = position.coords;
+            console.log(latitude,longitude);
+            displayLocation(latitude, longitude);
+        },
+        (error) => {
+            alert('Error getting your location: ' + error.message);
+        }
+      );
+    } else {
+        alert('Geolocation is not supported by your browser.');
+    }
+}  
+    

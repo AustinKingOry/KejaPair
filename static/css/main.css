@@ -66,7 +66,7 @@
     box-sizing: border-box;
 }
 body{
-    background-color: var(--bgWhite);
+    background-color: var(--pureWhite);
     overflow-x: hidden;
     font-family: 'Poppins','Roboto','Lato','Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
@@ -157,6 +157,16 @@ a{
 /* border-colors */
 .border-success{
     border-color: var(--bgGreen2);
+}
+/* show and hidden */
+.hidden{
+    display: none;
+}
+.display-unset{
+    display: unset;
+}
+.show-flex{
+    display: flex;
 }
 /* nav bar */
 nav{
@@ -337,6 +347,33 @@ nav .nav-links a{
     background-color: var(--bgBlue2);
     color: var(--fontWhite);
 }
+.file-placeholder{
+    position: relative;
+    border: 2px dashed var(--lightBorder);
+    border-radius: 3px;
+    min-width: 200px;
+    min-height: 200px;
+}
+.file-placeholder.empty-placeholder{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.file-placeholder .file-add{
+    /* position: absolute;
+    top: -1.5em;
+    right: -1.5em; */
+    padding: 1em;
+    border: 1px dashed var(--lightBorder);
+    border-radius: 50%;
+}
+.file-placeholder img{
+    position: relative;
+    width: 100%;
+    object-fit: cover;
+    object-position: center;
+}
+
 
 footer{
     position: relative;

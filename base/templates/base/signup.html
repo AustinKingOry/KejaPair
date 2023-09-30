@@ -17,9 +17,8 @@
             <div class="step-col" id="step-col-3"><span>Verify</span></div>
         </div>
         <div class="form-sects-wrapper showSect" data-step>
-            <div class="form-sect">
+            <div class="col-md-6">
                 {% csrf_token %}
-                <!-- {{form.as_p}} -->
                 <div class="form-group">
                     <label for="id_first_name">First Name: <code>*</code></label>
                     <input type="text" name="first_name" id="id_first_name" class="form-control aptinput" required placeholder="First Name" maxlength="200">
@@ -38,11 +37,10 @@
                 </div>
                 <div class="form-group">
                     <label for="id_category">Account Type: <code>*</code></label>
-                    <select name="category" id="id_category" class="form-control aptinput" required>
-                        <option value="">--select--</option>
-                        <option value="Guest">I'm looking for a place to stay.</option>
-                        <option value="Host">I have a property and I'm looking for a roommate.</option>
-                        <option value="Owner">I'm a property owner looking for tenants.</option>
+                    <select name="category" id="id_category" class="form-control aptinput select2bs4" required>
+                        {% for opt in form.category %}
+                        {{opt}}
+                        {% endfor %}
                     </select>
                 </div>
                 <div class="form-group">
@@ -65,7 +63,7 @@
         </div>
 
         <div class="form-sects-wrapper" data-step>
-            <div class="form-sect">
+            <div class="col-md-6">
                 <div class="form-group">
                     <label for="id_location">Your Location: <code>*</code></label>
                     <input type="text" name="location" id="id_location" class="form-control aptinput" required placeholder="eg. Nairobi" maxlength="200">
@@ -78,15 +76,15 @@
                     <label for="id_gender">Gender: <code>*</code></label>
                     <select name="gender" id="id_gender" class="form-control aptinput" required>
                         <option value="">--select--</option>
-                        <option value="Male">Male</option>
-                        <option value="Female">Female</option>
-                        <option value="Other">Other</option>
-                        <option value="Unspecified">Rather Not Say</option>
+                        {% for opt in form.gender %}
+                        {{opt}}
+                        {% endfor %}
                     </select>
                 </div>
                 <div class="form-group">
                     <label for="id_age">Age: <code>*</code></label>
                     <input type="number" name="age" id="id_age" class="form-control aptinput" required placeholder="age" min="18" value="18">
+                    <small class="help-text text-muted">Must 18 and above.</small>
                 </div>
                 <div class="form-group">
                     <label for="id_bio">About You:</label>

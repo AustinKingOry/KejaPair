@@ -5,7 +5,7 @@
     <link rel="stylesheet" href="{% static 'css/add-profile-photos-styles.css' %}" type="text/css">
     <title>New Timeline Photo</title>
 </head>
-<div class="container">
+<div class="container mt-4 border">
     <div class="headings">
         <h1>New Activity</h1>
         <p>Share memories, capture your lifestyle with people with mutual interests.</p>
@@ -14,12 +14,16 @@
         {% csrf_token %}
         <div class="field">
             <label for="id_image" class="bi-camera"> New Photo</label>
-            <input type="file" class="hidden" name="image" id="id_image" accept="image/*" onchange="previewFile('uploadPreview','id_image')" required>
+            <input type="file" class="hidden" name="image" id="id_image" accept="image/*" onchange="showPreview('img_holder','uploadPreview','id_image',10)" required>
         </div>
         <div class="new-photos-wrapper">
-            <div class="image-container">
-                <img src="" alt="" id="uploadPreview">
+            <div class="file-placeholder empty-placeholder">
+                <div class="file-add fas fa-plus" id="img_holder"></div>
+                <!-- <div class="image-container"> -->
+                    <img src="" alt="" id="uploadPreview" class="image-responsive hidden preview-field">
+                <!-- </div> -->
             </div>
+            
         </div>
         <div class="field">
             <textarea name="description" id="id_description" cols="30" rows="4" placeholder="Caption..."></textarea>
