@@ -9,6 +9,8 @@ websocket_urlpatterns = [
     path('handle-photo/', baseConsumers.HandlePhotosConsumer.as_asgi()),
     path('clear-notification/', baseConsumers.ClearNotificationConsumer.as_asgi()),
     path('live-updates/', baseConsumers.LiveDataConsumer.as_asgi()),
+    path('delete-room/', baseConsumers.PropertyConsumer.as_asgi()),
+    path('remove-listing/', baseConsumers.RemoveListingConsumer.as_asgi()),
     
     path('chats/', chatConsumers.ChatConsumer.as_asgi()),
     path('chat-seen/', chatConsumers.ChatSeenConsumer.as_asgi()),

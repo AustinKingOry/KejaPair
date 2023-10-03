@@ -86,18 +86,22 @@ function starClick(starIndex){
 }
 //integration with openstreetmap
 function initMap() {
-    const propertyLocation = [PROPERTY_LATITUDE, PROPERTY_LONGITUDE];  // Replace with actual latitude and longitude
+    let coords = document.getElementById('map').getAttribute('data');
+    const [latitude, longitude] = coords.split(',');
+    // Convert the latitude and longitude to numbers
+    const parsedLatitude = parseFloat(latitude);
+    const parsedLongitude = parseFloat(longitude);
+    const propertyLocation = [parsedLatitude, parsedLongitude];
     const map = L.map('map').setView(propertyLocation, 15);
-
     L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
         attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
     }).addTo(map);
-
+  
     L.marker(propertyLocation).addTo(map)
         .bindPopup('Property Location')
         .openPopup();
 }
 
 // Call the initMap function when the window has finished loading
-window.onload = initMap;
+window.addEventListener('load',initMap);
   

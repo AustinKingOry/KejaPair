@@ -1,4 +1,4 @@
-from .models import Notification,User,PairRequest,Property as Room,Guest,ActivityLog as Log,Match
+from .models import Notification,User,PairRequest,Property as Room,Guest,ActivityLog as Log,Match,RoomPhoto,UserPhoto,Hobby,Review
 from django.contrib.auth.decorators import login_required
 from django.db.models import Q
 from Crypto.Cipher import AES
@@ -367,15 +367,22 @@ def suggestPair(user_id):
     elif acc == 2:
         pairs = suggestRooms(user_id)
     return pairs
-    
-def createLog(trigger,targetId,act_type,default_text):    
+
+def track_activity(user, activity_type,activity_group, activity_details,target_model,target_id):
     Log.objects.create(
-        actId = createId(Log,Log.actId,'ACT'),
-        trigger = trigger,
-        target_id = targetId,
-        activity_type = act_type,
-        default_text = default_text
-    )
+        rec_id = createId(Log,Log.rec_id,'ACT'),
+        user=user,
+        activity_type=activity_type,
+        activity_group=activity_group,
+        activity_details=activity_details,
+        target_model = target_model,
+        target_id = target_id,
+        )
+    
+def get_activity_feed(user):
+    activities = Log.objects.filter(user=user).order_by('-created')
+    return activities
+
 
 def delete_match(id):
     res = False
@@ -452,11 +459,13 @@ def book_room(guest,owner,room):
             'Room Request',
             '/profiles/'+str(user_obj.id)
         )
-        createLog(
+        track_activity(
             user_obj,
-            room_obj.id,
+            'room request',
             'Property',
-            str(user_obj.get_full_name())+' requested for a room.'
+            str(user_obj.get_full_name())+' requested for a room.',
+            'property',
+            room.id,
         )
         res = True
     return res
@@ -475,3 +484,44 @@ def booked_rooms(guest):
         for room in booked_rooms:
             res.append(room)
     return res
+
+def map_model(kw):
+    TARGET_MODEL_MAP = {
+        'property': Room,
+        'property_like': Room,
+        'property_photo': RoomPhoto,
+        'user': User,
+        'user_photo': UserPhoto,
+        'hobby': Hobby,
+        'review':Review,
+    }
+    if not kw in TARGET_MODEL_MAP:
+        return
+    else:
+        target_model = TARGET_MODEL_MAP[kw]
+    return target_model
+
+def activity_body(item,activity):
+    '''
+    Returns an array of image and a message depending on whether the targeted model has suitable fields.
+    @param `item` - instance of a model record as stored in database
+    @param `activity` - instance of the ActivityLog model
+    '''
+    target_image_url = None
+    target_text = None
+    if activity.target_model == 'property':
+        target_image_url = item.coverPhoto.url if hasattr(item, 'coverPhoto') else None
+        target_text = item.description if hasattr(item, 'description') else None
+    elif activity.target_model == 'property_like':
+        target_image_url = item.coverPhoto.url if hasattr(item, 'coverPhoto') else None
+    elif activity.target_model == 'property_photo':
+        target_image_url = item.image.url if hasattr(item, 'image') else None
+        target_text = item.description if hasattr(item, 'description') else None
+    elif activity.target_model == 'user_photo':
+        target_image_url = item.image.url if hasattr(item, 'image') else None
+        target_text = item.description if hasattr(item, 'description') else None
+    elif activity.target_model == 'review':
+        target_image_url = item.property.coverPhoto.url if hasattr(item, 'property') and hasattr(item.property, 'coverPhoto') else None
+        target_text = item.body if hasattr(item, 'body') else None
+
+    return target_image_url, target_text

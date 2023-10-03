@@ -1,1 +1,75 @@
 {% load static %}
+{% load custom_tags %}
+<div class="activity-component" id="activity-feed">
+    <h3>Activity Feed</h3>
+    <div class="feed-category-header-wrapper">
+        <div class="feed-category-header active_feed_header" id="rooms_feed_header">
+            <span>Rooms</span>
+        </div>
+        <div class="feed-category-header" id="profile_feed_header">
+            <span>Profile</span>
+        </div>              
+    </div>
+    <div class="activity-wrapper">
+        {% for activity in property_activities %}
+        <div class="activity-card rooms-feed-item">
+            <div class="activity-card-header">
+                <div class="user-info">
+                    <img src="{% static activity.user.profilePhoto.url %}" alt="">
+                    <p>{{activity.user}} {% if activity.user.verified %}<i class="bi-patch-check-fill verified-badge"></i>{%endif%}<br><small>@{{activity.user}}</small></p>
+                </div>                    
+                <span><small>{{activity.created|timesince}} ago</small></span>
+            </div>
+            <div class="activity-card-caption">
+                <p class="cutoff-text-shift">
+                    {% if activity.activity_details %}
+                    <span>{{activity.activity_details}}</span> <br>
+                    {% endif %}                    
+                    {% if activity.target_text %}
+                    {{activity.target_text}}
+                    {% endif %}
+                    <a href="{% url 'room' activity.target_id %}"> Checkout this room.</a></p>
+            </div>
+            {% if activity.target_image_url %}
+            <div class="activity-card-image">
+                <img src="{% static activity.target_image_url %}" alt="{{activity.activity_type}}" class="image-responsive">
+            </div>
+            {% endif %}
+        </div>
+        {% empty %}
+        <div class="empty-container rooms-feed-item">
+            <span>No activity yet.</span>
+        </div>
+        {% endfor %}
+        {% for activity in profile_activities %}
+        <div class="activity-card profile-feed-item" style="display: none;">
+            <div class="activity-card-header">
+                <div class="user-info">
+                    <img src="{% static activity.user.profilePhoto.url %}" alt="">
+                    <p>{{activity.user.get_full_name}} {% if activity.user.verified %}<i class="bi-patch-check-fill verified-badge"></i>{% endif %}<br><small>@{{activity.user}}</small></p>
+                </div>                    
+                <span><small>{{activity.created|timesince}} ago</small></span>
+            </div>
+            <div class="activity-card-caption">
+                <p>
+                    {% if activity.activity_details %}
+                    <span>{{activity.activity_details}}</span> <br>
+                    {% endif %}
+                    {% if activity.target_text %}
+                    {{activity.target_text}}
+                    {% endif %}
+                </p>
+            </div>
+            {% if activity.target_image_url %}
+            <div class="activity-card-image">
+                <img src="{% static activity.target_image_url %}" alt="{{activity.activity_type}}" class="image-responsive">
+            </div>
+            {% endif %}
+        </div>
+        {% empty %}
+        <div class="empty-container profile-feed-item" style="display: none;">
+            <span>No activity yet.</span>
+        </div>
+        {% endfor %}
+    </div>        
+</div>

@@ -12,8 +12,13 @@
             <h3>Room Details:</h3>
             <div class="header-btns">
                 <span class="bi-pencil-fill room-actions-btn" id="show-room-form" title="Edit Room"></span>
-                <a href="{% url 'delete-room' room.id %}" class="bi-trash-fill room-actions-btn" title="Delete Room"></a>
-                <span class="bi-bookmark-check room-actions-btn" title="Clear Room From Listing"></span>
+                <!-- <a href="{% url 'delete-room' room.id %}" class="bi-trash-fill room-actions-btn" title="Delete Room"></a> -->
+                <button type="button" class="btn btn-tool bi-trash-fill room-actions-btn" title="Delete Room" onclick="confirmDeletionToast('{{room.id}}')"></button>
+                {% if room.available %}
+                <button type="button" class="btn btn-tool bi-bookmark-check room-actions-btn" title="Clear Room From Listing" onclick="toggleListingToast('{{room.id}}')"></button>
+                {% else %}
+                <button type="button" class="btn btn-tool bi-bookmark-check room-actions-btn" title="Add To Listing" onclick="toggleListingToast('{{room.id}}')"></button>
+                {% endif %}
                 <span class="bi-share-fill room-actions-btn" title="Share Room"></span>
             </div>
         </div>
@@ -87,7 +92,7 @@
                         </div>
                         <div class="field">
                             <label for="id_maps_link">Google Maps Link: <code>*</code></label>
-                            <input type="url" name="maps_link" value="{{room.maps_link}}" maxlength="200" id="id_maps_link" required placeholder="share a location link for verification" class="field-input">
+                            <input type="text" name="maps_link" value="{{room.maps_link}}" maxlength="200" id="id_maps_link" required placeholder="share a location link for verification" class="field-input">
                         </div>
                     </div>
                     <div class="form-mini-sect col-md-6">

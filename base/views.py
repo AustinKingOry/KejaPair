@@ -1,9 +1,6 @@
+import os
 from django.shortcuts import render,redirect
 from django.contrib.auth.decorators import login_required
-from .models import User,Property as Room,Review,Guest,Like,RoomPhoto,UserPhoto,Hobby,Notification,PairRequest,ActivityLog as Log,Match
-from chat.models import Chat,Thread
-from .forms import MyUserCreationForm,RoomForm,GuestForm,ReviewForm
-from .utils import createId,send_notification,pairable,create_pair,pair_exists,suggestPair,createLog,createMatch,book_room,booked_rooms
 from django.core.mail import send_mail
 from django.contrib.auth.hashers import make_password
 from django.utils import timezone
@@ -12,7 +9,10 @@ from django.contrib.auth import authenticate,login,logout
 from django.http import HttpResponse
 from django.db.models import Q
 
-import os
+from .models import User,Property as Room,Review,Guest,Like,RoomPhoto,UserPhoto,Hobby,Notification,PairRequest,ActivityLog as Log,Match
+from chat.models import Chat,Thread
+from .forms import MyUserCreationForm,RoomForm,GuestForm,ReviewForm
+from .utils import createId,send_notification,pairable,create_pair,pair_exists,suggestPair,track_activity,createMatch,book_room,booked_rooms,get_activity_feed,map_model,activity_body
 
 # Create your views here.
 def home(request):
@@ -30,13 +30,29 @@ def users(request):
 
 def profiles(request, pk):
     user = User.objects.get(id=pk)
-    # reviews = user.review_set.all()
+    property_activities = []
+    profile_activities = []
     hobbies = user.hobbies.all()
     rooms = Room.objects.filter(host=user)
     feed_photos = user.photosList.all()
     rooms_photos = RoomPhoto.objects.filter(host=user)
     request_user = User.objects.filter(id=request.user.id)
     likes_rec = Like.objects.filter(guest=user)
+    activities = get_activity_feed(user)[0:30]
+    for activity in activities:
+        target_model = map_model(str(activity.target_model))
+        if target_model:
+            try:
+                item = target_model.objects.get(id=activity.target_id)
+                activity.target_image_url = activity_body(item,activity)[0]
+                activity.target_text = activity_body(item,activity)[1]
+            except:
+                item = None
+            
+        if str(activity.activity_group).lower()=='property':
+            property_activities.append(activity)
+        elif str(activity.activity_group).lower()=='profile':
+            profile_activities.append(activity)
     # PairRequest.objects.all().delete()
     # Notification.objects.all().delete()
     # Like.objects.all().delete()
@@ -46,7 +62,7 @@ def profiles(request, pk):
     else:
         can_pair=False
         paired = False
-    context = {'profile': user,'hobbies': hobbies,'rooms':rooms,'feed_photos':feed_photos,'rooms_photos':rooms_photos,'pairable':can_pair,'pair_exists':paired,'likes_rec':likes_rec,'active_page':'profile'}
+    context = {'profile': user,'hobbies': hobbies,'rooms':rooms,'feed_photos':feed_photos,'rooms_photos':rooms_photos,'pairable':can_pair,'pair_exists':paired,'likes_rec':likes_rec,'active_page':'profile','property_activities':property_activities,'profile_activities':profile_activities}
     return render(request, 'base/profile.html', context)
 
 def hosts(request):
@@ -184,11 +200,13 @@ def updateUser(request):
             user.profilePhoto = request.FILES.get('profilePhoto')
         user.save()
         messages.success(request,'Profile updated successfully!')
-        createLog(
-            trigger = user,
-            targetId = user.id,
-            act_type = 'User',
-            default_text = str(user.get_full_name) + ' updated their profile.'
+        track_activity(
+            user,
+            'Profile Update',
+            'Profile',
+            str(user.get_full_name()) + ' updated their profile.',
+            'user',
+            user.id,
         )
         return redirect('edit-profile')
         # else:
@@ -215,15 +233,17 @@ def newUserPhoto(request):
                 )
                 user.photosList.add(photo)
                 photo_ids.append(photo.id)
-                return redirect('edit-profile')
             
-            createLog(
-                trigger = user,
-                targetId = photo_ids,
-                act_type = 'UserPhoto',
-                default_text = str(user.get_full_name) + ' added a new photo to their profile.'
+            track_activity(
+                user,
+                'New Photo',
+                'Profile',
+                '',
+                'user_photo',
+                user.id,
             )
             messages.info(request,'photos is uploaded!')
+        return redirect('edit-profile')
 
     context = {'photos':photos}
     return render(request,'base/add-profile-photos.html',context)
@@ -433,6 +453,14 @@ def createRoom(request):
                 room.host = request.user
                 room.save()
                 messages.success(request,'Your room has been added successfully!!')
+                track_activity(
+                    request.user,
+                    'New Property',
+                    'Property',
+                    str(request.user.get_full_name()) + ' added a new property.',
+                    'property',
+                    room.id,
+                )
                 return redirect('home')
             else:
                 for field, errors in form.errors.items():
@@ -465,11 +493,13 @@ def newRoomPhoto(request,pk):
                 room.photosList.add(photo)
                 photo_ids.append(photo.id)
                 loopcounter+=1
-            createLog(
-                trigger = request.user,
-                targetId = photo_ids,
-                act_type = 'RoomPhoto',
-                default_text = str(request.user.get_full_name) + ' added a new photo to their room.'
+            track_activity(
+                request.user,
+                'New Property Photo',
+                'Property',
+                str(request.user.get_full_name()) + ' added a new photo to their room.',
+                'property',
+                room.id,
             )
             messages.info(request,'Post created sucessfully!')
     context = {'room':room,'photos':photos}
@@ -540,12 +570,20 @@ def room(request, pk):
                     review.save()
                     
                     send_notification(
-                        str(request.user.get_full_name)+' added a new review for you on one of your listings: '+'"'+str(request.POST.get('body'))+'"',
+                        str(request.user.get_full_name())+' added a new review for you on one of your listings: '+'"'+str(request.POST.get('body'))+'"',
                         'New Review',
                         request.user,
                         host,
                         'Review',
                         "/room/"+str(room.id)+"/#reviews"
+                    )
+                    track_activity(
+                        request.user,
+                        'Profile Update',
+                        'Property',
+                        f"{str(request.user.get_full_name())}  posted a review to {host.get_full_name()}.",
+                        'review',
+                        review.id,
                     )
                 else:                    
                     for field, errors in form.errors.items():
@@ -575,11 +613,9 @@ def room(request, pk):
 
 @login_required(login_url='signin')
 def updateRoom(request,pk):
-    # for like in Like.objects.all():
-    #     like.delete()
-    
     room = Room.objects.get(id=pk)
     form = RoomForm(instance=room)
+    photos = room.photosList.all()
     if request.user != room.host:
         return HttpResponse('Your are not allowed here!!')
 
@@ -610,7 +646,7 @@ def updateRoom(request,pk):
                 for error in errors:
                     messages.error(request, f"Error in {field}: {error}")
 
-    context = {'form': form, 'room': room}
+    context = {'form': form, 'room': room,'photos':photos}
     return render(request, 'base/edit-room.html', context)
 
 @login_required(login_url='signin')

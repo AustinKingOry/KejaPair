@@ -1,6 +1,8 @@
 from django.db import models
 from django.contrib.auth.models import AbstractUser
 from django.db.models import Q
+from django.db.models.signals import pre_delete
+from django.dispatch import receiver
 
 
 def get_file_path(parentFolder,itemFolder):
@@ -10,9 +12,11 @@ def get_file_path(parentFolder,itemFolder):
 def upload_path_handler(instance, filename):
     return "uploads/user_{id}/{file}".format(id=instance.id, file=filename)
 def upload_path_handler_up(instance, filename):
-    return "uploads/user_{id}/{file}".format(id=instance.user.id, file=filename)
+    return "uploads/user_{id}/post_{pid}/{file}".format(id=instance.user.id,pid=instance.id, file=filename)
 def upload_path_handler_room(instance, filename):
-    return "uploads/user_{id}/{file}".format(id=instance.host.id, file=filename)
+    return "uploads/user_{id}/prp_{pid}/{file}".format(id=instance.host.id,pid=instance.id,file=filename)
+def upload_path_handler_room_new(instance, filename):
+    return "uploads/user_{id}/prp_{pid}/{file}".format(id=instance.host.id,pid=instance.room.id,file=filename)
 
 class Hobby(models.Model):
     hbId = models.CharField(max_length=10,unique=True)
@@ -85,8 +89,14 @@ class User(AbstractUser):
         return self.username
     def field_id(self):
         return self.UID
-    # def full_name(self) -> str:
-    #     return str(self.first_name)+" "+str(self.last_name)
+    def delete(self, *args, **kwargs):
+        # Delete associated photos and their image files
+        self.profilePhoto.delete()
+        for photo in self.photosList.all():
+            photo.image.delete()
+            photo.delete()
+
+        super().delete(*args, **kwargs)
     
     USERNAME_FIELD = 'username'
     EMAIL_FIELD = 'email'
@@ -112,7 +122,7 @@ class RoomPhoto(models.Model):
     photoId = models.CharField(max_length=10,unique=True)
     host = models.ForeignKey(User,on_delete=models.CASCADE,null=True)
     room = models.ForeignKey('Property',on_delete=models.CASCADE,null=True)
-    image = models.ImageField(null=False,blank=False,upload_to=upload_path_handler_room)
+    image = models.ImageField(null=False,blank=False,upload_to=upload_path_handler_room_new)
     created = models.DateTimeField(auto_now_add=True)
     category = models.CharField(null=False,default='room',max_length=200)
     description = models.TextField(null=True)
@@ -134,7 +144,7 @@ class Property(models.Model):
     rent = models.IntegerField()
     security_deposit = models.IntegerField()
     bills_included = models.BooleanField(default=False)
-    maps_link = models.URLField(null=True,blank=True, max_length=200)
+    maps_link = models.CharField(null=True,blank=True, max_length=200,help_text="You may need to allow access to your location to access maps navigation.")
     capacity = models.IntegerField(default=1)
     occupants = models.IntegerField(default=0)
     preferredGender = models.CharField(default="Not Necessary",max_length=50)
@@ -155,7 +165,14 @@ class Property(models.Model):
         return self.name
     def field_id(self):
         return self.propertyId
-    
+    def delete(self, *args, **kwargs):
+        # Delete associated photos and their image files
+        self.coverPhoto.delete()
+        for photo in self.photosList.all():
+            photo.image.delete()
+            photo.delete()
+
+        super().delete(*args, **kwargs)
 
 class PairRequest(models.Model):
     rqstId = models.CharField(max_length=10,unique=True)
@@ -290,19 +307,20 @@ class PwdReset(models.Model):
         return self.email
     def field_id(self):
         return self.resetId
-    
+
 class ActivityLog(models.Model):
-    actId = models.CharField(max_length=10,unique=True)
-    trigger = models.ForeignKey(User,null=False,on_delete=models.CASCADE)
-    target_id = models.CharField(null=True,max_length=10)
-    activity_type = models.CharField(max_length=20,null=False)
+    rec_id = models.CharField(max_length=10,unique=True)
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    activity_type = models.CharField(max_length=255,default='')
+    activity_group = models.CharField(max_length=255,default='')
+    activity_details = models.TextField(null=True,blank=True)
+    target_model = models.CharField(max_length=255,default='')  # Store model identifier/keyword
+    target_id = models.PositiveIntegerField(default=0)  # Store the related model instance ID
     created = models.DateTimeField(auto_now_add=True)
-    default_text = models.TextField(null=True)
-    
     class Meta:
         ordering = ['-created']
 
     def __str__(self):
-        return self.default_text
+        return self.rec_id
     def field_id(self):
-        return self.actId
+        return self.rec_id

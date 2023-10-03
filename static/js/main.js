@@ -446,7 +446,7 @@ function displayLocation(latitude, longitude) {
     L.marker([latitude, longitude]).addTo(map)
         .bindPopup('Your Location')
         .openPopup();
-  }
+}
   
   
 function getUserLocation() {

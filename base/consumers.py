@@ -1,10 +1,12 @@
 import json
 from channels.consumer import AsyncConsumer
 from channels.db import database_sync_to_async
+from channels.generic.websocket import AsyncWebsocketConsumer
+from django.shortcuts import get_object_or_404
 
 from chat.models import Chat,Thread
 from base.models import Property,Like,Hobby,User,RoomPhoto,Notification,ActivityLog as Log
-from base.utils import createId,send_notification,suggestPair,createLog
+from base.utils import createId,send_notification,suggestPair,track_activity
 from django.db.models import Q
 
 
@@ -168,11 +170,13 @@ class RoomLikesConsumer(AsyncConsumer):
                         room.likesCount+=1                    
                     room.save()
                 status = True
-                createLog(
-                    trigger = liked_by_obj,
-                    targetId = room_obj.id,
-                    act_type = 'Like',
-                    default_text = str(liked_by_obj.username) + ' liked the room:' + str(room_obj.name)
+                track_activity(
+                    liked_by_obj,
+                    'Like',
+                    'Property',
+                    str(liked_by_obj.username) + ' liked the room:' + str(room_obj.name),
+                    'property_like',
+                    room.id,
                 )
             else:
                 status = False
@@ -331,11 +335,13 @@ class NewHobbiesConsumer(AsyncConsumer):
                     status = False
             counter+=1
         if status == True:            
-            createLog(
-                trigger = user_obj,
-                targetId = user_obj.id,
-                act_type = 'Hobby',
-                default_text = str(user_obj.username) + ' updated their hobbies.'
+            track_activity(
+                user_obj,
+                'Hobbies',
+                'Profile',
+                f"{str(user_obj.username)} + ' updated their hobbies.'",
+                'user',
+                user_obj.id,
             )
         return status
     
@@ -516,11 +522,13 @@ class HandlePhotosConsumer(AsyncConsumer):
                 sbj_room.save()
                 photo.delete()
                 response = 'Cover photo updated successfully.'
-                createLog(
-                    trigger = user_obj,
-                    targetId = room_obj.id,
-                    act_type = 'RoomPhoto',
-                    default_text = str(user_obj.username) + ' updated the cover photo for their room.'
+                track_activity(
+                    user_obj,
+                    'Cover Photo',
+                    'Property',
+                    str(user_obj.username) + ' updated the cover photo for their room.',
+                    'property',
+                    room_obj.id,
                 )
             else:
                 response = 'No such room.'
@@ -886,4 +894,99 @@ class ReccomendPairConsumer(AsyncConsumer):
         else:
             obj = None
         return obj
-    
+
+class PropertyConsumer(AsyncWebsocketConsumer):
+    async def connect(self):
+        await self.accept()
+
+    async def disconnect(self, close_code):
+        pass
+
+    async def receive(self, text_data):
+        data = json.loads(text_data)
+        action = data['action']
+
+        if action == 'delete_property':
+            try:
+                property_id = data['property_id']
+                prp = await self.get_property(property_id)
+                name = prp.name
+                # Perform property deletion
+                status = await self.del_property(property_id)
+                if status:
+                    await self.send(text_data=json.dumps({'bool': True, 'message': f'Property with name "{str(name)}" has been deleted.'}))
+                else:
+                    await self.send(text_data=json.dumps({'bool': False, 'message': f'Error deleting property'}))
+            except Exception as e:
+                await self.send(text_data=json.dumps({'bool': False, 'message': f'Error deleting property: {str(e)}'}))
+
+    @database_sync_to_async
+    def get_property(self, property_id):
+        try:
+            property = get_object_or_404(Property, id=property_id)
+            return property
+        except Property.DoesNotExist:
+            property = None
+            return property
+
+    @database_sync_to_async
+    def del_property(self,property_id):   
+        try:
+            property = get_object_or_404(Property, id=property_id)
+            property.delete()
+            return True
+        except Property.DoesNotExist:
+            return False
+
+class RemoveListingConsumer(AsyncWebsocketConsumer):
+    async def connect(self):
+        await self.accept()
+
+    async def disconnect(self, close_code):
+        pass
+
+    async def receive(self, text_data):
+        data = json.loads(text_data)
+        action = data['action']
+
+        if action == 'remove_listing':
+            try:
+                property_id = data['property_id']
+                prp = await self.get_property(property_id)
+                name = prp.name
+                # Perform property unlisting
+                status = await self.unlist_property(property_id)
+                if status:
+                    if prp.available:
+                        await self.send(text_data=json.dumps({'bool': True, 'message': f'Property with name "{str(name)}" has been removed from listing.'}))
+                    else:
+                        await self.send(text_data=json.dumps({'bool': True, 'message': f'Property with name "{str(name)}" has been added to listing.'}))
+                else:
+                    if prp.available:
+                        await self.send(text_data=json.dumps({'bool': False, 'message': f'Error unlisting property'}))
+                    else:
+                        await self.send(text_data=json.dumps({'bool': False, 'message': f'Error listing property'}))
+            except Exception as e:
+                await self.send(text_data=json.dumps({'bool': False, 'message': f'Error accessing property: {str(e)}'}))
+
+    @database_sync_to_async
+    def get_property(self, property_id):
+        try:
+            property = get_object_or_404(Property, id=property_id)
+            return property
+        except Property.DoesNotExist:
+            property = None
+            return property
+
+    @database_sync_to_async
+    def unlist_property(self,property_id):   
+        try:
+            property = get_object_or_404(Property, id=property_id)
+            if property.available:
+                property.available = False
+            else:
+                property.available = True
+            property.save()
+            return True
+        except Property.DoesNotExist:
+            return False

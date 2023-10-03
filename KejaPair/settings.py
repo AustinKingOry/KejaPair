@@ -41,7 +41,7 @@ INSTALLED_APPS = [
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
-    'whitenoise.runserver_nostatic',
+    # 'whitenoise.runserver_nostatic',
     'django.contrib.staticfiles',
 
     'base.apps.BaseConfig',
@@ -56,7 +56,7 @@ AUTH_USER_MODEL = 'base.User'
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
-    'whitenoise.middleware.WhiteNoiseMiddleware',
+    # 'whitenoise.middleware.WhiteNoiseMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
@@ -98,26 +98,26 @@ ASGI_APPLICATION = 'KejaPair.asgi.application'
 #     }
 # }
 # localhost postgresql
-# DATABASES = {
-#     'default': {
-#         'ENGINE': 'django.db.backends.postgresql_psycopg2',
-#         'NAME': 'kejapair',
-#         'USER':'postgres',
-#         'PASSWORD':'98xv39pydjangoadmin',
-#         'HOST':'localhost',
-#         'PORT':'5432',
-#     }
-# }
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'railway',
+        'ENGINE': 'django.db.backends.postgresql_psycopg2',
+        'NAME': 'kejapair',
         'USER':'postgres',
-        'PASSWORD':'PuOOOSfgflwaN0XZLMxZ',
-        'HOST':'containers-us-west-65.railway.app',
-        'PORT':'5915',
+        'PASSWORD':'98xv39pydjangoadmin',
+        'HOST':'localhost',
+        'PORT':'5432',
     }
 }
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.postgresql',
+#         'NAME': 'railway',
+#         'USER':'postgres',
+#         'PASSWORD':'PuOOOSfgflwaN0XZLMxZ',
+#         'HOST':'containers-us-west-65.railway.app',
+#         'PORT':'5915',
+#     }
+# }
 
 # Password validation
 # https://docs.djangoproject.com/en/4.1/ref/settings/#auth-password-validators
@@ -157,13 +157,13 @@ STATIC_URL = '/static/'
 MEDIA_URL = '/img/'
 MEDIA_ROOT = BASE_DIR / 'static/img'
 
-# STATICFILES_DIRS = [
-#     BASE_DIR / 'static',
-# ]
+STATICFILES_DIRS = [
+    BASE_DIR / 'static',
+]
 
 # added for whitenoise
-STATIC_ROOT = BASE_DIR / 'static'
-STATICFILES_STORAGE = 'whitenoise.storage.CompressedStaticFilesStorage'
+# STATIC_ROOT = BASE_DIR / 'static'
+# STATICFILES_STORAGE = 'whitenoise.storage.CompressedStaticFilesStorage'
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.1/ref/settings/#default-auto-field
