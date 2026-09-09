@@ -20,6 +20,8 @@ django-background-task==0.1.8
 django-background-tasks==1.2.5
 django-compat==1.0.15
 djangorestframework==3.14.0
+environ==1.2.0
+h11==0.14.0
 gunicorn==21.2.0
 hyperlink==21.0.0
 idna==3.4
