@@ -1,1 +1,6 @@
 KejaPair/settings.py
+.env
+.venv
+__pycache__/
+*.pyc
+*.pyo
