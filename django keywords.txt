@@ -1,4 +1,5 @@
-env\scripts\activate
+python -m venv .venv
+env\scripts\activate or for bash source .venv/Scripts/activate
 python manage.py runserver
 python manage.py runsslserver
 python manage.py makemigrations
