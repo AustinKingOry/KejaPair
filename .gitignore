@@ -4,3 +4,4 @@ KejaPair/settings.py
 __pycache__/
 *.pyc
 *.pyo
+*.py[cod]
